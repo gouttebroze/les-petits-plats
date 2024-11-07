@@ -1,4 +1,3 @@
-import '../css/style.css';
 import { recipes } from './recipes';
 
 // recipes
