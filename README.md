@@ -16,6 +16,8 @@ pnpm create vite
 
 * Lien vers repo. Github [ici](https://github.com/gouttebroze/les-petits-plats)
 
+* Lien vers l'application (CI/CD - Github pages) [ici](https://gouttebroze.github.io/les-petits-plats/)
+
 ## Dépendances
 
 * 

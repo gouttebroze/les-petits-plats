@@ -29,7 +29,7 @@ body {
   display: flex;
   place-items: center;
   min-width: 320px;
-  min-height: 100vh;
+  /* min-height: 100vh; */
 }
 
 /* h1 {
@@ -40,7 +40,7 @@ body {
 #app {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  /* padding: 2rem; */
   text-align: center;
 }
 
@@ -91,7 +91,16 @@ button:focus-visible {
 /*************************************/
 header {
   display: flex;
+  flex-direction: column;
   background-color: hsl(0, 0%, 0%);
+  background-image: url(../header.png);
+  background-origin: border-box;
+  background-repeat: no-repeat;
+}
+
+header>img {
+  width: 285px;
+  height: 40px;
 }
 
 header>h1 {
