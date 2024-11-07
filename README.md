@@ -14,7 +14,7 @@ pnpm create vite
 
 ## Repository - Code source
 
-* Lien vers repo. Github [ici]()
+* Lien vers repo. Github [ici](https://github.com/gouttebroze/les-petits-plats)
 
 ## Dépendances
 
