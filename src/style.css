@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-color: hsla(43, 100%, 68%, 1);
+  --background-main-color: #E5E5E5;
+  ;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  /* background-color: #242424; */
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  /* min-height: 100vh; */
+}
+
+/* h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+} */
+
+#app {
+  margin: 0 auto;
+  text-align: center;
+}
+
+/*************************************/
+header {
+  display: flex;
+  flex-direction: column;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(../header.png);
+  background-position: center;
+  background-size: cover;
+}
+
+header>img {
+  width: 285px;
+  height: 40px;
+}
+
+header>section>h1 {
+  text-align: center;
+  /* font-size: 44px; */
+  font-weight: 400;
+  line-height: 66.24px;
+  color: var(--primary-color);
+}
+
+.header-title-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.recipes-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  justify-items: center;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.card {
+  background-color: rgba(229, 229, 229, 1);
+  width: 380px;
+  border: 1px solid black;
+  margin-bottom: 30px;
+  border-top-left-radius: 21px;
+  border-top-right-radius: 21px;
+}
+
+.header-card__image {
+  border-top-left-radius: 21px;
+  border-top-right-radius: 21px;
+  width: 380px;
+  height: 256px;
+  object-fit: cover;
+}
+
+.header-card__name {
+  color: rgba(0, 0, 0, 1);
+}
+
+.main-card {}
+
+.main-card__title {}
+
+.main-card__description {
+  color: rgba(27, 27, 27, 1);
+  font-size: 14px;
+  ;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+
+  a:hover {
+    color: #747bff;
+  }
+
+  button {
+    background-color: #f9f9f9;
+  }
+}
