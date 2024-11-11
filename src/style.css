@@ -1,11 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 :root {
   --primary-color: hsla(43, 100%, 68%, 1);
   --background-main-color: #E5E5E5;
-  ;
+  --primary-text-color: #000000;
+
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -46,6 +43,20 @@ body {
 #app {
   margin: 0 auto;
   text-align: center;
+}
+
+.button {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+  color: white;
+  width: 97px;
+  height: 19px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 40px;
+  margin-left: 40px;
 }
 
 /*************************************/
@@ -114,6 +125,77 @@ header>section>h1 {
   font-size: 14px;
   ;
 }
+
+.toggle-tag {
+  display: none;
+  background-color: var(--primary-color);
+  color: var(--primary-text-color);
+}
+
+.hide {
+  display: none;
+}
+
+.filter-wrapper {
+  background-color: white;
+  width: 195px;
+  border-radius: 11px;
+}
+
+.filter-btn-top {
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 195px;
+  height: 56px;
+  border-radius: 11px;
+  padding: 17px 16px;
+}
+
+/* .input-filter {
+  display: none;
+} */
+
+.filter-list {
+  display: none;
+}
+
+.arrow-wrapper>.arrow-up {
+  display: none;
+}
+
+/* add icon into input field */
+.input-icons {
+  display: none;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.input-icons i {
+  position: absolute;
+}
+
+.icon {
+  padding: 10px;
+  min-width: 40px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+}
+
+/* input {
+  appearance: none;
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+}
+
+input::before {
+  content: '\f002';
+} */
 
 @media (prefers-color-scheme: light) {
   :root {

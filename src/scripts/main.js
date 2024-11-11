@@ -1,6 +1,62 @@
 import { recipes } from './recipes';
 import RecipeCard from './recipeCard.js';
 
+const $dropdown1 = document.querySelector('.first');
+const $dropdown2 = document.querySelector('.second');
+const $dropdown3 = document.querySelector('.third');
+const $buttonTag = document.querySelector('.toggle-tag');
+const $closeTag = document.querySelector('.close-tag');
+const $filter = document.querySelector('.filter-btn');
+const $filterList = document.querySelector('.filter-list');
+const $arrowDown = document.querySelector('.arrow-down')
+const $arrowUp = document.querySelector('.arrow-up');
+const $filterInput = document.querySelector('input[name="ingredient"]');
+const $inputIcon = document.querySelector('.input-icons');
+
+$filter.addEventListener('click', () => {
+  $filterList.style.display = 'block';
+  $arrowDown.style.display = 'none';
+  $arrowUp.style.display = 'block';
+  $filterInput.style.display = 'block';
+  $inputIcon.style.display = 'block';
+});
+
+$filterList.addEventListener('click', () => {
+  $buttonTag.style.display = 'block';
+  $filterList.style.display = 'none';
+  $arrowUp.style.display = 'none';
+  $arrowDown.style.display = 'block';
+  $filterInput.style.display = 'none';
+  $inputIcon.style.display = 'none';
+})
+
+/* $dropdown1.addEventListener('click', () => {
+  $buttonTag.style.display = 'block';
+
+});
+
+$dropdown2.addEventListener('click', () => {
+  $buttonTag.style.display = 'block';
+});
+
+$dropdown3.addEventListener('click', () => {
+  $buttonTag.style.display = 'block';
+}) */
+
+$closeTag.addEventListener('click', () => {
+  $buttonTag.style.display = 'none';
+})
+
+function filterInputValue() {
+  $filterInput.addEventListener('change', (e) => {
+    e.preventDefault();
+    const target = e.target.value;
+    console.log(target);
+  })
+}
+
+filterInputValue();
+
 const allRecipes = recipes.flatMap((r) => r.ingredients);
 
 async function displayRecipeData() {
