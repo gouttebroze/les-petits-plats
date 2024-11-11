@@ -12,13 +12,14 @@ const $arrowDown = document.querySelector('.arrow-down')
 const $arrowUp = document.querySelector('.arrow-up');
 const $filterInput = document.querySelector('input[name="ingredient"]');
 const $inputIcon = document.querySelector('.input-icons');
+const $totalRecipesDisplayed = document.querySelector('.total-recipies');
 
 $filter.addEventListener('click', () => {
   $filterList.style.display = 'block';
   $arrowDown.style.display = 'none';
   $arrowUp.style.display = 'block';
   $filterInput.style.display = 'block';
-  $inputIcon.style.display = 'block';
+  $inputIcon.style.display = 'flex';
 });
 
 $filterList.addEventListener('click', () => {
@@ -29,19 +30,6 @@ $filterList.addEventListener('click', () => {
   $filterInput.style.display = 'none';
   $inputIcon.style.display = 'none';
 })
-
-/* $dropdown1.addEventListener('click', () => {
-  $buttonTag.style.display = 'block';
-
-});
-
-$dropdown2.addEventListener('click', () => {
-  $buttonTag.style.display = 'block';
-});
-
-$dropdown3.addEventListener('click', () => {
-  $buttonTag.style.display = 'block';
-}) */
 
 $closeTag.addEventListener('click', () => {
   $buttonTag.style.display = 'none';
@@ -56,6 +44,14 @@ function filterInputValue() {
 }
 
 filterInputValue();
+
+/* calcul du nombre de recettes affichées */
+let totalRecipes = recipes.length
+console.log(totalRecipes);
+let $displayRecipesNumber = document.createElement('h3');
+$displayRecipesNumber.setAttribute('class', 'recipes-number anton');
+$displayRecipesNumber.textContent = `${totalRecipes} recettes`;
+$totalRecipesDisplayed.appendChild($displayRecipesNumber);
 
 const allRecipes = recipes.flatMap((r) => r.ingredients);
 

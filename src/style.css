@@ -1,3 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@200..800&display=swap');
+
+/*  <uniquifier>: Use a unique and descriptive class name
+ <weight>: Use a value from 200 to 800 */
+.manrope {
+  font-family: "Manrope", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.anton {
+  font-family: "Anton", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 :root {
   --primary-color: hsla(43, 100%, 68%, 1);
   --background-main-color: #E5E5E5;
@@ -116,6 +133,13 @@ header>section>h1 {
   color: rgba(0, 0, 0, 1);
 }
 
+.top-main-bar {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .main-card {}
 
 .main-card__title {}
@@ -123,7 +147,10 @@ header>section>h1 {
 .main-card__description {
   color: rgba(27, 27, 27, 1);
   font-size: 14px;
-  ;
+}
+
+.ingredient-item {
+  font-weight: 500;
 }
 
 .toggle-tag {
@@ -161,13 +188,31 @@ header>section>h1 {
   display: none;
 }
 
+.filter-list>li:hover,
+.filter-list>li:focus,
+.filter-list>li:active {
+  background-color: #8d8c8c;
+}
+
 .arrow-wrapper>.arrow-up {
   display: none;
+}
+
+/* titre du nbr de recettes affichées */
+.recipes-number {
+  font-family: "Anton", sans-serif;
+  font-style: normal;
+  font-size: 21px;
+  font-weight: 400;
+  line-height: 31px;
 }
 
 /* add icon into input field */
 .input-icons {
   display: none;
+  flex-direction: row-reverse;
+  align-items: center;
+  padding-right: 16px;
   width: 100%;
   margin-bottom: 10px;
 }

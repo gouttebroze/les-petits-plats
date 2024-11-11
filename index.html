@@ -17,7 +17,7 @@
     <header>
       <img class="" src="./LogoSVG.svg" alt="les petits plats" />
       <section class="header-title-section">
-        <h1 class="text-[44px] font-normal size-2/3 pt-[245px] pb-[29px]">
+        <h1 class="anton text-[44px] font-normal size-2/3 pt-[245px] pb-[29px]">
           CHERCHEZ PARMI PLUS DE 1500 RECETTES DU QUOTIDIEN, SIMPLES ET DÉLICIEUSES
         </h1>
       </section>
@@ -50,54 +50,58 @@
     </header>
 
     <main class="bg-gray-300 main-container d-flex flex-column">
-      <div id="menu" class="dropdowns-wrapper d-flex mx-2">
-        <div class="filter-wrapper">
-          <div class="filter-btn">
-            <div class="filter-btn-top">
-              <span>Ingrédients</span>
-              <div class="arrow-wrapper">
-                <i class="fa-solid fa-angle-down arrow-down"></i>
-                <i class="fa-solid fa-angle-up arrow-up"></i>
-              </div>
-            </div>
-            <button type="button" class="input-icons input-filter-btn">
-              <i class="fa-solid fa-magnifying-glass"></i>
-              <input name="ingredient" id="ingredient" type="text" class="input-field input-filter" />
-            </button>
-          </div>
-          <ul class="filter-list">
-            <li>test</li>
-            <li>test</li>
-            <li>test</li>
-            <li>test</li>
-          </ul>
-        </div>
-        <button class="button toggle-tag">
-          <span class="d-flex justify-content-around">
-            <span>tag</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="close-tag bi bi-x"
-              viewBox="0 0 16 16">
-              <path
-                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
-            </svg>
-          </span>
-        </button>
-
-        <div class="dropdown mx-4">
-          <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Ingrédients
-          </button>
-          <ul class="dropdown-menu first">
-            <li><a class="dropdown-item" href="#menu">
+      <section class="top-main-bar">
+        <section class="total-recipies">
+        </section>
+        <div id="menu" class="dropdowns-wrapper d-flex mx-2">
+          <div class="filter-wrapper">
+            <div class="filter-btn">
+              <div class="filter-btn-top">
                 <span>Ingrédients</span>
-                <input name="inputIngredient" id="inputIngredient" type="text" class="inputFilter"
-                  placeholder="Rechercher un ingrédient" />
-              </a></li>
-            <li><a class="dropdown-item" href="#menu">Another action</a></li>
-            <li><a class="dropdown-item" href="#menu">Something else here</a></li>
-          </ul>
+                <div class="arrow-wrapper">
+                  <i class="fa-solid fa-angle-down arrow-down"></i>
+                  <i class="fa-solid fa-angle-up arrow-up"></i>
+                </div>
+              </div>
+              <button type="button" class="input-icons input-filter-btn">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input name="ingredient" id="ingredient" type="text" class="input-field input-filter" />
+              </button>
+            </div>
+            <ul class="filter-list">
+              <li>test</li>
+              <li>test</li>
+              <li>test</li>
+              <li>test</li>
+            </ul>
+          </div>
+          <button class="button toggle-tag">
+            <span class="d-flex justify-content-around">
+              <span>tag</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="close-tag bi bi-x" viewBox="0 0 16 16">
+                <path
+                  d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+              </svg>
+            </span>
+          </button>
+
+          <div class="dropdown mx-4">
+            <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Ingrédients
+            </button>
+            <ul class="dropdown-menu first">
+              <li><a class="dropdown-item" href="#menu">
+                  <span>Ingrédients</span>
+                  <input name="inputIngredient" id="inputIngredient" type="text" class="inputFilter"
+                    placeholder="Rechercher un ingrédient" />
+                </a></li>
+              <li><a class="dropdown-item" href="#menu">Another action</a></li>
+              <li><a class="dropdown-item" href="#menu">Something else here</a></li>
+            </ul>
+          </div>
         </div>
-      </div>
+      </section>
 
       <section class="recipes-wrapper">
         <!-- <ul class="ingredients-recipe"></ul> -->

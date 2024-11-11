@@ -9,16 +9,16 @@ export default class RecipeCard {
     $wrapper.classList.add('card');
 
     const recipeCard = `
-    <div class="card" style="width: 18rem;">
-  <img src=${this._image} alt=${this._recipe.name} class="card-img-top">
-  <div class="card-body">
-    <h5 class="card-title">${this._recipe.name}</h5>
-    <p class='main-card__title uppercase'>Recette</p>
-    <p class="card-text">${this._recipe.description}</p>
-            ${this.createIngredientsList()}
-    <a href="#" class="btn btn-primary">Go somewhere</a>
-  </div>
-</div>
+    <div class="card manrope" style="width: 18rem;">
+      <img src=${this._image} alt=${this._recipe.name} class="card-img-top">
+      <div class="card-body">
+        <h5 class="card-title anton">${this._recipe.name}</h5>
+        <p class='main-card__title uppercase'>Recette</p>
+        <p class="card-text">${this._recipe.description}</p>
+                ${this.createIngredientsList()}
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+    </div>
 
       
     `;
@@ -52,9 +52,9 @@ export default class RecipeCard {
     console.log(this._recipe.ingredients);
 
     const ingredientList = this._recipe.ingredients.map((ingredient) =>
-      `<p>Ingrédients</p>
+      `<p class='uppercase'>Ingrédients</p>
         <ul>
-          <li>${ingredient.ingredient}</li>
+          <li class='ingredient-item'>${ingredient.ingredient}</li>
           <li>${ingredient.quantity}</li>
           <li>${ingredient.unit || ''}</li>
         </ul>
