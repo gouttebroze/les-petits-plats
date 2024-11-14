@@ -6,17 +6,29 @@ export default class RecipeCard {
 
   createRecipeCard() {
     const $wrapper = document.createElement('div');
-    $wrapper.classList.add('card');
+    //$wrapper.classList.add('card');
+    $wrapper.classList.add('grid');
+    // $wrapper.classList.add('col-md-6');
+    // $wrapper.classList.add('col-sm-10');
 
     const recipeCard = `
-    <div class="card manrope" style="width: 18rem;">
-      <img src=${this._image} alt=${this._recipe.name} class="card-img-top">
-      <div class="card-body">
-        <h5 class="card-title anton">${this._recipe.name}</h5>
-        <p class='main-card__title uppercase'>Recette</p>
-        <p class="card-text">${this._recipe.description}</p>
-                ${this.createIngredientsList()}
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+    <div class="card manrope card-wrapper">
+      <img src=${this._image} alt=${this._recipe.name} class="img-fluid rounded card-image z-10 card-img-top">
+      <button class="card-btn button-sm">
+        ${this._recipe.time}min
+      </button>
+      <div class="card-body text-start">
+        <h5 class="card-body-name anton">${this._recipe.name}</h5>
+        <section class="card-body-recipes">
+          <p class="recipes-title uppercase">Recette</p>
+          <p class="card-text">${this._recipe.description}</p>        
+        </section>
+        <section class="card-body-ingredients">
+          <p class='ingredient-title uppercase'>Ingrédients</p>
+          <div class="card-text container">
+            ${this.createIngredientsList()}
+          </div>       
+        </section>
       </div>
     </div>
 
@@ -46,19 +58,25 @@ export default class RecipeCard {
   }
 
   createIngredientsList() {
-    const $listWrapper = document.createElement('div');
-    $listWrapper.classList.add('ingredients-list-wrapper');
+    const $listWrapper = document.createElement('ul');
+    $listWrapper.classList.add('row');
+    $listWrapper.classList.add('list-grid');
 
     console.log(this._recipe.ingredients);
 
     const ingredientList = this._recipe.ingredients.map((ingredient) =>
-      `<p class='uppercase'>Ingrédients</p>
-        <ul>
-          <li class='ingredient-item'>${ingredient.ingredient}</li>
-          <li>${ingredient.quantity}</li>
-          <li>${ingredient.unit || ''}</li>
-        </ul>
-      `)
+      `<li class='ingredient-item col text-left'>
+        <span class='ingredient-name'>
+          ${ingredient.ingredient}
+        </span>
+        <br />
+        <span class='ingredient-type'>
+          ${ingredient.quantity || ''} ${ingredient.unit || ''}
+        </span>
+       </li>
+      `);
+    {/* <li class='ingredient-item'>${ingredient.ingredient}</li>
+       <li>${ingredient.quantity || ''} ${ingredient.unit || ''}</li> */}
     $listWrapper.innerHTML = ingredientList;
 
     return $listWrapper.outerHTML;

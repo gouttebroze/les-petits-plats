@@ -1,9 +1,6 @@
 import { recipes } from './recipes';
 import RecipeCard from './recipeCard.js';
 
-const $dropdown1 = document.querySelector('.first');
-const $dropdown2 = document.querySelector('.second');
-const $dropdown3 = document.querySelector('.third');
 const $buttonTag = document.querySelector('.toggle-tag');
 const $closeTag = document.querySelector('.close-tag');
 const $filter = document.querySelector('.filter-btn');
@@ -39,7 +36,8 @@ function filterInputValue() {
   $filterInput.addEventListener('change', (e) => {
     e.preventDefault();
     const target = e.target.value;
-    console.log(target);
+    // console.log(target);
+    return target;
   })
 }
 
@@ -47,7 +45,7 @@ filterInputValue();
 
 /* calcul du nombre de recettes affichées */
 let totalRecipes = recipes.length
-console.log(totalRecipes);
+// console.log(totalRecipes);
 let $displayRecipesNumber = document.createElement('h3');
 $displayRecipesNumber.setAttribute('class', 'recipes-number anton');
 $displayRecipesNumber.textContent = `${totalRecipes} recettes`;
@@ -57,7 +55,6 @@ const allRecipes = recipes.flatMap((r) => r.ingredients);
 
 async function displayRecipeData() {
   const $recipeSection = document.querySelector('.recipes-wrapper');
-  //const $ingredientList = document.querySelector('.ingredients-recipe');
   recipes.map((recipe) => {
     const Template = new RecipeCard(recipe);
     $recipeSection.appendChild(Template.createRecipeCard());
@@ -67,20 +64,14 @@ async function displayRecipeData() {
     const Template = new RecipeCard(ingredient);
     $recipeSection.appendChild(Template.createIngredientsList());
   })
-
-  console.log(recipes); // recup. recettes
-  console.log(allRecipes); // recup. ingredients
-  console.log(recipes[1].ingredients[0]);  // recup. les ingredients de la 1ere recette
-
-
-
+  // console.log(recipes); // recup. recettes
+  // console.log(allRecipes); // recup. ingredients
+  // console.log(recipes[1].ingredients[0]);  // recup. les ingredients de la 1ere recette
 }
 
 async function init() {
   displayRecipeData();
 }
-
-//recipes;
 
 init();
 
@@ -124,8 +115,7 @@ function bubbleSort(array) {
 };
 
 // test algo de tri à bulle sur notre tableau à la base désordonné
-console.log(bubbleSort(unsortedArray));
-// soit 1 tab. ordonné: [2, 4, 9, 23, 32, 33, 90, 100, 654]
+// console.log(bubbleSort(unsortedArray)); // soit 1 tab. ordonné: [2, 4, 9, 23, 32, 33, 90, 100, 654]
 
 /***********************************************
  * fn de tri par insertion - insertionSort
@@ -154,4 +144,118 @@ On va recommencer la même chose jusqu’à atteindre un seul élément par sép
 Ensuite, on va refusionner les éléments séparés de façon récursive en les triant à chaque niveau.
 C’est en comparant et permutant les éléments niveau par niveau qu’on construit un nouveau tableau trié
  ********************************************/
+
+/****************************************************************************
+ ************************ Méthodes de l'objet Array *************************
+ ****************************************************************************/
+const bands = [
+  { nom: 'Ramones', from: 'New-York' },
+  { nom: 'The Pogues', from: 'London' },
+  { nom: 'Raï-Kho-Ris', from: 'Népal' },
+  { nom: 'Earth', from: 'Seattle' },
+  { nom: 'Butthole Surfers', from: 'Austin, Texas' },
+  { nom: 'The Clash', from: 'London' },
+];
+
+// 1ere approche consiste à maper sur les objets du tableau pr utiliser les méthodes "includes()" & "indexOf()"
+const noms = bands.map(el => el.nom);
+// console.log(noms.includes("The Pogues")); // true
+// console.log(noms.indexOf("Earth")); // 3
+
+// seconde approche où on travail directement sur le tableau
+// console.log(bands.find(el => el.from === "London"));
+// console.log(bands.filter(el => el.from === "London"));
+// console.log(bands.find(el => el.nom === "Ramones")); // retourne l'objet entier soit { nom: 'Ramones', from: 'New-York' },
+// console.log(bands.filter(el => el.nom === "Butthole")); // ne retourne rien (manque une partie du nom), voir comment faire...
+
+/***********************************************
+ **** Recherche principale dès 3 caractères ****
+ ***********************************************/
+const $primarySearch = document.getElementById('primary-search');
+
+// on initie 1 tab. vide pr y stocker nos élements trouvés
+// mais problème du tableau, on pt avoir des doublons,
+// pr remédier à ce problème, on pt stocker nos el. ds 1 set à la place (on ne pt pas avoir de doublon ds 1 set), 
+// en revanche on perd la notion d'index (1 set n'a pas d'index)
+// let searchValue = [];
+let searchValue = new Set();
+
+/***********************************************
+******** Approche avec Boucles natïves ********
+***********************************************/
+/**
+ * fonction de recherche, le drapeau passant à TRUE indique que l'élement est trouvé
+ * @param {string} target - chaîne de charactère dont recherche un chaîne égale ds le tableau de recettes
+ * @returns {array} searchValue[] - nouveau tableau contenant l'élement (qui a été trouvé dans le tableau initial)
+ */
+function searchForRecipes(target) {
+  let flag = false;
+  // ex.: si cherche "Brownie", retourne: "trouvé"
+  for (let i = 0; i < recipes.length; i++) {
+    for (let j = 0; j < recipes[i].ingredients.length; j++) {
+      // trie sur "name" & sur "description" du tab. "recipes" & sur "ingredient" du tab. "ingredients"
+      if (target === recipes[i].name || target === recipes[i].description || target === recipes[i].ingredients[j].ingredient) {
+        flag = true;
+      }
+    }
+  }
+  if (flag === true) {
+    console.log("trouvé");
+    // searchValue.push(target); // on stock nos élements trouvé ds 1 tableau "searchValue"
+    searchValue.add(target); // on stock nos élements trouvé ds 1 set (pr éviter les doublons)
+  } else {
+    console.log("pas trouvé");
+  }
+  console.log("Elements trouvés: ", searchValue);
+  return searchValue;
+}
+
+// console.log(recipes.ingredients.length);
+
+
+/**
+ * on utilise la fn précédente dans cet écouteur d'évenement
+ * fn ayant en paramètre la valeur de l'event soumis ds l'input de recherche principale
+ */
+$primarySearch.addEventListener('change', (e) => {
+  console.log(e.target.value);
+  let target = e.target.value;
+  searchForRecipes(target);
+});
+
+/* TODO: stocker les el. ds le localstorage?
+*/
+
+/************************************************
+**** Approche avec méthodes de l'objet Array ****
+*************************************************/
+// console.log("tableau de recettes: ", recipes);
+// console.table("tableau de recettes: ", recipes);
+
+$primarySearch.addEventListener('change', (e) => {
+  // console.log(e.target.value);
+  let searchFor = e.target.value;
+  // let searchValue = [];
+
+  /**
+   * les méthodes .filter() & .find() retourne l'objet complet
+   * exemple: tape "Brownie", retourne son id, non, des, ingredients ...
+   */
+  const result = recipes.filter(el => el.name === searchFor)
+  // console.log(result.filter(el => el));
+  // console.log(recipes.find(el => el.name === searchFor));
+
+  const recipeName = recipes.map(el => el.name === searchFor);
+  // console.log(recipeName);
+  //console.log(recipes.includes(searchFor));
+  // console.log(recipes.indexOf(searchFor));
+  // console.table(searchValue.push(recipeName));
+
+  /* if (recipeName === true) {
+    searchValue.push(searchFor);
+    // console.table(searchValue);
+  } */
+
+})
+
 
