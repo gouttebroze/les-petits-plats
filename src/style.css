@@ -90,6 +90,19 @@ body {
 
 }
 
+.button-tag {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+  color: #000000;
+  width: 141px;
+  height: 53px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 17px 18px;
+}
+
 .logo {
   width: 180px;
   height: 25px;
@@ -144,12 +157,9 @@ header>section>h1 {
 .card {
   color: var(--secondary-text-color);
   background-color: rgba(229, 229, 229, 1);
-  /* width: 380px; */
   width: 27vw;
   border: 1px solid black;
   margin-bottom: 61px;
-  border-top-left-radius: 21px;
-  border-top-right-radius: 21px;
   box-shadow: 0px 4px 34px 30px #0000000A;
 }
 
@@ -159,8 +169,6 @@ header>section>h1 {
 }
 
 .card-image {
-  border-top-left-radius: 21px;
-  border-top-right-radius: 21px;
   width: 380px;
   height: 256px;
   object-fit: cover;
@@ -204,7 +212,19 @@ header>section>h1 {
   margin-bottom: 32px;
 }
 
-.card-body-ingredients {}
+.card-text {
+  max-height: 100px;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.card-text::-webkit-scrollbar {
+  display: none;
+}
 
 .top-main-bar {
   display: flex;
@@ -274,7 +294,7 @@ header>section>h1 {
 .filter-list>li:hover,
 .filter-list>li:focus,
 .filter-list>li:active {
-  background-color: #8d8c8c;
+  background-color: var(--primary-color);
 }
 
 .arrow-wrapper>.arrow-up {
@@ -294,13 +314,17 @@ header>section>h1 {
 .search-input {
   display: flex;
   flex-direction: row-reverse;
-  padding-right: 25vw;
+  padding-right: 15vw;
+  padding-left: 15vw;
   width: 100%;
   margin-bottom: 10px;
+  border-radius: 11px;
 }
 
-.search-input i {
+.search-input svg {
   position: absolute;
+  border-radius: 11px;
+  margin: 6px;
 }
 
 .input-icons {
@@ -314,6 +338,7 @@ header>section>h1 {
 
 .input-icons i {
   position: absolute;
+
 }
 
 .icon {
@@ -325,12 +350,15 @@ header>section>h1 {
   padding: 13.8px;
   min-width: 40px;
   background-color: black;
+  width: 50px;
+  height: 50px;
 }
 
 .input-field {
   width: 100%;
   padding: 10px;
-  text-align: center;
+  height: 62px;
+  border-radius: 11px;
 }
 
 /* input {
@@ -355,5 +383,25 @@ input::before {
 
   button {
     background-color: #f9f9f9;
+  }
+}
+
+@media (max-width: 767px) {
+  .recipes-wrapper {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .card {
+    width: 38vw;
+  }
+}
+
+@media (max-width: 575px) {
+  .recipes-wrapper {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  .card {
+    width: 64vw;
   }
 }

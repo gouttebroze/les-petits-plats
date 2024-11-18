@@ -8,12 +8,12 @@ export default class RecipeCard {
     const $wrapper = document.createElement('div');
     //$wrapper.classList.add('card');
     $wrapper.classList.add('grid');
-    // $wrapper.classList.add('col-md-6');
+    $wrapper.classList.add('rounded-top-4');
     // $wrapper.classList.add('col-sm-10');
 
     const recipeCard = `
-    <div class="card manrope card-wrapper">
-      <img src=${this._image} alt=${this._recipe.name} class="img-fluid rounded card-image z-10 card-img-top">
+    <div class="card manrope card-wrapper rounded-top-4">
+      <img src=${this._image} alt=${this._recipe.name} class="rounded-top-4 card-image z-10">
       <button class="card-btn button-sm">
         ${this._recipe.time}min
       </button>
@@ -73,10 +73,7 @@ export default class RecipeCard {
         <span class='ingredient-type'>
           ${ingredient.quantity || ''} ${ingredient.unit || ''}
         </span>
-       </li>
-      `);
-    {/* <li class='ingredient-item'>${ingredient.ingredient}</li>
-       <li>${ingredient.quantity || ''} ${ingredient.unit || ''}</li> */}
+       </li>`).join('');
     $listWrapper.innerHTML = ingredientList;
 
     return $listWrapper.outerHTML;

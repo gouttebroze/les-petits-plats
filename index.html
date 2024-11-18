@@ -18,13 +18,18 @@
     <header>
       <img class="logo" src="./LogoSVG.svg" alt="les petits plats" />
       <section class="header-title-section">
-        <h1 class="anton text-[44px] font-normal size-2/3 pt-[245px] pb-[29px]">
+        <h1 class="anton text-[44px] font-normal vw-64 pt-[245px] pb-[29px]">
           CHERCHEZ PARMI PLUS DE 1500 RECETTES DU QUOTIDIEN, SIMPLES ET DÉLICIEUSES
         </h1>
       </section>
       <div class="search-input">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input id="primary-search" class="input-field w-2/3 rounded-md mb-[188px] pl-10 ring-1 ring-slate-200 shadow-sm"
+        <!-- <i class="fa-solid fa-magnifying-glass search-icon"></i> -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="white" class="search-icon bi bi-search"
+          viewBox="0 0 16 16">
+          <path
+            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+        </svg>
+        <input id="primary-search" class="input-field w-200 mb-[188px] pl-10 ring-1 ring-slate-200 shadow-sm"
           type="text" placeholder="Rechercher une recette, un ingrédient, ..." />
       </div>
     </header>
@@ -101,10 +106,10 @@
             </ul>
           </div>
 
-          <button class="button toggle-tag">
+          <button class="button-tag toggle-tag">
             <span class="d-flex justify-content-around">
               <span>tag</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                 class="close-tag bi bi-x" viewBox="0 0 16 16">
                 <path
                   d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
@@ -130,7 +135,6 @@
       </section>
 
       <section class="recipes-wrapper grid">
-        <!-- <ul class="ingredients-recipe"></ul> -->
       </section>
     </main>
 
