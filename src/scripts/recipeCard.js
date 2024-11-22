@@ -61,9 +61,7 @@ export default class RecipeCard {
     const $listWrapper = document.createElement('ul');
     $listWrapper.classList.add('row');
     $listWrapper.classList.add('list-grid');
-
-    console.log(this._recipe.ingredients);
-
+    // console.log(this._recipe.ingredients);
     const ingredientList = this._recipe.ingredients.map((ingredient) =>
       `<li class='ingredient-item col text-left'>
         <span class='ingredient-name'>

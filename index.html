@@ -18,7 +18,7 @@
     <header>
       <img class="logo" src="./LogoSVG.svg" alt="les petits plats" />
       <section class="header-title-section">
-        <h1 class="anton text-[44px] font-normal vw-64 pt-[245px] pb-[29px]">
+        <h1 class="anton text-[44px] font-normal vw-64 pt-[150px] pb-[29px]">
           CHERCHEZ PARMI PLUS DE 1500 RECETTES DU QUOTIDIEN, SIMPLES ET DÉLICIEUSES
         </h1>
       </section>
@@ -37,7 +37,7 @@
     <main class="bg-gray-300 main-container d-flex flex-column">
       <section class="top-main-bar">
 
-        <section class="total-recipies">
+        <section class="total-recipes">
         </section>
         <div id="menu" class="dropdowns-wrapper d-flex mx-2">
           <div class="filter-wrapper m-6">
@@ -54,12 +54,10 @@
                 <input name="ingredient" id="ingredient" type="text" class="input-field input-filter" />
               </button>
             </div>
-            <ul class="filter-list">
-              <li>test</li>
-              <li>test</li>
-              <li>test</li>
-              <li>test</li>
-            </ul>
+            <div id="appliances" class="filter-list">
+              <!-- <ul class="filter-list">
+              </ul> -->
+            </div>
           </div>
 
           <div class="filter-wrapper m-6">
@@ -85,7 +83,7 @@
           </div>
 
           <div class="filter-wrapper m-6">
-            <div class="filter-btn">
+            <div class="ustensils-filter-btn">
               <div class="filter-btn-top">
                 <span>Ustensiles</span>
                 <div class="arrow-wrapper">
@@ -95,20 +93,16 @@
               </div>
               <button type="button" class="input-icons input-filter-btn">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input name="ingredient" id="ingredient" type="text" class="input-field input-filter" />
+                <input name="ustensils" id="ustensils" type="text" class="input-field input-filter" />
               </button>
             </div>
-            <ul class="filter-list">
-              <li>test</li>
-              <li>test</li>
-              <li>test</li>
-              <li>test</li>
+            <ul id="ustensils-list" class="filter-list ustensils-filter-list">
             </ul>
           </div>
 
           <button class="button-tag toggle-tag">
             <span class="d-flex justify-content-around">
-              <span>tag</span>
+              <span id="appliance-tag"></span>
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                 class="close-tag bi bi-x" viewBox="0 0 16 16">
                 <path

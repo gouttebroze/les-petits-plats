@@ -9,35 +9,87 @@ const $arrowDown = document.querySelector('.arrow-down')
 const $arrowUp = document.querySelector('.arrow-up');
 const $filterInput = document.querySelector('input[name="ingredient"]');
 const $inputIcon = document.querySelector('.input-icons');
-const $totalRecipesDisplayed = document.querySelector('.total-recipies');
+const $totalRecipesDisplayed = document.querySelector('.total-recipes');
 const $recipeSection = document.querySelector('.recipes-wrapper');
+const $primarySearch = document.getElementById('primary-search');
+const $applianceTag = document.getElementById('appliance-tag');
+const $ustensilsBtn = document.querySelector('.ustensils-filter-btn');
+const $ustensilsList = document.querySelector('.ustensils-filter-list');
 
-$filter.addEventListener('click', () => {
-  $filterList.style.display = 'block';
-  $arrowDown.style.display = 'none';
-  $arrowUp.style.display = 'block';
-  $filterInput.style.display = 'block';
-  $inputIcon.style.display = 'flex';
-});
+function displayUstansilsList() {
+  let ustansilsList = new Set();
+  for (let i = 0; i < recipes.length; i++) {
+    for (let j = 0; j < recipes[i].ustensils.length; j++) {
+      ustansilsList.add(recipes[i].ustensils[j]);
+      console.log(recipes[i].ustensils[j]);
+      document.getElementById('ustensils-list').innerHTML += `<li>${recipes[i].ustensils[j]}</li>`;
+    }
+  }
+  $ustensilsBtn.addEventListener('click', () => {
+    $ustensilsList.style.display = 'block';
+    $arrowDown.style.display = 'none';
+    $arrowUp.style.display = 'block';
+    $filterInput.style.display = 'block';
+    $inputIcon.style.display = 'flex';
+  });
+  $ustensilsList.addEventListener('click', () => {
+    $buttonTag.style.display = 'block';
+    $ustensilsList.style.display = 'none';
+    $arrowUp.style.display = 'none';
+    $arrowDown.style.display = 'block';
+    $filterInput.style.display = 'none';
+    $inputIcon.style.display = 'none';
+  })
+  $closeTag.addEventListener('click', () => {
+    $buttonTag.style.display = 'none';
+  })
+}
 
-$filterList.addEventListener('click', () => {
-  $buttonTag.style.display = 'block';
-  $filterList.style.display = 'none';
-  $arrowUp.style.display = 'none';
-  $arrowDown.style.display = 'block';
-  $filterInput.style.display = 'none';
-  $inputIcon.style.display = 'none';
-})
+function displayAppliance() {
+  let applianceArray = [];
+  /* for (let i = 0; i <= recipes.length; i++) {
+    applianceArray.push(recipes[i]?.appliance);
+    console.log(applianceArray);
 
-$closeTag.addEventListener('click', () => {
-  $buttonTag.style.display = 'none';
-})
+  } */
+  const $div = document.querySelector('#appliances');
+  let $ul = '<ul>';
+  /* for (arr of applianceArray) { */
+  for (let i = 0; i < recipes.length; i++) {
+    $ul += `<li>${recipes[i]?.appliance}</li>`;
+  }
+  $ul += '</ul>';
+  $div.insertAdjacentHTML('beforeend', $ul);
+
+  $filter.addEventListener('click', () => {
+    $filterList.style.display = 'block';
+    $arrowDown.style.display = 'none';
+    $arrowUp.style.display = 'block';
+    $filterInput.style.display = 'block';
+    $inputIcon.style.display = 'flex';
+
+  });
+
+  $filterList.addEventListener('click', () => {
+    $buttonTag.style.display = 'block';
+    $filterList.style.display = 'none';
+    $arrowUp.style.display = 'none';
+    $arrowDown.style.display = 'block';
+    $filterInput.style.display = 'none';
+    $inputIcon.style.display = 'none';
+    for (let i = 0; i < recipes.length; i++) {
+      $applianceTag.textContent = `${recipes[i]?.appliance}`;
+    }
+  })
+  $closeTag.addEventListener('click', () => {
+    $buttonTag.style.display = 'none';
+  })
+}
 
 function filterInputValue() {
   $filterInput.addEventListener('change', (e) => {
     e.preventDefault();
     const target = e.target.value;
-    // console.log(target);
     return target;
   })
 }
@@ -45,7 +97,7 @@ function filterInputValue() {
 filterInputValue();
 
 /* calcul du nombre de recettes affichées */
-function totalRecipedDisplayed() {
+function totalRecipedDisplayed(recipes) {
   let totalRecipes = recipes.length;
   let $displayRecipesNumber = document.createElement('h3');
   $displayRecipesNumber.setAttribute('class', 'recipes-number anton');
@@ -54,36 +106,52 @@ function totalRecipedDisplayed() {
   return totalRecipes;
 }
 
-totalRecipedDisplayed();
-
 // const allRecipes = recipes.flatMap((r) => r.ingredients);
 
-function searchRecipes(term) {
+
+/**
+ * @typedef {Object} SearchQuery
+ * @property {string} term - Le terme de recherche saisi par l'utilisateur.
+ * @property {string[]} appliances - Une liste d'appareils liés à la recherche.
+ * @property {string[]} ustensils - Une liste d'ustensiles liés à la recherche.
+ * @property {string[]} ingredients - Une liste d'ingrédients liés à la recherche.
+ */
+
+/**
+ * Processes a search query object.
+ * @param {SearchQuery} searchForm - The search query containing filters.
+ * @returns {void}
+ */
+function searchRecipes(searchForm) {
+  const { term, appliances, ustensils, ingredients } = searchForm;
   let newRecipes = [];
-  for (let i = 0; i <= recipes.length; i++) {
-    if (term === recipes[i]?.name || term === recipes[i]?.description) {
+
+  // recherche globale
+  for (let i = 0; i < recipes.length; i++) {
+    if (recipes[i]?.name?.toLowerCase()?.includes(term)
+      || recipes[i]?.description?.toLowerCase()?.includes(term)) {
       newRecipes.push(recipes[i]);
       continue;
     }
-    for (let j = 0; j <= recipes[i]?.ingredients.length; j++) {
-      if (term === recipes[i]?.ingredients[j]?.ingredient) {
+    for (let j = 0; j < recipes[i]?.ingredients.length; j++) {
+      if (recipes[i]?.ingredients[j]?.ingredient?.toLowerCase()?.includes(term)) {
         newRecipes.push(recipes[i]);
       }
     }
   }
-  return newRecipes;
+
+  let newRecipesAppliances = [];
+  for (let j = 0; j < newRecipes.length; j++) {
+    if (appliances.includes(newRecipes[j].appliance.toLowerCase())) {
+      newRecipesAppliances.push(newRecipes[j]);
+    }
+  }
+  return newRecipesAppliances;
 }
 console.log(searchRecipes('Brownie'));
 console.log(searchRecipes('Courgette'));
-console.log(searchRecipes('Raper'));
-
-const $primarySearch = document.getElementById('primary-search');
-
-
-
 
 async function displayRecipeData(recipes) {
-
   recipes.map((recipe) => {
     const Template = new RecipeCard(recipe);
     $recipeSection.appendChild(Template.createRecipeCard());
@@ -95,8 +163,15 @@ function displaySortedReciped() {
   searchRecipes(sortedRecipes);
 }
 
-function deleteDisplayRecipes() {
-  $recipeSection.innerHTML = '';
+function deleteDisplayData() {
+  $recipeSection.textContent = '';
+  // document.querySelector('.recipes-number').insertAdjacentText('afterbegin', '');
+  document.querySelector('.recipes-number').textContent = '';
+}
+
+function resetSearchInput() {
+  $searchForm = document.querySelector('.search-input');
+  $searchForm.innerHTML = '';
 }
 
 let searchValue = new Set();
@@ -128,33 +203,57 @@ function searchForRecipes(target) {
 function searchSubStringsInRecipes(substring) {
   let sortedRecipes = [];
   for (let i = 0; i <= recipes.length; i++) {
-    if (substring === recipes[i]?.name.includes(substring) || 'faire' === recipes[i]?.description.includes('faire')) {
+    if (recipes[i]?.name.indexOf(substring) !== -1
+      || recipes[i]?.description.indexOf(substring) !== -1) {
       sortedRecipes.push(recipes[i]);
       continue;
     }
     /* for (let j = 0; j <= recipes[i]?.ingredients.length; j++) {
-      if (substring === recipes[i]?.ingredients[j]?.ingredient.includes(substring)) {
+      if (recipes[i]?.ingredients[j]?.ingredient.indexOf(substring) !== -1) {
         sortedRecipes.push(recipes[i]);
       }
     } */
   }
   return sortedRecipes;
 }
-console.log(searchSubStringsInRecipes('Raper'));
+console.log(searchSubStringsInRecipes('courge'));
+
 
 document.addEventListener("DOMContentLoaded", function () {
-  // init();
+
   displayRecipeData(recipes);
+  totalRecipedDisplayed(recipes);
+
+  // affichage de la liste des menus déroulants
+  displayAppliance();
+  displayUstansilsList();
 
   $primarySearch.addEventListener('change', (e) => {
-    const $recipeSection = document.querySelector('.recipes-wrapper');
     console.log(e.target.value);
-    let target = e.target.value;
-    searchRecipes(target);
-    console.log(searchRecipes(target));
-    // il faut supprimer les recettes déjà affichées, puis on affiche les recettes triées
-    deleteDisplayRecipes();
-    displayRecipeData(searchRecipes(target));
+    let target = e.target.value.toLowerCase();
+    let query = {
+      term: target,
+      appliances: ["casserole"],
+      ustensils: [],
+      ingredients: []
+    }
+    const result = searchRecipes(query);
+    console.log(result);
+
+    // suppression des recettes déjà affichées
+    deleteDisplayData();
+
+    // affichage des recettes (selon le mot recherché)
+    displayRecipeData(result);
+
+    // affichage des recettes (recheche y compris ds chaînes de carartères)
+    // displayRecipeData(searchSubStringsInRecipes(target));
+
+    // calcul du nbre de recettes affichées
+    totalRecipedDisplayed(result);
+    /* totalRecipedDisplayed(searchSubStringsInRecipes(target)); */
+
+    // resetSearchInput();
   });
 
 });
