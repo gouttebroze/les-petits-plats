@@ -140,27 +140,43 @@ function searchRecipes(searchForm) {
     }
   }
 
+  // filtre par appareil
   let newRecipesAppliances = [];
   for (let j = 0; j < newRecipes.length; j++) {
     if (appliances.includes(newRecipes[j].appliance.toLowerCase())) {
       newRecipesAppliances.push(newRecipes[j]);
     }
   }
-  return newRecipesAppliances;
+
+  // filtre par ustensiles
+  let newRecipesUstensils = [];
+  // on recherche sur la rech. principale + sur 1 des filtres (ms les résultats des filtres doivent être combinés et non séparés...donc...)
+  for (let k = 0; k < newRecipes.length; k++) {
+    for (let l = 0; l < newRecipes[k]?.ustensils.length; l++) {
+      if (ustensils.includes(newRecipes[k].ustensils[l].toLowerCase())) {
+        newRecipesUstensils.push(newRecipes[k]);
+      }
+    }
+  }
+
+  // filtre par ingredients
+  let newRecipesIngredients = [];
+  for (let l = 0; l < newRecipes.length; l++) {
+    for (let m = 0; m < newRecipes[l].ingredients.length; m++) {
+      if (ingredients.includes(newRecipes[l].ingredients[m].ingredient.toLowerCase())) {
+        newRecipesIngredients.push(newRecipes[l]);
+      }
+    }
+  }
+
+  return newRecipesUstensils; // on ne retourne qu'un seul filtre (alors que leurs résultats doivent être combinés)
 }
-console.log(searchRecipes('Brownie'));
-console.log(searchRecipes('Courgette'));
 
 async function displayRecipeData(recipes) {
   recipes.map((recipe) => {
     const Template = new RecipeCard(recipe);
     $recipeSection.appendChild(Template.createRecipeCard());
   })
-}
-
-function displaySortedReciped() {
-  let sortedRecipes = document.querySelector('input[type=text]').value;
-  searchRecipes(sortedRecipes);
 }
 
 function deleteDisplayData() {
@@ -233,9 +249,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let target = e.target.value.toLowerCase();
     let query = {
       term: target,
-      appliances: ["casserole"],
-      ustensils: [],
-      ingredients: []
+      appliances: [],
+      ustensils: ["couteau"],
+      ingredients: ["tomate"]
     }
     const result = searchRecipes(query);
     console.log(result);
