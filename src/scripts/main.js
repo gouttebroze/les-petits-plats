@@ -45,18 +45,40 @@ function displayUstansilsList() {
   })
 }
 
-function displayAppliance() {
+function updateIngredientsList(term) {
+
+  let updatedIngredients = [];
+  for (let i = 0; i < recipes.length; i++) {
+    for (let j = 0; j < recipes[i].ingredients.length; j++) {
+      if (recipes[i].ingredients[j].ingredient.toLowerCase().includes(term.toLowerCase())) {
+        updatedIngredients.push(recipes[i].ingredients[j].ingredient.toLowerCase());
+      }
+    }
+
+  }
+  let uniqueIngredients = [];
+  for (let i = 0; i < updatedIngredients.length; i++) {
+    // on récupère l'index, puis on le compare à l'index du tableau, indexOf retourne le 1er index si doublon
+    const ingredientIndex = updatedIngredients.indexOf(updatedIngredients[i])
+    if (i === ingredientIndex) {
+      uniqueIngredients.push(updatedIngredients[i]);
+    }
+  }
+  return uniqueIngredients;
+}
+
+function displayIngredients(ingredients) {
   let applianceArray = [];
   /* for (let i = 0; i <= recipes.length; i++) {
     applianceArray.push(recipes[i]?.appliance);
     console.log(applianceArray);
 
   } */
-  const $div = document.querySelector('#appliances');
+  const $div = document.querySelector('#ingredients');
   let $ul = '<ul>';
   /* for (arr of applianceArray) { */
-  for (let i = 0; i < recipes.length; i++) {
-    $ul += `<li>${recipes[i]?.appliance}</li>`;
+  for (let i = 0; i < ingredients.length; i++) {
+    $ul += `<li>${ingredients[i]}</li>`;
   }
   $ul += '</ul>';
   $div.insertAdjacentHTML('beforeend', $ul);
@@ -169,7 +191,7 @@ function searchRecipes(searchForm) {
     }
   }
 
-  return newRecipesUstensils; // on ne retourne qu'un seul filtre (alors que leurs résultats doivent être combinés)
+  return newRecipesIngredients; // on ne retourne qu'un seul filtre (alors que leurs résultats doivent être combinés)
 }
 
 async function displayRecipeData(recipes) {
@@ -241,7 +263,10 @@ document.addEventListener("DOMContentLoaded", function () {
   totalRecipedDisplayed(recipes);
 
   // affichage de la liste des menus déroulants
-  displayAppliance();
+  const ingredients = updateIngredientsList("");
+  console.log(ingredients);
+
+  displayIngredients(ingredients);
   displayUstansilsList();
 
   $primarySearch.addEventListener('change', (e) => {
@@ -262,13 +287,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // affichage des recettes (selon le mot recherché)
     displayRecipeData(result);
 
-    // affichage des recettes (recheche y compris ds chaînes de carartères)
-    // displayRecipeData(searchSubStringsInRecipes(target));
-
     // calcul du nbre de recettes affichées
     totalRecipedDisplayed(result);
-    /* totalRecipedDisplayed(searchSubStringsInRecipes(target)); */
-
     // resetSearchInput();
   });
 
