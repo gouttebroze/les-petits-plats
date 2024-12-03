@@ -4,24 +4,36 @@ import RecipeCard from './recipeCard.js';
 const $buttonTag = document.querySelector('.toggle-tag');
 const $closeTag = document.querySelector('.close-tag');
 const $filter = document.querySelector('.filter-btn');
+const $filterAppliancesButton = document.querySelector('.filter-appliances-btn');
+const $filterUstensilsButton = document.querySelector('.filter-ustensils-btn');
 const $filterList = document.querySelector('.filter-list');
-const $arrowDown = document.querySelector('.arrow-down')
+const $filterAppliancesList = document.querySelector('.filter-appliances-list');
+const $filterUstensilsList = document.querySelector('.filter-ustensils-list');
+const $arrowDown = document.querySelector('.arrow-down');
+const $arrowDownAppliances = document.querySelector('.arrow-down-appliances');
+const $arrowDownUstensils = document.querySelector('.arrow-down-ustensils');
 const $arrowUp = document.querySelector('.arrow-up');
+const $arrowUpAppliances = document.querySelector('.arrow-up-appliances');
+const $arrowUpUstensils = document.querySelector('.arrow-up-ustensils');
 const $filterInput = document.querySelector('input[name="ingredient"]');
+const $filterInputAppliances = document.querySelector('input[name="appliance"]');
+const $filterInputUstensils = document.querySelector('input[name="ustensil"]');
 const $inputIcon = document.querySelector('.input-icons');
+const $inputAppliancesIcon = document.querySelector('.input-appliances-icons');
+const $inputUstensilsIcon = document.querySelector('.input-ustensils-icons');
 const $totalRecipesDisplayed = document.querySelector('.total-recipes');
 const $recipeSection = document.querySelector('.recipes-wrapper');
 const $primarySearch = document.getElementById('primary-search');
-const $applianceTag = document.getElementById('appliance-tag');
+/* const $applianceTag = document.getElementById('appliance-tag');
 const $ustensilsBtn = document.querySelector('.ustensils-filter-btn');
-const $ustensilsList = document.querySelector('.ustensils-filter-list');
+const $ustensilsList = document.querySelector('.ustensils-filter-list'); */
 
 function displayUstansilsList() {
   let ustansilsList = new Set();
   for (let i = 0; i < recipes.length; i++) {
     for (let j = 0; j < recipes[i].ustensils.length; j++) {
       ustansilsList.add(recipes[i].ustensils[j]);
-      console.log(recipes[i].ustensils[j]);
+      // console.log(recipes[i].ustensils[j]);
       document.getElementById('ustensils-list').innerHTML += `<li>${recipes[i].ustensils[j]}</li>`;
     }
   }
@@ -45,8 +57,13 @@ function displayUstansilsList() {
   })
 }
 
+/** 
+ * fonction permettant de récupérer et de mettre à jour la liste des ingrédients, sans doublons, selon le terme de la recherche.
+ * La boucle "for" nous permet de parcourir les différents niveaux du tableau de recettes afin d'y récupérer la liste des ingrédients.
+ * @property {string} term - Le terme de recherche saisi par l'utilisateur.
+ * @returns {void}
+ */
 function updateIngredientsList(term) {
-
   let updatedIngredients = [];
   for (let i = 0; i < recipes.length; i++) {
     for (let j = 0; j < recipes[i].ingredients.length; j++) {
@@ -54,12 +71,11 @@ function updateIngredientsList(term) {
         updatedIngredients.push(recipes[i].ingredients[j].ingredient.toLowerCase());
       }
     }
-
   }
   let uniqueIngredients = [];
   for (let i = 0; i < updatedIngredients.length; i++) {
     // on récupère l'index, puis on le compare à l'index du tableau, indexOf retourne le 1er index si doublon
-    const ingredientIndex = updatedIngredients.indexOf(updatedIngredients[i])
+    const ingredientIndex = updatedIngredients.indexOf(updatedIngredients[i]);
     if (i === ingredientIndex) {
       uniqueIngredients.push(updatedIngredients[i]);
     }
@@ -67,16 +83,39 @@ function updateIngredientsList(term) {
   return uniqueIngredients;
 }
 
-function displayIngredients(ingredients) {
-  let applianceArray = [];
-  /* for (let i = 0; i <= recipes.length; i++) {
-    applianceArray.push(recipes[i]?.appliance);
-    console.log(applianceArray);
+function updateUstensilsList(term) {
+  let updatedUstansils = [];
+  for (let i = 0; i < recipes.length; i++) {
+    for (let j = 0; j < recipes[i].ustensils.length; j++) {
+      if (recipes[i].ustensils[j].toLowerCase().includes(term.toLowerCase())) {
+        updatedUstansils.push(recipes[i].ustensils[j].toLowerCase());
+      }
+    }
+  }
+  // suppression d'éventuels doublons
+  let uniqueUstansils = [];
+  for (let i = 0; i < updatedUstansils.length; i++) {
+    const ustensilIndex = updatedUstansils.indexOf(updatedUstansils[i]);
+    // indexOf() récupère l'index et, en cas de doublon, récupère uniquement le 1er index de(s) l'élément(s) trouvé(s)
+    if (i === ustensilIndex) {
+      uniqueUstansils.push(updatedUstansils[i]);
+    }
+  }
+  return uniqueUstansils;
+}
 
-  } */
+function updateAppliancesList(term) {
+  let updatedAppliances = [];
+}
+
+/**
+ * fonction qui génère un template HTML (<ul> avec des <li>)
+ * @param {string[]} ingredients 
+ */
+function displayIngredients(ingredients) {
   const $div = document.querySelector('#ingredients');
+
   let $ul = '<ul>';
-  /* for (arr of applianceArray) { */
   for (let i = 0; i < ingredients.length; i++) {
     $ul += `<li>${ingredients[i]}</li>`;
   }
@@ -89,7 +128,6 @@ function displayIngredients(ingredients) {
     $arrowUp.style.display = 'block';
     $filterInput.style.display = 'block';
     $inputIcon.style.display = 'flex';
-
   });
 
   $filterList.addEventListener('click', () => {
@@ -99,9 +137,39 @@ function displayIngredients(ingredients) {
     $arrowDown.style.display = 'block';
     $filterInput.style.display = 'none';
     $inputIcon.style.display = 'none';
-    for (let i = 0; i < recipes.length; i++) {
+    /* for (let i = 0; i < recipes.length; i++) {
       $applianceTag.textContent = `${recipes[i]?.appliance}`;
-    }
+    } */
+  })
+  $closeTag.addEventListener('click', () => {
+    $buttonTag.style.display = 'none';
+  })
+}
+
+function displayUstensils(ustensils) {
+  const $div = document.querySelector('#ustensils');
+  let $ul = '<ul>';
+  for (let i = 0; i < ustensils.length; i++) {
+    $ul += `<li>${ustensils[i]}</li>`;
+  }
+  $ul += '</ul>';
+  $div.insertAdjacentHTML('beforeend', $ul);
+
+  $filterUstensilsButton.addEventListener('click', () => {
+    $filterUstensilsList.style.display = 'block';
+    $arrowDownUstensils.style.display = 'none';
+    $arrowUpUstensils.style.display = 'block';
+    $filterInputUstensils.style.display = 'block';
+    $inputUstensilsIcon.style.display = 'flex';
+  });
+
+  $filterUstensilsList.addEventListener('click', () => {
+    $buttonTag.style.display = 'block';
+    $filterUstensilsList.style.display = 'none';
+    $arrowUpUstensils.style.display = 'none';
+    $arrowDownUstensils.style.display = 'block';
+    $filterInputUstensils.style.display = 'none';
+    $inputUstensilsIcon.style.display = 'none';
   })
   $closeTag.addEventListener('click', () => {
     $buttonTag.style.display = 'none';
@@ -129,7 +197,6 @@ function totalRecipedDisplayed(recipes) {
 }
 
 // const allRecipes = recipes.flatMap((r) => r.ingredients);
-
 
 /**
  * @typedef {Object} SearchQuery
@@ -263,11 +330,14 @@ document.addEventListener("DOMContentLoaded", function () {
   totalRecipedDisplayed(recipes);
 
   // affichage de la liste des menus déroulants
-  const ingredients = updateIngredientsList("");
-  console.log(ingredients);
+  const ingredients = updateIngredientsList('');
+  console.table(ingredients);
+
+  const ustensils = updateUstensilsList('');
+  console.table(ustensils);
 
   displayIngredients(ingredients);
-  displayUstansilsList();
+  displayUstensils(ustensils);
 
   $primarySearch.addEventListener('change', (e) => {
     console.log(e.target.value);

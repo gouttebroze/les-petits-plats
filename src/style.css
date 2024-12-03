@@ -283,11 +283,9 @@ header>section>h1 {
   padding: 17px 16px;
 }
 
-/* .input-filter {
-  display: none;
-} */
-
-.filter-list {
+.filter-list,
+.filter-appliances-list,
+.filter-ustensils-list {
   display: none;
 }
 
@@ -297,7 +295,9 @@ header>section>h1 {
   background-color: var(--primary-color);
 }
 
-.arrow-wrapper>.arrow-up {
+.arrow-wrapper>.arrow-up,
+.arrow-wrapper>.arrow-up-appliances,
+.arrow-wrapper>.arrow-up-ustensils {
   display: none;
 }
 
@@ -327,7 +327,9 @@ header>section>h1 {
   margin: 6px;
 }
 
-.input-icons {
+.input-icons,
+.input-appliances-icons,
+.input-ustensils-icons {
   display: none;
   flex-direction: row-reverse;
   align-items: center;
@@ -336,9 +338,10 @@ header>section>h1 {
   margin-bottom: 10px;
 }
 
-.input-icons i {
+.input-icons i,
+.input-appliances-icons i,
+.input-ustensils-icons i {
   position: absolute;
-
 }
 
 .icon {
