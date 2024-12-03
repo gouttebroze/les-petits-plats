@@ -24,9 +24,9 @@ const $inputUstensilsIcon = document.querySelector('.input-ustensils-icons');
 const $totalRecipesDisplayed = document.querySelector('.total-recipes');
 const $recipeSection = document.querySelector('.recipes-wrapper');
 const $primarySearch = document.getElementById('primary-search');
-/* const $applianceTag = document.getElementById('appliance-tag');
+const $applianceTag = document.getElementById('appliance-tag');
 const $ustensilsBtn = document.querySelector('.ustensils-filter-btn');
-const $ustensilsList = document.querySelector('.ustensils-filter-list'); */
+const $ustensilsList = document.querySelector('.ustensils-filter-list');
 
 function displayUstansilsList() {
   let ustansilsList = new Set();
@@ -83,6 +83,30 @@ function updateIngredientsList(term) {
   return uniqueIngredients;
 }
 
+function updateAppliancesList(term) {
+  let updatedAppliances = [];
+  for (let i = 0; i < recipes.length; i++) {
+    if (recipes[i].appliance.toLowerCase().includes(term.toLowerCase())) {
+      updatedAppliances.push(recipes[i].appliance.toLowerCase());
+    }
+  }
+  let uniqueAppliances = [];
+  for (let i = 0; i < updatedAppliances.length; i++) {
+    const applianceIndex = updatedAppliances.indexOf(updatedAppliances[i]);
+    if (i === applianceIndex) {
+      uniqueAppliances.push(updatedAppliances[i]);
+    }
+  }
+  return uniqueAppliances;
+}
+
+/* function updateAppliancesList(term) {
+  //let updatedAppliances = [];
+  // return recipes.filter((recipe) => recipe.appliance.toLowerCase().includes(term.toLowerCase()));
+  let updatedAppliances = recipes.map(recipe => recipe.appliance.toLowerCase().includes(term.toLowerCase()));
+  return updatedAppliances;
+} */
+
 function updateUstensilsList(term) {
   let updatedUstansils = [];
   for (let i = 0; i < recipes.length; i++) {
@@ -104,24 +128,18 @@ function updateUstensilsList(term) {
   return uniqueUstansils;
 }
 
-function updateAppliancesList(term) {
-  let updatedAppliances = [];
-}
-
 /**
- * fonction qui génère un template HTML (<ul> avec des <li>)
+ * fonction qui génère un template HTML (<ul> > <li>)
  * @param {string[]} ingredients 
  */
 function displayIngredients(ingredients) {
   const $div = document.querySelector('#ingredients');
-
   let $ul = '<ul>';
   for (let i = 0; i < ingredients.length; i++) {
     $ul += `<li>${ingredients[i]}</li>`;
   }
   $ul += '</ul>';
   $div.insertAdjacentHTML('beforeend', $ul);
-
   $filter.addEventListener('click', () => {
     $filterList.style.display = 'block';
     $arrowDown.style.display = 'none';
@@ -129,7 +147,6 @@ function displayIngredients(ingredients) {
     $filterInput.style.display = 'block';
     $inputIcon.style.display = 'flex';
   });
-
   $filterList.addEventListener('click', () => {
     $buttonTag.style.display = 'block';
     $filterList.style.display = 'none';
@@ -137,9 +154,36 @@ function displayIngredients(ingredients) {
     $arrowDown.style.display = 'block';
     $filterInput.style.display = 'none';
     $inputIcon.style.display = 'none';
-    /* for (let i = 0; i < recipes.length; i++) {
-      $applianceTag.textContent = `${recipes[i]?.appliance}`;
-    } */
+  })
+  $closeTag.addEventListener('click', () => {
+    $buttonTag.style.display = 'none';
+  })
+}
+
+function displayAppliances(appliances) {
+  const $div = document.querySelector('#appliances');
+  let $ul = '<ul>';
+  for (let i = 0; i < appliances.length; i++) {
+    $ul += `<li>${appliances[i]}</li>`;
+  }
+  $ul += '</ul>';
+  $div.insertAdjacentHTML('beforeend', $ul);
+
+  $filterAppliancesButton.addEventListener('click', () => {
+    $filterAppliancesList.style.display = 'block';
+    $arrowDownAppliances.style.display = 'none';
+    $arrowUpAppliances.style.display = 'block';
+    $filterInputAppliances.style.display = 'block';
+    $inputAppliancesIcon.style.display = 'flex';
+  });
+
+  $filterAppliancesList.addEventListener('click', () => {
+    $buttonTag.style.display = 'block';
+    $filterAppliancesList.style.display = 'none';
+    $arrowUpAppliances.style.display = 'none';
+    $arrowDownAppliances.style.display = 'block';
+    $filterInputAppliances.style.display = 'none';
+    $inputAppliancesIcon.style.display = 'none';
   })
   $closeTag.addEventListener('click', () => {
     $buttonTag.style.display = 'none';
@@ -176,15 +220,15 @@ function displayUstensils(ustensils) {
   })
 }
 
-function filterInputValue() {
+/* function filterInputValue() {
   $filterInput.addEventListener('change', (e) => {
     e.preventDefault();
     const target = e.target.value;
     return target;
   })
-}
+} */
 
-filterInputValue();
+//filterInputValue();
 
 /* calcul du nombre de recettes affichées */
 function totalRecipedDisplayed(recipes) {
@@ -232,7 +276,7 @@ function searchRecipes(searchForm) {
   // filtre par appareil
   let newRecipesAppliances = [];
   for (let j = 0; j < newRecipes.length; j++) {
-    if (appliances.includes(newRecipes[j].appliance.toLowerCase())) {
+    if (appliances.includes(newRecipes[j]?.appliance.toLowerCase())) {
       newRecipesAppliances.push(newRecipes[j]);
     }
   }
@@ -257,8 +301,8 @@ function searchRecipes(searchForm) {
       }
     }
   }
-
-  return newRecipesIngredients; // on ne retourne qu'un seul filtre (alors que leurs résultats doivent être combinés)
+  return newRecipesAppliances;
+  //return newRecipesIngredients; // on ne retourne qu'un seul filtre (alors que leurs résultats doivent être combinés)
 }
 
 async function displayRecipeData(recipes) {
@@ -279,51 +323,6 @@ function resetSearchInput() {
   $searchForm.innerHTML = '';
 }
 
-let searchValue = new Set();
-function searchForRecipes(target) {
-  let flag = false;
-  // ex.: si cherche "Brownie", retourne: "trouvé"
-  for (let i = 0; i < recipes.length; i++) {
-    for (let j = 0; j < recipes[i].ingredients.length; j++) {
-      // trie sur "name" & sur "description" du tab. "recipes" & sur "ingredient" du tab. "ingredients"
-      if (target === recipes[i].name.toLocaleLowerCase()
-        || target === recipes[i].description
-        || target === recipes[i].ingredients[j].ingredient
-      ) {
-        flag = true;
-      }
-    }
-  }
-  if (flag === true) {
-    console.log("trouvé");
-    // searchValue.push(target); // on stock nos élements trouvé ds 1 tableau "searchValue"
-    searchValue.add(target); // on stock nos élements trouvé ds 1 set (pr éviter les doublons)
-  } else {
-    console.log("pas trouvé");
-  }
-  console.log("Elements trouvés: ", searchValue);
-  return searchValue;
-}
-
-function searchSubStringsInRecipes(substring) {
-  let sortedRecipes = [];
-  for (let i = 0; i <= recipes.length; i++) {
-    if (recipes[i]?.name.indexOf(substring) !== -1
-      || recipes[i]?.description.indexOf(substring) !== -1) {
-      sortedRecipes.push(recipes[i]);
-      continue;
-    }
-    /* for (let j = 0; j <= recipes[i]?.ingredients.length; j++) {
-      if (recipes[i]?.ingredients[j]?.ingredient.indexOf(substring) !== -1) {
-        sortedRecipes.push(recipes[i]);
-      }
-    } */
-  }
-  return sortedRecipes;
-}
-console.log(searchSubStringsInRecipes('courge'));
-
-
 document.addEventListener("DOMContentLoaded", function () {
 
   displayRecipeData(recipes);
@@ -331,22 +330,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // affichage de la liste des menus déroulants
   const ingredients = updateIngredientsList('');
-  console.table(ingredients);
-
+  const appliances = updateAppliancesList('');
   const ustensils = updateUstensilsList('');
+  console.table(ingredients);
+  console.table(appliances);
   console.table(ustensils);
 
   displayIngredients(ingredients);
+  displayAppliances(appliances);
   displayUstensils(ustensils);
 
+  // test with .filter() method
+  // recipes.filter(recipe => console.log(recipe.appliance))
+  // console.log(recipes.filter((recipe) => recipe.appliance.toLowerCase()));
+
+  // TODO: voir pr passer valeur du filtre ds les tableaux du query...
   $primarySearch.addEventListener('change', (e) => {
     console.log(e.target.value);
     let target = e.target.value.toLowerCase();
     let query = {
       term: target,
-      appliances: [],
-      ustensils: ["couteau"],
-      ingredients: ["tomate"]
+      appliances: ['blender'],
+      ustensils: [],
+      ingredients: []
     }
     const result = searchRecipes(query);
     console.log(result);
@@ -362,4 +368,132 @@ document.addEventListener("DOMContentLoaded", function () {
     // resetSearchInput();
   });
 
+  /********
+  TODO:
+    - lancer les recherches à partir du click sur 1 des éléments d'1 des 3 listes
+    - ce qui relance la recherche globale, en ajoutant ensuite une 
+    scd recherche de recette qui filtre les recettes, 
+    donc après la recherche globale (qui peut être vide), on recherche les recettes 
+    ayant le tag correspondant au filtre...
+    - en 1er, on sélectionne ts les <li> des listes avec 1 querySelectorAll()
+    - ensuite, on lance 1 eventListener au click sur les <li>
+    ...
+  *********/
+
+  const $ingredientsList = Array.from(document.querySelectorAll('#ingredients ul li'));
+  console.log($ingredientsList); // return nodeList of <li>
+  $ingredientsList.forEach((li) => {
+    li.addEventListener("click", (e) => {
+
+      // injection du nom de l'ingrédient + affichage button "tag"
+      console.log(e.target.textContent);
+      let target = e.target.textContent.toLowerCase();
+      $buttonTag.style.display = 'block';
+      $buttonTag.textContent = e.target.textContent;
+
+      /* let query = {
+        term: target,
+        appliances: ['Blender'],
+        ustensils: [],
+        ingredients: []
+      }
+      const result = searchRecipes(query);
+      deleteDisplayData();
+      displayRecipeData(result); */
+    })
+  })
+
+  const $ustensilsList = Array.from(document.querySelectorAll('#ustensils ul li'));
+  console.log($ustensilsList);
+  $ustensilsList.forEach((li) => {
+    li.addEventListener("click", (e) => {
+      console.log(e.target.textContent);
+      let target = e.target.textContent.toLowerCase();
+      $buttonTag.style.display = 'block';
+      $buttonTag.textContent = e.target.textContent;
+
+      /* let query = {
+        term: target,
+        appliances: [],
+        ustensils: [],
+        ingredients: []
+      }
+      const result = searchRecipes(query);
+      deleteDisplayData();
+      displayRecipeData(result); */
+    })
+  })
+
+  const $appliancesList = Array.from(document.querySelectorAll('#appliances ul li'));
+  console.log($appliancesList);
+  $appliancesList.forEach((li) => {
+    li.addEventListener("click", (e) => {
+      console.log(e.target.textContent);
+      let target = e.target.textContent.toLowerCase();
+      $buttonTag.style.display = 'block';
+      $buttonTag.textContent = e.target.textContent;
+    })
+  })
+
+  /*********************************
+   * TODO: implement input's filters
+   *********************************/
+  // ingredients list input
+  $filter.addEventListener('change', (e) => {
+    let target = e.target.value.toLowerCase();
+    let query = {
+      term: target,
+      appliances: ['blender'],
+      ustensils: [],
+      ingredients: []
+    }
+    const result = searchRecipes(query);
+    console.log(result);
+
+    // suppression des recettes déjà affichées
+    deleteDisplayData();
+
+    // affichage des recettes (selon le mot recherché)
+    displayRecipeData(result);
+
+    // calcul du nbre de recettes affichées
+    totalRecipedDisplayed(result);
+    // resetSearchInput();
+  });
+
+  $filterInputAppliances.addEventListener('change', (e) => {
+    let target = e.target.value.toLowerCase();
+    let query = {
+      term: target,
+      appliances: ['blender'],
+      ustensils: [],
+      ingredients: []
+    }
+    const result = searchRecipes(query);
+    console.log(result);
+
+    // suppression des recettes déjà affichées
+    deleteDisplayData();
+
+    // affichage des recettes (selon le mot recherché)
+    displayRecipeData(result);
+
+    // calcul du nbre de recettes affichées
+    totalRecipedDisplayed(result);
+  });
+
+  $filterInputUstensils.addEventListener('change', (e) => {
+    let target = e.target.value.toLowerCase();
+    let query = {
+      term: target,
+      appliances: ['blender'],
+      ustensils: [],
+      ingredients: []
+    }
+    const result = searchRecipes(query);
+    console.log(result);
+    deleteDisplayData();
+    displayRecipeData(result);
+    totalRecipedDisplayed(result);
+  });
 });
