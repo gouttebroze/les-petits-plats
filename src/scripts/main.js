@@ -2,7 +2,13 @@ import { recipes } from './recipes';
 import RecipeCard from './recipeCard.js';
 
 const $buttonTag = document.querySelector('.toggle-tag');
+const $buttonTagIngredients = document.querySelector('.toggle-tag-ingredients');
+const $buttonTagAppliances = document.querySelector('.toggle-tag-appliances');
+const $buttonTagUstensils = document.querySelector('.toggle-tag-ustensils');
 const $closeTag = document.querySelector('.close-tag');
+const $closeTagIngredients = document.querySelector('.close-tag-ingredients');
+const $closeTagAppliances = document.querySelector('.close-tag-appliances');
+const $closeTagUstensils = document.querySelector('.close-tag-ustensils');
 const $filter = document.querySelector('.filter-btn');
 const $filterAppliancesButton = document.querySelector('.filter-appliances-btn');
 const $filterUstensilsButton = document.querySelector('.filter-ustensils-btn');
@@ -24,38 +30,11 @@ const $inputUstensilsIcon = document.querySelector('.input-ustensils-icons');
 const $totalRecipesDisplayed = document.querySelector('.total-recipes');
 const $recipeSection = document.querySelector('.recipes-wrapper');
 const $primarySearch = document.getElementById('primary-search');
-const $applianceTag = document.getElementById('appliance-tag');
+const $contentTagIngredients = document.getElementById('content-tag-ingredients');
+const $contentTagAppliances = document.getElementById('content-tag-appliances');
+const $contentTagUstensils = document.getElementById('content-tag-ustensils');
 const $ustensilsBtn = document.querySelector('.ustensils-filter-btn');
 const $ustensilsList = document.querySelector('.ustensils-filter-list');
-
-function displayUstansilsList() {
-  let ustansilsList = new Set();
-  for (let i = 0; i < recipes.length; i++) {
-    for (let j = 0; j < recipes[i].ustensils.length; j++) {
-      ustansilsList.add(recipes[i].ustensils[j]);
-      // console.log(recipes[i].ustensils[j]);
-      document.getElementById('ustensils-list').innerHTML += `<li>${recipes[i].ustensils[j]}</li>`;
-    }
-  }
-  $ustensilsBtn.addEventListener('click', () => {
-    $ustensilsList.style.display = 'block';
-    $arrowDown.style.display = 'none';
-    $arrowUp.style.display = 'block';
-    $filterInput.style.display = 'block';
-    $inputIcon.style.display = 'flex';
-  });
-  $ustensilsList.addEventListener('click', () => {
-    $buttonTag.style.display = 'block';
-    $ustensilsList.style.display = 'none';
-    $arrowUp.style.display = 'none';
-    $arrowDown.style.display = 'block';
-    $filterInput.style.display = 'none';
-    $inputIcon.style.display = 'none';
-  })
-  $closeTag.addEventListener('click', () => {
-    $buttonTag.style.display = 'none';
-  })
-}
 
 /** 
  * fonction permettant de récupérer et de mettre à jour la liste des ingrédients, sans doublons, selon le terme de la recherche.
@@ -148,15 +127,15 @@ function displayIngredients(ingredients) {
     $inputIcon.style.display = 'flex';
   });
   $filterList.addEventListener('click', () => {
-    $buttonTag.style.display = 'block';
+    $buttonTagIngredients.style.display = 'block';
     $filterList.style.display = 'none';
     $arrowUp.style.display = 'none';
     $arrowDown.style.display = 'block';
     $filterInput.style.display = 'none';
     $inputIcon.style.display = 'none';
   })
-  $closeTag.addEventListener('click', () => {
-    $buttonTag.style.display = 'none';
+  $closeTagIngredients.addEventListener('click', () => {
+    $buttonTagIngredients.style.display = 'none';
   })
 }
 
@@ -178,15 +157,15 @@ function displayAppliances(appliances) {
   });
 
   $filterAppliancesList.addEventListener('click', () => {
-    $buttonTag.style.display = 'block';
+    $buttonTagAppliances.style.display = 'block';
     $filterAppliancesList.style.display = 'none';
     $arrowUpAppliances.style.display = 'none';
     $arrowDownAppliances.style.display = 'block';
     $filterInputAppliances.style.display = 'none';
     $inputAppliancesIcon.style.display = 'none';
   })
-  $closeTag.addEventListener('click', () => {
-    $buttonTag.style.display = 'none';
+  $closeTagAppliances.addEventListener('click', () => {
+    $buttonTagAppliances.style.display = 'none';
   })
 }
 
@@ -208,29 +187,26 @@ function displayUstensils(ustensils) {
   });
 
   $filterUstensilsList.addEventListener('click', () => {
-    $buttonTag.style.display = 'block';
+    $buttonTagUstensils.style.display = 'block';
     $filterUstensilsList.style.display = 'none';
     $arrowUpUstensils.style.display = 'none';
     $arrowDownUstensils.style.display = 'block';
     $filterInputUstensils.style.display = 'none';
     $inputUstensilsIcon.style.display = 'none';
   })
-  $closeTag.addEventListener('click', () => {
-    $buttonTag.style.display = 'none';
+  $closeTagUstensils.addEventListener('click', () => {
+    $buttonTagUstensils.style.display = 'none';
   })
 }
 
-/* function filterInputValue() {
-  $filterInput.addEventListener('change', (e) => {
-    e.preventDefault();
-    const target = e.target.value;
-    return target;
-  })
-} */
-
-//filterInputValue();
-
-/* calcul du nombre de recettes affichées */
+/**
+ * fn de calcul & d'affichage:
+ *  - du nombre de recettes affichées
+ *  - de l'affichage de ce nombre
+ * TODO: séparer la logique de calcul de celle d'affichage (créer 2 fns, pr que chaque fn ai une & une seul responsable)
+ * @param {string[]} recipes 
+ * @returns {number} totalRecipes - taille du tableau de recettes passé en paramètre
+ */
 function totalRecipedDisplayed(recipes) {
   let totalRecipes = recipes.length;
   let $displayRecipesNumber = document.createElement('h3');
@@ -240,7 +216,17 @@ function totalRecipedDisplayed(recipes) {
   return totalRecipes;
 }
 
-// const allRecipes = recipes.flatMap((r) => r.ingredients);
+function calculResultsElements(results) {
+  let arrayLength = results.length;
+  return arrayLength;
+}
+
+function displayRecipesNumber(resultsNumbers) {
+  let $displayRecipesNumber = document.createElement('h3');
+  $displayRecipesNumber.setAttribute('class', 'recipes-number anton');
+  $displayRecipesNumber.textContent = `${totalRecipes} recettes`;
+  $totalRecipesDisplayed.appendChild($displayRecipesNumber);
+}
 
 /**
  * @typedef {Object} SearchQuery
@@ -301,8 +287,8 @@ function searchRecipes(searchForm) {
       }
     }
   }
-  return newRecipesAppliances;
-  //return newRecipesIngredients; // on ne retourne qu'un seul filtre (alors que leurs résultats doivent être combinés)
+  //return newRecipesAppliances;
+  return newRecipesIngredients;
 }
 
 async function displayRecipeData(recipes) {
@@ -314,7 +300,6 @@ async function displayRecipeData(recipes) {
 
 function deleteDisplayData() {
   $recipeSection.textContent = '';
-  // document.querySelector('.recipes-number').insertAdjacentText('afterbegin', '');
   document.querySelector('.recipes-number').textContent = '';
 }
 
@@ -325,6 +310,7 @@ function resetSearchInput() {
 
 document.addEventListener("DOMContentLoaded", function () {
 
+  // affichage initial, avec tableau de recettes complet
   displayRecipeData(recipes);
   totalRecipedDisplayed(recipes);
 
@@ -335,24 +321,21 @@ document.addEventListener("DOMContentLoaded", function () {
   console.table(ingredients);
   console.table(appliances);
   console.table(ustensils);
-
   displayIngredients(ingredients);
   displayAppliances(appliances);
   displayUstensils(ustensils);
 
-  // test with .filter() method
-  // recipes.filter(recipe => console.log(recipe.appliance))
-  // console.log(recipes.filter((recipe) => recipe.appliance.toLowerCase()));
-
-  // TODO: voir pr passer valeur du filtre ds les tableaux du query...
+  /**
+   * recherche principale
+   */
   $primarySearch.addEventListener('change', (e) => {
     console.log(e.target.value);
     let target = e.target.value.toLowerCase();
     let query = {
       term: target,
-      appliances: ['blender'],
+      appliances: [],
       ustensils: [],
-      ingredients: []
+      ingredients: ['citron']
     }
     const result = searchRecipes(query);
     console.log(result);
@@ -368,38 +351,15 @@ document.addEventListener("DOMContentLoaded", function () {
     // resetSearchInput();
   });
 
-  /********
-  TODO:
-    - lancer les recherches à partir du click sur 1 des éléments d'1 des 3 listes
-    - ce qui relance la recherche globale, en ajoutant ensuite une 
-    scd recherche de recette qui filtre les recettes, 
-    donc après la recherche globale (qui peut être vide), on recherche les recettes 
-    ayant le tag correspondant au filtre...
-    - en 1er, on sélectionne ts les <li> des listes avec 1 querySelectorAll()
-    - ensuite, on lance 1 eventListener au click sur les <li>
-    ...
-  *********/
-
+  // inject element name on click, into button tag
   const $ingredientsList = Array.from(document.querySelectorAll('#ingredients ul li'));
   console.log($ingredientsList); // return nodeList of <li>
   $ingredientsList.forEach((li) => {
     li.addEventListener("click", (e) => {
 
-      // injection du nom de l'ingrédient + affichage button "tag"
-      console.log(e.target.textContent);
-      let target = e.target.textContent.toLowerCase();
-      $buttonTag.style.display = 'block';
-      $buttonTag.textContent = e.target.textContent;
-
-      /* let query = {
-        term: target,
-        appliances: ['Blender'],
-        ustensils: [],
-        ingredients: []
-      }
-      const result = searchRecipes(query);
-      deleteDisplayData();
-      displayRecipeData(result); */
+      // au lieu d'afficher btn, le / les créer pr en afficher plusieurs
+      $buttonTagIngredients.style.display = 'block';
+      $contentTagIngredients.textContent = e.target.textContent;
     })
   })
 
@@ -407,20 +367,8 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log($ustensilsList);
   $ustensilsList.forEach((li) => {
     li.addEventListener("click", (e) => {
-      console.log(e.target.textContent);
-      let target = e.target.textContent.toLowerCase();
-      $buttonTag.style.display = 'block';
-      $buttonTag.textContent = e.target.textContent;
-
-      /* let query = {
-        term: target,
-        appliances: [],
-        ustensils: [],
-        ingredients: []
-      }
-      const result = searchRecipes(query);
-      deleteDisplayData();
-      displayRecipeData(result); */
+      $buttonTagUstensils.style.display = 'block';
+      $contentTagUstensils.textContent = e.target.textContent;
     })
   })
 
@@ -428,39 +376,34 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log($appliancesList);
   $appliancesList.forEach((li) => {
     li.addEventListener("click", (e) => {
-      console.log(e.target.textContent);
-      let target = e.target.textContent.toLowerCase();
-      $buttonTag.style.display = 'block';
-      $buttonTag.textContent = e.target.textContent;
+      $buttonTagAppliances.style.display = 'block';
+      $contentTagAppliances.textContent = e.target.textContent;
     })
   })
 
-  /*********************************
-   * TODO: implement input's filters
-   *********************************/
-  // ingredients list input
+  /*****************************************
+   * Dropdown - to display filters recipes 
+   *****************************************/
+  /**
+   * filter by ingredient
+   */
   $filter.addEventListener('change', (e) => {
     let target = e.target.value.toLowerCase();
     let query = {
       term: target,
-      appliances: ['blender'],
+      appliances: [],
       ustensils: [],
-      ingredients: []
+      ingredients: ['citron'] // preciser un ingredient pr avoir des résultats (ok, fonctionne)
     }
     const result = searchRecipes(query);
-    console.log(result);
-
-    // suppression des recettes déjà affichées
     deleteDisplayData();
-
-    // affichage des recettes (selon le mot recherché)
     displayRecipeData(result);
-
-    // calcul du nbre de recettes affichées
     totalRecipedDisplayed(result);
-    // resetSearchInput();
   });
 
+  /**
+   * filter by appliance
+   */
   $filterInputAppliances.addEventListener('change', (e) => {
     let target = e.target.value.toLowerCase();
     let query = {
@@ -470,18 +413,14 @@ document.addEventListener("DOMContentLoaded", function () {
       ingredients: []
     }
     const result = searchRecipes(query);
-    console.log(result);
-
-    // suppression des recettes déjà affichées
     deleteDisplayData();
-
-    // affichage des recettes (selon le mot recherché)
     displayRecipeData(result);
-
-    // calcul du nbre de recettes affichées
     totalRecipedDisplayed(result);
   });
 
+  /**
+   * filter by ustensil
+   */
   $filterInputUstensils.addEventListener('change', (e) => {
     let target = e.target.value.toLowerCase();
     let query = {

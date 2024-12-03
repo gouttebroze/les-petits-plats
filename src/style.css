@@ -50,13 +50,7 @@ body {
   display: flex;
   place-items: center;
   min-width: 320px;
-  /* min-height: 100vh; */
 }
-
-/* h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-} */
 
 #app {
   margin: 0 auto;
@@ -180,7 +174,6 @@ header>section>h1 {
   top: 21px;
   right: 22px;
   height: 30px;
-  /*   padding-left: ; */
   background-color: var(--primary-color);
 }
 
@@ -256,7 +249,9 @@ header>section>h1 {
   margin-top: 30px;
 }
 
-.toggle-tag {
+.toggle-tag-ingredients,
+.toggle-tag-appliances,
+.toggle-tag-ustensils {
   display: none;
   background-color: var(--primary-color);
   color: var(--primary-text-color);
@@ -289,9 +284,10 @@ header>section>h1 {
   display: none;
 }
 
-.filter-list>li:hover,
-.filter-list>li:focus,
-.filter-list>li:active {
+/* arrière-plan en jaune sur éléments des filtres (juste sur ingredients, pr tester...) */
+.filter-list>ul>li:hover,
+.filter-list>ul>li:focus,
+.filter-list>ul>li:active {
   background-color: var(--primary-color);
 }
 
