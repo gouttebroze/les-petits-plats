@@ -1,6 +1,242 @@
 import { recipes } from './recipes';
 import RecipeCard from './recipeCard.js';
 import { searchRecipes } from './nativeLoops.js';
+import { filterByReduceMethod } from './arrayObject.js';
+
+const musicBandsInfos = [
+  {
+    label: '',
+    musicalStyle: 'punk',
+    stillPlaying: false,
+    country: 'usa', albums: 12, nom: 'Ramones', from: 'New-York',
+    collaborations: [
+      {
+        turnedOrRecorded: 'turned with Pavement',
+        turnedOrRecorded: 'turned with Throwing Muses',
+        turnedOrRecorded: 'with Low, recorded by Touch & Go label',
+        turnedOrRecorded: 'turned with Cat Power',
+        turnedOrRecorded: 'turned with PJ Harvey',
+        turnedOrRecorded: 'turned with The Pogues',
+        turnedOrRecorded: 'turned with Nick Cave',
+        turnedOrRecorded: 'turned with Sonic Youth'
+      }
+    ]
+  },
+  {
+    label: '', musicalStyle: 'punk & traditional irish folk',
+    stillPlaying: false,
+    country: 'uk',
+    albums: 6,
+    nom: 'The Pogues', from: 'London',
+    collaborations: [{
+      turnedOrRecorded: 'turned with Pavement',
+      turnedOrRecorded: 'turned with Throwing Muses',
+      turnedOrRecorded: 'with Low, recorded by Touch & Go label',
+      turnedOrRecorded: 'turned with Cat Power',
+      turnedOrRecorded: 'turned with PJ Harvey',
+      turnedOrRecorded: 'turned with The Pogues',
+      turnedOrRecorded: 'turned with Nick Cave',
+      turnedOrRecorded: 'turned with Sonic Youth'
+    }]
+  },
+  {
+    label: '', musicalStyle: 'punk',
+    stillPlaying: true,
+    country: 'nepal', albums: 4, nom: 'Raï-Kho-Ris', from: 'katmandou',
+    collaborations: [{
+      turnedOrRecorded: 'turned with Pavement',
+      turnedOrRecorded: 'turned with Throwing Muses',
+      turnedOrRecorded: 'with Low, recorded by Touch & Go label',
+      turnedOrRecorded: 'turned with Cat Power',
+      turnedOrRecorded: 'turned with PJ Harvey',
+      turnedOrRecorded: 'turned with The Pogues',
+      turnedOrRecorded: 'turned with Nick Cave',
+      turnedOrRecorded: 'turned with Sonic Youth'
+    }]
+  },
+  {
+    /*
+    return only if the band is stillPlaying, have released more than 6 albums & is comming from Seattle, 
+    // so this band is... EARTH, yeah, okay... famous doom rock band, leaded by Dylan Carlson, great musician & a really nice person, 
+    // a very nice guy, having met him during a completely unsuccessful interview, realised with my old friend, Loïc Devigne. 
+    // And, he and my friend have been working on some folk music writings ... !!!
+    //a very nice guy, having met him during a completely unsuccessful interview. 
+    // He and my friend had been working on some folk music writing, a lovely project 
+    // that would have made for good reading, always funny, quirky and surprising, 
+    //for sure, but since fallen by the wayside or into oblivion it seems to me.
+    */
+    label: '', musicalStyle: 'doom',
+    stillPlaying: true,
+    country: 'usa', albums: 7, nom: 'Earth', from: 'Seattle', collaborations: [
+      {
+        turnedOrRecorded: 'turned with Pavement',
+        turnedOrRecorded: 'turned with Throwing Muses',
+        turnedOrRecorded: 'with Low, recorded by Touch & Go label',
+        turnedOrRecorded: 'turned with Cat Power',
+        turnedOrRecorded: 'turned with PJ Harvey',
+        turnedOrRecorded: 'turned with The Pogues',
+        turnedOrRecorded: 'turned with Nick Cave',
+        turnedOrRecorded: 'turned with Sonic Youth'
+      }
+    ]
+  },
+  {
+    label: '', musicalStyle: 'punk',
+    stillPlaying: false,
+    country: 'usa', albums: 7, nom: 'Butthole Surfers', from: 'Austin, Texas',
+    collaborations: [{
+      turnedOrRecorded: 'turned with Pavement',
+      turnedOrRecorded: 'turned with Throwing Muses',
+      turnedOrRecorded: 'with Low, recorded by Touch & Go label',
+      turnedOrRecorded: 'turned with Cat Power',
+      turnedOrRecorded: 'turned with PJ Harvey',
+      turnedOrRecorded: 'turned with The Pogues',
+      turnedOrRecorded: 'turned with Nick Cave',
+      turnedOrRecorded: 'turned with Sonic Youth'
+    }]
+  },
+  {
+    label: '', musicalStyle: 'punk rock as jazz, reggae, ska & more influences',
+    stillPlaying: false,
+    country: 'uk', albums: 6, nom: 'The Clash', from: 'London', collaborations: [
+      {
+        turnedOrRecorded: 'turned with Pavement',
+        turnedOrRecorded: 'turned with Throwing Muses',
+        turnedOrRecorded: 'with Low, recorded by Touch & Go label',
+        turnedOrRecorded: 'turned with Cat Power',
+        turnedOrRecorded: 'turned with PJ Harvey',
+        turnedOrRecorded: 'turned with The Pogues',
+        turnedOrRecorded: 'turned with Nick Cave',
+        turnedOrRecorded: 'turned with Sonic Youth'
+      }
+    ]
+  },
+  {
+    label: '', musicalStyle: 'post punk noise',
+    stillPlaying: true,
+    country: 'uk',
+    albums: 6,
+    nom: 'The Pixies',
+    from: 'somewhere, maybe ...', collaborations: [
+      {
+        turnedOrRecorded: 'turned with Pavement',
+        turnedOrRecorded: 'turned with Throwing Muses',
+        turnedOrRecorded: 'with Low, recorded by Touch & Go label',
+        turnedOrRecorded: 'turned with Cat Power',
+        turnedOrRecorded: 'turned with PJ Harvey',
+        turnedOrRecorded: 'turned with The Pogues',
+        turnedOrRecorded: 'turned with Nick Cave',
+        turnedOrRecorded: 'turned with Sonic Youth'
+      }
+    ]
+  },
+  {
+    label: ['Scuzz Productions', 'Torn & Frayed', 'Anchor & Hope', 'Madman', 'Bella Union', 'Touch & Go'],
+    musicalStyle: 'instrumental rock',
+    stillPlaying: true,
+    country: 'Australia',
+    albums: 17,
+    nom: 'Dirty Three',
+    from: 'Melbourne',
+    collaborations: [
+      {
+        turnedOrRecorded: 'turned with Pavement',
+        turnedOrRecorded: 'turned with Throwing Muses',
+        turnedOrRecorded: 'with Low, recorded by Touch & Go label',
+        turnedOrRecorded: 'turned with Cat Power',
+        turnedOrRecorded: 'turned with PJ Harvey',
+        turnedOrRecorded: 'turned with The Pogues',
+        turnedOrRecorded: 'turned with Nick Cave',
+        turnedOrRecorded: 'turned with Sonic Youth'
+      }
+    ]
+  },
+];
+
+function bandsInformations(term) {
+  const musiciansObj = musicBandsInfos.reduce((acc, curr) => {
+    const { country, nom, from, ...otherProps } = curr;
+
+    if (curr.country === term) {
+      curr.nom + ' ';
+    }
+    // acc[curr.country] = otherProps;
+    return acc;
+  }, {});
+  return musiciansObj;
+}
+console.log('info. music bands here: ', bandsInformations('uk'));
+
+/*****
+ * ------------ *
+ ****
+const filterByReduceMethod = recipes.reduce((acc, curr) => {
+  const { id, ...otherProps } = curr;
+  if (curr.name.includes('Courgette')) {
+    acc[curr.id] = otherProps;
+  }
+  return acc;
+}, {})
+console.log('filter recipes using reduce method: ', filterByReduceMethod);
+*/
+const punkBands = musicBandsInfos.reduce((acc, curr) => {
+  const { nom, musicalStyle, albums, from, country, stillPlaying, ...otherProps } = curr;
+  if (curr.albums > 3 && curr.musicalStyle.includes('punk')) {
+
+    acc[curr.nom] = curr.from; // 'nom' as obj.key: 'from' as obj. values
+  }
+
+  return acc;
+}, {}); // on commence à parcourir le tab. avec 0 comme nbre d'albums 
+console.log('bands as punk rock music could be :', punkBands);
+//.log('a band  : ', bandsByFrom[]);
+/**
+ * .reduce() memo & explain:
+ *  - acc : 
+ *  - curr :
+ *  - init. value:
+ *  - acc[curr.keyName]
+ *  - destructuring:  
+ */
+const bandsByFrom = musicBandsInfos.reduce((acc, curr) => {
+  const { nom, albums, from, stillPlaying, ...otherProps } = curr;
+  if (curr.stillPlaying && curr.albums > 6 && curr.from === 'Seattle') {
+    // 
+    /* acc[curr.albums] = otherProps; */
+    acc[curr.nom] = curr.from; // 'nom' as obj.key: 'from' as obj. values
+  }
+
+  return acc;
+}, {}); // on commence à parcourir le tab. avec 0 comme nbre d'albums 
+console.log('from-location:', bandsByFrom);
+//.log('a band  : ', bandsByFrom[]);
+
+
+const bandsFromUK = musicBandsInfos.reduce((acc, curr) => {
+  if ((Object.keys(acc).includes(curr.country))) {
+    acc[curr.country] += curr.nom
+  } else {
+    acc[curr.country] = curr.nom
+  }
+  return acc;
+}, {}); // on commence à parcourir le tab. avec 0 comme nbre d'albums 
+console.log('Reduce bands from UK:', bandsFromUK);
+
+const nbreOfAlbums = musicBandsInfos.reduce((acc, curr) => {
+  acc += curr.albums;
+  return acc;
+}, 0); // on commence à parcourir le tab. avec 0 comme nbre d'albums 
+const albumNumberByCountry = musicBandsInfos.reduce((acc, curr) => {
+  if (Object.keys(acc).includes(curr.country)) {
+    acc[curr.country] += curr.albums;
+  } else {
+    acc[curr.country] = curr.albums;
+  }
+  return acc;
+}, {});
+console.log("nombre d'albums", albumNumberByCountry);   // usa:26, uk: 12, nepal: 4
+console.table("nombre d'albums", albumNumberByCountry);// usa:26, uk: 12, nepal: 4
+
 
 const $buttonTagIngredients = document.querySelector('.toggle-tag-ingredients');
 const $buttonTagAppliances = document.querySelector('.toggle-tag-appliances');
@@ -225,6 +461,10 @@ function displayRecipesNumber(resultsNumbers) {
   $totalRecipesDisplayed.appendChild($displayRecipesNumber);
 }
 
+/**
+ * fn to display recipes
+ * @param {*} recipes 
+ */
 async function displayRecipeData(recipes) {
   recipes.map((recipe) => {
     const Template = new RecipeCard(recipe);
@@ -244,12 +484,14 @@ function resetSearchInput() {
 
 document.addEventListener("DOMContentLoaded", function () {
 
+  console.log(filterByReduceMethod('courgette'));
+
   // affichage initial, avec tableau de recettes complet
   displayRecipeData(recipes);
   totalRecipedDisplayed(recipes);
 
   // affichage de la liste des menus déroulants
-  const ingredients = updateIngredientsList('');
+  /* const ingredients = updateIngredientsList('');
   const appliances = updateAppliancesList('');
   const ustensils = updateUstensilsList('');
   console.table(ingredients);
@@ -257,31 +499,48 @@ document.addEventListener("DOMContentLoaded", function () {
   console.table(ustensils);
   displayIngredients(ingredients);
   displayAppliances(appliances);
-  displayUstensils(ustensils);
+  displayUstensils(ustensils); */
 
   /**
    * recherche principale
    */
   $primarySearch.addEventListener('change', (e) => {
-    console.log(e.target.value);
+    // console.log(filterByReduceMethod('fraise'));
     let target = e.target.value.toLowerCase();
-    let query = {
+    //let arrTarg = Array.of(target);
+    console.log(target);
+
+    /* let query = {
       term: target,
       appliances: [],
       ustensils: [],
       ingredients: ['citron']
     }
-    const result = searchRecipes(query);
-    console.log(result);
+    // const result = searchRecipes(query);
+    const result = filterByReduceMethod(query);
+    console.log(result); */
 
     // suppression des recettes déjà affichées
     deleteDisplayData();
 
     // affichage des recettes (selon le mot recherché)
-    displayRecipeData(result);
+    // displayRecipeData(result);
+
+    /**
+     * fn d'affichage des recettes, 
+     * pernnant en paramètre une fn de recherche de correspondances entre l'occurence soumise dans l'input, 
+     * & les valeurs trouvées parcourant le tab. de recettes 
+     * on recherche les égalités ds le tableau "recipes", 
+     * entre les valeurs des objets{} "nom", "description" & le tableau "ingredients" (tab. multi-dimensionnel) 
+     * & avec l'occurence soumise dans l'input
+     * fn utilisant les methodes de l'objet Array (.reduce())
+     */
+    displayRecipeData(filterByReduceMethod(target));
 
     // calcul du nbre de recettes affichées
-    totalRecipedDisplayed(result);
+    // totalRecipedDisplayed(result);
+    totalRecipedDisplayed(recipes);
+
     // resetSearchInput();
   });
 
@@ -321,7 +580,7 @@ document.addEventListener("DOMContentLoaded", function () {
   /**
    * filter by ingredient
    */
-  $filter.addEventListener('change', (e) => {
+  /* $filter.addEventListener('change', (e) => {
     let target = e.target.value.toLowerCase();
     let query = {
       term: target,
@@ -333,12 +592,12 @@ document.addEventListener("DOMContentLoaded", function () {
     deleteDisplayData();
     displayRecipeData(result);
     totalRecipedDisplayed(result);
-  });
+  }); */
 
   /**
    * filter by appliance
    */
-  $filterInputAppliances.addEventListener('change', (e) => {
+  /* $filterInputAppliances.addEventListener('change', (e) => {
     let target = e.target.value.toLowerCase();
     let query = {
       term: target,
@@ -350,12 +609,12 @@ document.addEventListener("DOMContentLoaded", function () {
     deleteDisplayData();
     displayRecipeData(result);
     totalRecipedDisplayed(result);
-  });
+  }); */
 
   /**
    * filter by ustensil
    */
-  $filterInputUstensils.addEventListener('change', (e) => {
+  /* $filterInputUstensils.addEventListener('change', (e) => {
     let target = e.target.value.toLowerCase();
     let query = {
       term: target,
@@ -368,5 +627,5 @@ document.addEventListener("DOMContentLoaded", function () {
     deleteDisplayData();
     displayRecipeData(result);
     totalRecipedDisplayed(result);
-  });
+  }); */
 });
