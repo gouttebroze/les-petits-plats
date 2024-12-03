@@ -1,11 +1,10 @@
 import { recipes } from './recipes';
 import RecipeCard from './recipeCard.js';
+import { searchRecipes } from './nativeLoops.js';
 
-const $buttonTag = document.querySelector('.toggle-tag');
 const $buttonTagIngredients = document.querySelector('.toggle-tag-ingredients');
 const $buttonTagAppliances = document.querySelector('.toggle-tag-appliances');
 const $buttonTagUstensils = document.querySelector('.toggle-tag-ustensils');
-const $closeTag = document.querySelector('.close-tag');
 const $closeTagIngredients = document.querySelector('.close-tag-ingredients');
 const $closeTagAppliances = document.querySelector('.close-tag-appliances');
 const $closeTagUstensils = document.querySelector('.close-tag-ustensils');
@@ -33,8 +32,6 @@ const $primarySearch = document.getElementById('primary-search');
 const $contentTagIngredients = document.getElementById('content-tag-ingredients');
 const $contentTagAppliances = document.getElementById('content-tag-appliances');
 const $contentTagUstensils = document.getElementById('content-tag-ustensils');
-const $ustensilsBtn = document.querySelector('.ustensils-filter-btn');
-const $ustensilsList = document.querySelector('.ustensils-filter-list');
 
 /** 
  * fonction permettant de récupérer et de mettre à jour la liste des ingrédients, sans doublons, selon le terme de la recherche.
@@ -228,69 +225,6 @@ function displayRecipesNumber(resultsNumbers) {
   $totalRecipesDisplayed.appendChild($displayRecipesNumber);
 }
 
-/**
- * @typedef {Object} SearchQuery
- * @property {string} term - Le terme de recherche saisi par l'utilisateur.
- * @property {string[]} appliances - Une liste d'appareils liés à la recherche.
- * @property {string[]} ustensils - Une liste d'ustensiles liés à la recherche.
- * @property {string[]} ingredients - Une liste d'ingrédients liés à la recherche.
- */
-
-/**
- * Processes a search query object.
- * @param {SearchQuery} searchForm - The search query containing filters.
- * @returns {void}
- */
-function searchRecipes(searchForm) {
-  const { term, appliances, ustensils, ingredients } = searchForm;
-  let newRecipes = [];
-
-  // recherche globale
-  for (let i = 0; i < recipes.length; i++) {
-    if (recipes[i]?.name?.toLowerCase()?.includes(term)
-      || recipes[i]?.description?.toLowerCase()?.includes(term)) {
-      newRecipes.push(recipes[i]);
-      continue;
-    }
-    for (let j = 0; j < recipes[i]?.ingredients.length; j++) {
-      if (recipes[i]?.ingredients[j]?.ingredient?.toLowerCase()?.includes(term)) {
-        newRecipes.push(recipes[i]);
-      }
-    }
-  }
-
-  // filtre par appareil
-  let newRecipesAppliances = [];
-  for (let j = 0; j < newRecipes.length; j++) {
-    if (appliances.includes(newRecipes[j]?.appliance.toLowerCase())) {
-      newRecipesAppliances.push(newRecipes[j]);
-    }
-  }
-
-  // filtre par ustensiles
-  let newRecipesUstensils = [];
-  // on recherche sur la rech. principale + sur 1 des filtres (ms les résultats des filtres doivent être combinés et non séparés...donc...)
-  for (let k = 0; k < newRecipes.length; k++) {
-    for (let l = 0; l < newRecipes[k]?.ustensils.length; l++) {
-      if (ustensils.includes(newRecipes[k].ustensils[l].toLowerCase())) {
-        newRecipesUstensils.push(newRecipes[k]);
-      }
-    }
-  }
-
-  // filtre par ingredients
-  let newRecipesIngredients = [];
-  for (let l = 0; l < newRecipes.length; l++) {
-    for (let m = 0; m < newRecipes[l].ingredients.length; m++) {
-      if (ingredients.includes(newRecipes[l].ingredients[m].ingredient.toLowerCase())) {
-        newRecipesIngredients.push(newRecipes[l]);
-      }
-    }
-  }
-  //return newRecipesAppliances;
-  return newRecipesIngredients;
-}
-
 async function displayRecipeData(recipes) {
   recipes.map((recipe) => {
     const Template = new RecipeCard(recipe);
@@ -408,9 +342,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let target = e.target.value.toLowerCase();
     let query = {
       term: target,
-      appliances: ['blender'],
+      appliances: [],
       ustensils: [],
-      ingredients: []
+      ingredients: ['citron']
     }
     const result = searchRecipes(query);
     deleteDisplayData();
@@ -425,9 +359,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let target = e.target.value.toLowerCase();
     let query = {
       term: target,
-      appliances: ['blender'],
+      appliances: [],
       ustensils: [],
-      ingredients: []
+      ingredients: ['citron']
     }
     const result = searchRecipes(query);
     console.log(result);
