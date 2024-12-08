@@ -33,32 +33,45 @@ export function searchRecipes(searchForm) {
 
   // filtre par appareil
   let newRecipesAppliances = [];
-  for (let j = 0; j < newRecipes.length; j++) {
-    if (appliances.includes(newRecipes[j]?.appliance.toLowerCase())) {
-      newRecipesAppliances.push(newRecipes[j]);
+  if (appliances.length === 0) {
+    newRecipesAppliances = [...newRecipes];
+  } else {
+    for (let j = 0; j < newRecipes.length; j++) {
+      if (appliances.includes(newRecipes[j]?.appliance.toLowerCase())) {
+        newRecipesAppliances.push(newRecipes[j]);
+      }
     }
   }
 
   // filtre par ustensiles
   let newRecipesUstensils = [];
-  // on recherche sur la rech. principale + sur 1 des filtres (ms les résultats des filtres doivent être combinés et non séparés...donc...)
-  for (let k = 0; k < newRecipes.length; k++) {
-    for (let l = 0; l < newRecipes[k]?.ustensils.length; l++) {
-      if (ustensils.includes(newRecipes[k].ustensils[l].toLowerCase())) {
-        newRecipesUstensils.push(newRecipes[k]);
+  // si le tab. d'ustensils vaut 0, soit s'il est vide, on retourne 1 copie du tab. du filtre précédent
+  if (ustensils.length === 0) {
+    newRecipesUstensils = [...newRecipesAppliances];
+  } else {
+    for (let k = 0; k < newRecipesAppliances.length; k++) {
+      for (let l = 0; l < newRecipesAppliances[k]?.ustensils.length; l++) {
+        if (ustensils.includes(newRecipesAppliances[k].ustensils[l].toLowerCase())) {
+          newRecipesUstensils.push(newRecipesAppliances[k]);
+        }
       }
     }
   }
 
   // filtre par ingredients
   let newRecipesIngredients = [];
-  for (let l = 0; l < newRecipes.length; l++) {
-    for (let m = 0; m < newRecipes[l].ingredients.length; m++) {
-      if (ingredients.includes(newRecipes[l].ingredients[m].ingredient.toLowerCase())) {
-        newRecipesIngredients.push(newRecipes[l]);
+  if (ingredients.length === 0) {
+    newRecipesIngredients = [...newRecipesUstensils];
+  } else {
+    for (let l = 0; l < newRecipesUstensils.length; l++) {
+      for (let m = 0; m < newRecipesUstensils[l].ingredients.length; m++) {
+        if (ingredients.includes(newRecipesUstensils[l].ingredients[m].ingredient.toLowerCase())) {
+          newRecipesIngredients.push(newRecipesUstensils[l]);
+        }
       }
     }
   }
-  //return newRecipesAppliances;
   return newRecipesIngredients;
+  // return newRecipesUstensils;
+  //return newRecipes;
 }
