@@ -38,7 +38,7 @@ let $displayRecipesNumber = document.createElement('h3');
 $displayRecipesNumber.setAttribute('class', 'recipes-number anton');
 
 /** 
- * recupère & mettre à jour la liste des ingrédients, sans doublons.
+ * recupère & MAJ la liste des ingrédients, sans doublons.
  * @property {string} term
  * @returns {void}
  */
@@ -122,7 +122,7 @@ function displayIngredients(ingredients) {
     $inputIcon.style.display = 'flex';
   });
   $filterList.addEventListener('click', () => {
-    $buttonTagIngredients.style.display = 'block';
+    //$buttonTagIngredients.style.display = 'block';
     $filterList.style.display = 'none';
     $arrowUp.style.display = 'none';
     $arrowDown.style.display = 'block';
@@ -131,9 +131,9 @@ function displayIngredients(ingredients) {
   })
 
   // click sur le btn close du tag l'ajoute à la liste
-  $closeTagIngredients.addEventListener('click', () => {
+  /* $closeTagIngredients.addEventListener('click', () => {
     $buttonTagIngredients.style.display = 'none';
-  })
+  }) */
 }
 
 /**
@@ -141,7 +141,9 @@ function displayIngredients(ingredients) {
  * @param {string[]} appliances 
  */
 function displayAppliances(appliances) {
-  const $div = document.querySelector('#appliances');
+  const $div = document.querySelector('#appliances'); // on créé 1 div à partir de l'id "appliances"
+
+  // création des tags HTML <ul> & <li>
   let $ul = '<ul>';
   for (let i = 0; i < appliances.length; i++) {
     $ul += `<li>${appliances[i]}</li>`;
@@ -149,22 +151,40 @@ function displayAppliances(appliances) {
   $ul += '</ul>';
   $div.insertAdjacentHTML('beforeend', $ul);
 
+  // au click sur le boutton du dropdown des appareils
   $filterAppliancesButton.addEventListener('click', () => {
+
+    // on affiche la liste des appareils
     $filterAppliancesList.style.display = 'block';
-    $arrowDownAppliances.style.display = 'none';
-    $arrowUpAppliances.style.display = 'block';
-    $filterInputAppliances.style.display = 'block';
-    $inputAppliancesIcon.style.display = 'flex';
+
+    // on passe le btn en position ouvert
+    $arrowDownAppliances.style.display = 'none'; // on cacher la flèche qui pointe vers le bas
+    $arrowUpAppliances.style.display = 'block'; // & on affiche la flèche qui pointe vers le haut
+
+    // affichage de l'input du filtre des appareil
+    $filterInputAppliances.style.display = 'block'; // on affiche l'input
+    $inputAppliancesIcon.style.display = 'flex'; // on affiche l'icône "loupe" de l'input
   });
 
+  // au click sur 1 élement de la liste du dropdown des appareils
   $filterAppliancesList.addEventListener('click', () => {
-    $buttonTagAppliances.style.display = 'block';
+
+    // on affiche le tag
+    //$buttonTagAppliances.style.display = 'block';
+
+    // on cache la liste
     $filterAppliancesList.style.display = 'none';
-    $arrowUpAppliances.style.display = 'none';
-    $arrowDownAppliances.style.display = 'block';
-    $filterInputAppliances.style.display = 'none';
-    $inputAppliancesIcon.style.display = 'none';
+
+    // on passe le btn en position fermée
+    $arrowUpAppliances.style.display = 'none'; // on cache la flèche qui pointe vers le haut
+    $arrowDownAppliances.style.display = 'block'; // on affiche la flèche qui pointe vers le bas
+
+    // désaffichage de l'input du filtre des appareil
+    $filterInputAppliances.style.display = 'none'; // on cache l'input
+    $inputAppliancesIcon.style.display = 'none'; // on cache la loupe
   })
+
+  // event listener on tag's arrow (to close tag & re-push element into filter list)
   $closeTagAppliances.addEventListener('click', () => {
     $buttonTagAppliances.style.display = 'none';
   })
@@ -224,7 +244,6 @@ function totalRecipedDisplayed(recipes) {
 function deleteRecipesNumberTitle() {
   $displayRecipesNumber.querySelector('.recipes-number');
   $displayRecipesNumber.textContent = '';
-  // $totalRecipesDisplayed.appendChild($displayRecipesNumber);
 }
 
 async function displayRecipeData(recipes) {
@@ -271,11 +290,8 @@ document.addEventListener("DOMContentLoaded", function () {
     ingredients: []
   }
   $primarySearch.addEventListener('input', (e) => {
-    console.log(e.target.value);
     let target = e.target.value.toLowerCase();
     query.term = target;
-    console.log('query:', query);
-
     const result = searchRecipes(query);
     console.log('recherche principale:', result, 'nbr char.: ', target.length);
     deleteDisplayData(); // suppression des recettes affichées
@@ -288,16 +304,46 @@ document.addEventListener("DOMContentLoaded", function () {
   const $ingredientsList = Array.from(document.querySelectorAll('#ingredients ul li'));
   $ingredientsList.forEach((ingredient) => {
     ingredient.addEventListener("click", (e) => {
-      $buttonTagIngredients.style.display = 'block';
-      $contentTagIngredients.textContent = e.target.textContent;
+
+      // on crée le tag HTML (création dynamique qui permet de générer 1 nouveau tag à chaque clic sur 1 ingrédient)
+      const $tagsWrapper = document.querySelector('.ingredients-tags-wrapper');
+      const $tagButton = document.createElement('button');
+      const $spanParentText = document.createElement('span');
+      const $spanChildText = document.createElement('span');
+      const $closingTagBtn = document.createElement('button');
+      $spanParentText.classList.add('d-flex');
+      $spanParentText.classList.add('justify-content-around');
+      $spanChildText.setAttribute('id', 'content-tag-ingredients')
+      $tagButton.classList.add('button-tag');
+      $tagButton.classList.add('show-tag-ingredients');
+      $closingTagBtn.textContent = 'X'; // à remplacer par 1 croix (icône "close")
+      $spanChildText.textContent = e.target.textContent; // injection du nom de l'ingrédient ds le tag
       const target = e.target.textContent.toLowerCase();
+      $tagsWrapper.appendChild($tagButton);
+      $tagButton.appendChild($spanParentText);
+      $spanParentText.appendChild($spanChildText);
+      $spanParentText.appendChild($closingTagBtn);
+
+      //$buttonTagIngredients.style.display = 'block'; // affichage du tag en réation au click sur l'élement de la liste
+      // $contentTagIngredients.textContent = e.target.textContent;
+
+      // on pousse l'élément target ds le tableau des ingrédients
       query.ingredients.push(target);
+
       const result = searchRecipes(query);
+
+      // suppression des recettes affichées (nettoyage avant d'afficher une nouvelle liste de recettes)
       deleteDisplayData();
+
+      // fn d'affichage des recettes
       displayRecipeData(result);
+
       deleteRecipesNumberTitle();
       totalRecipedDisplayed(result);
       console.log('filtre par ingredients : ', result);
+
+      // todo ds cette fn: MAJ les élements des 2 autres listes en fonction de l'ingredient sélectionné
+      // utiliser la fn updateIngredientsList() ms avec un 2eme paramètre
     })
   })
 
@@ -308,7 +354,6 @@ document.addEventListener("DOMContentLoaded", function () {
       $contentTagAppliances.textContent = e.target.textContent;
       const target = e.target.textContent.toLowerCase();
       query.appliances.push(target);
-
       const result = searchRecipes(query); /* fn combineles résultats des recherches (relance recherche principale & autres recherches) */
       deleteDisplayData();
       displayRecipeData(result);

@@ -45,7 +45,7 @@ export function searchRecipes(searchForm) {
 
   // filtre par ustensiles
   let newRecipesUstensils = [];
-  // si le tab. d'ustensils vaut 0, soit s'il est vide, on retourne 1 copie du tab. du filtre précédent
+  // si le tab. d'ustensils est vide, on retourne 1 copie du tab. du filtre précédent (permet d'éviter bug, sans aucun résultat, car il faut rendre les recherches précédentes)
   if (ustensils.length === 0) {
     newRecipesUstensils = [...newRecipesAppliances];
   } else {

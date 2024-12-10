@@ -257,6 +257,12 @@ header>section>h1 {
   color: var(--primary-text-color);
 }
 
+.show-tag-ingredients {
+  display: block;
+  background-color: var(--primary-color);
+  color: var(--primary-text-color);
+}
+
 .hide {
   display: none;
 }
