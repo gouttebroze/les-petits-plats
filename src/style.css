@@ -257,7 +257,7 @@ header>section>h1 {
   color: var(--primary-text-color);
 }
 
-.show-tag-ingredients {
+.show-tag {
   display: block;
   background-color: var(--primary-color);
   color: var(--primary-text-color);

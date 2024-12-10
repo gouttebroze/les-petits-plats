@@ -185,9 +185,9 @@ function displayAppliances(appliances) {
   })
 
   // event listener on tag's arrow (to close tag & re-push element into filter list)
-  $closeTagAppliances.addEventListener('click', () => {
+  /* $closeTagAppliances.addEventListener('click', () => {
     $tagIngredientButton.style.display = 'none';
-  })
+  }) */
 }
 
 /**
@@ -212,16 +212,16 @@ function displayUstensils(ustensils) {
   });
 
   $filterUstensilsList.addEventListener('click', () => {
-    $buttonTagUstensils.style.display = 'block';
+    // $buttonTagUstensils.style.display = 'block';
     $filterUstensilsList.style.display = 'none';
     $arrowUpUstensils.style.display = 'none';
     $arrowDownUstensils.style.display = 'block';
     $filterInputUstensils.style.display = 'none';
     $inputUstensilsIcon.style.display = 'none';
   })
-  $closeTagUstensils.addEventListener('click', () => {
+  /* $closeTagUstensils.addEventListener('click', () => {
     $buttonTagUstensils.style.display = 'none';
-  })
+  }) */
 }
 
 /** 
@@ -304,26 +304,25 @@ document.addEventListener("DOMContentLoaded", function () {
   const $ingredientsList = Array.from(document.querySelectorAll('#ingredients ul li'));
   $ingredientsList.forEach((ingredient) => {
     ingredient.addEventListener("click", (e) => {
-
       // on crée le tag HTML (création dynamique qui permet de générer 1 nouveau tag à chaque clic sur 1 ingrédient)
-      const $tagsWrapper = document.querySelector('.ingredients-tags-wrapper');
+      const $tagsIngredientsWrapper = document.querySelector('.ingredients-tags-wrapper');
       const $tagIngredientButton = document.createElement('button');
-      const $spanParentText = document.createElement('span');
-      const $spanChildText = document.createElement('span');
+      const $spanIngredientParentText = document.createElement('span');
+      const $spanIngredientChildText = document.createElement('span');
       const $closingTagIngredient = document.createElement('button');
-      $spanParentText.classList.add('d-flex');
-      $spanParentText.classList.add('justify-content-around');
-      $spanChildText.setAttribute('id', 'content-tag-ingredients')
+      $spanIngredientParentText.classList.add('d-flex');
+      $spanIngredientParentText.classList.add('justify-content-around');
+      $spanIngredientChildText.setAttribute('id', 'content-tag-ingredients')
       $tagIngredientButton.classList.add('button-tag');
-      $tagIngredientButton.classList.add('show-tag-ingredients');
+      $tagIngredientButton.classList.add('show-tag');
       $closingTagIngredient.classList.add('close-tag-ingredients');
       $closingTagIngredient.textContent = 'X'; // à remplacer par 1 croix (icône "close")
-      $spanChildText.textContent = e.target.textContent; // injection du nom de l'ingrédient ds le tag
+      $spanIngredientChildText.textContent = e.target.textContent; // injection du nom de l'ingrédient ds le tag
       const target = e.target.textContent.toLowerCase();
-      $tagsWrapper.appendChild($tagIngredientButton);
-      $tagIngredientButton.appendChild($spanParentText);
-      $spanParentText.appendChild($spanChildText);
-      $spanParentText.appendChild($closingTagIngredient);
+      $tagsIngredientsWrapper.appendChild($tagIngredientButton);
+      $tagIngredientButton.appendChild($spanIngredientParentText);
+      $spanIngredientParentText.appendChild($spanIngredientChildText);
+      $spanIngredientParentText.appendChild($closingTagIngredient);
 
       //$buttonTagIngredients.style.display = 'block'; // affichage du tag en réation au click sur l'élement de la liste
       // $contentTagIngredients.textContent = e.target.textContent;
@@ -354,9 +353,28 @@ document.addEventListener("DOMContentLoaded", function () {
   const $appliancesList = Array.from(document.querySelectorAll('#appliances ul li'));
   $appliancesList.forEach((appliance) => {
     appliance.addEventListener("click", (e) => {
-      $buttonTagAppliances.style.display = 'block';
-      $contentTagAppliances.textContent = e.target.textContent;
+      // on crée le tag HTML (création dynamique qui permet de générer 1 nouveau tag à chaque clic sur 1 ingrédient)
+      const $tagsAppliancesWrapper = document.querySelector('.appliances-tags-wrapper');
+      const $tagApplianceButton = document.createElement('button');
+      const $spanApplianceParentText = document.createElement('span');
+      const $spanApplianceChildText = document.createElement('span');
+      const $closingTagAppliance = document.createElement('button');
+      $spanApplianceParentText.classList.add('d-flex');
+      $spanApplianceParentText.classList.add('justify-content-around');
+      $spanApplianceChildText.setAttribute('id', 'content-tag-appliances')
+      $tagApplianceButton.classList.add('button-tag');
+      $tagApplianceButton.classList.add('show-tag');
+      $closingTagAppliance.classList.add('close-tag-appliances');
+      $closingTagAppliance.textContent = 'X'; // à remplacer par 1 croix (icône "close")
+      $spanApplianceChildText.textContent = e.target.textContent; // injection du nom de l'ingrédient ds le tag
       const target = e.target.textContent.toLowerCase();
+      $tagsAppliancesWrapper.appendChild($tagApplianceButton);
+      $tagApplianceButton.appendChild($spanApplianceParentText);
+      $spanApplianceParentText.appendChild($spanApplianceChildText);
+      $spanApplianceParentText.appendChild($closingTagAppliance);
+      // $buttonTagAppliances.style.display = 'block';
+      // $contentTagAppliances.textContent = e.target.textContent;
+      // const target = e.target.textContent.toLowerCase();
       query.appliances.push(target);
       const result = searchRecipes(query); /* fn combineles résultats des recherches (relance recherche principale & autres recherches) */
       deleteDisplayData();
@@ -364,6 +382,10 @@ document.addEventListener("DOMContentLoaded", function () {
       deleteRecipesNumberTitle();
       totalRecipedDisplayed(result);
       console.log('filtre par appareils : ', result);
+
+      $closingTagAppliance.addEventListener('click', () => {
+        $tagApplianceButton.style.display = 'none';
+      })
 
       // déplacer l'élement clické en haut de la liste
       // soit tt en CSS, soit on le déplace au début du tableau en 1er element
@@ -374,9 +396,29 @@ document.addEventListener("DOMContentLoaded", function () {
   const $ustensilsList = Array.from(document.querySelectorAll('#ustensils ul li'));
   $ustensilsList.forEach((ustensil) => {
     ustensil.addEventListener("click", (e) => {
-      $buttonTagUstensils.style.display = 'block';
-      $contentTagUstensils.textContent = e.target.textContent;
-      const target = e.target.textContent;
+      // $buttonTagUstensils.style.display = 'block';
+      // $contentTagUstensils.textContent = e.target.textContent;
+      // const target = e.target.textContent;
+      // on crée le tag HTML (création dynamique qui permet de générer 1 nouveau tag à chaque clic sur 1 ingrédient)
+      const $tagsUstensilsWrapper = document.querySelector('.ustensils-tags-wrapper');
+      const $tagUstensilButton = document.createElement('button');
+      const $spanUstensilParentText = document.createElement('span');
+      const $spanUstensilChildText = document.createElement('span');
+      const $closingTagUstensil = document.createElement('button');
+      $spanUstensilParentText.classList.add('d-flex');
+      $spanUstensilParentText.classList.add('justify-content-around');
+      $spanUstensilChildText.setAttribute('id', 'content-tag-ustensils')
+      $tagUstensilButton.classList.add('button-tag');
+      $tagUstensilButton.classList.add('show-tag');
+      $closingTagUstensil.classList.add('close-tag-ustensils');
+      $closingTagUstensil.textContent = 'X'; // à remplacer par 1 croix (icône "close")
+      $spanUstensilChildText.textContent = e.target.textContent; // injection du nom de l'ingrédient ds le tag
+      const target = e.target.textContent.toLowerCase();
+      $tagsUstensilsWrapper.appendChild($tagUstensilButton);
+      $tagUstensilButton.appendChild($spanUstensilParentText);
+      $spanUstensilParentText.appendChild($spanUstensilChildText);
+      $spanUstensilParentText.appendChild($closingTagUstensil);
+
       query.ustensils.push(target);
 
       const result = searchRecipes(query);
@@ -386,7 +428,9 @@ document.addEventListener("DOMContentLoaded", function () {
       totalRecipedDisplayed(result);
       console.log('filtre par ustensils: ', result);
 
-
+      $closingTagUstensil.addEventListener('click', () => {
+        $tagUstensilButton.style.display = 'none';
+      })
     })
   })
 
