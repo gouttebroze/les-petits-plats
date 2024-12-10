@@ -30,7 +30,7 @@ const $inputUstensilsIcon = document.querySelector('.input-ustensils-icons');
 const $totalRecipesDisplayed = document.querySelector('.total-recipes');
 const $recipeSection = document.querySelector('.recipes-wrapper');
 const $primarySearch = document.getElementById('primary-search');
-const $contentTagIngredients = document.getElementById('content-tag-ingredients');
+// const $contentTagIngredients = document.getElementById('content-tag-ingredients');
 const $contentTagAppliances = document.getElementById('content-tag-appliances');
 const $contentTagUstensils = document.getElementById('content-tag-ustensils');
 
@@ -131,7 +131,7 @@ function displayIngredients(ingredients) {
   })
 
   // click sur le btn close du tag l'ajoute à la liste
-  /* $closeTagIngredients.addEventListener('click', () => {
+  /* $closingTagBtn.addEventListener('click', () => {
     $buttonTagIngredients.style.display = 'none';
   }) */
 }
@@ -186,7 +186,7 @@ function displayAppliances(appliances) {
 
   // event listener on tag's arrow (to close tag & re-push element into filter list)
   $closeTagAppliances.addEventListener('click', () => {
-    $buttonTagAppliances.style.display = 'none';
+    $tagIngredientButton.style.display = 'none';
   })
 }
 
@@ -307,22 +307,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // on crée le tag HTML (création dynamique qui permet de générer 1 nouveau tag à chaque clic sur 1 ingrédient)
       const $tagsWrapper = document.querySelector('.ingredients-tags-wrapper');
-      const $tagButton = document.createElement('button');
+      const $tagIngredientButton = document.createElement('button');
       const $spanParentText = document.createElement('span');
       const $spanChildText = document.createElement('span');
-      const $closingTagBtn = document.createElement('button');
+      const $closingTagIngredient = document.createElement('button');
       $spanParentText.classList.add('d-flex');
       $spanParentText.classList.add('justify-content-around');
       $spanChildText.setAttribute('id', 'content-tag-ingredients')
-      $tagButton.classList.add('button-tag');
-      $tagButton.classList.add('show-tag-ingredients');
-      $closingTagBtn.textContent = 'X'; // à remplacer par 1 croix (icône "close")
+      $tagIngredientButton.classList.add('button-tag');
+      $tagIngredientButton.classList.add('show-tag-ingredients');
+      $closingTagIngredient.classList.add('close-tag-ingredients');
+      $closingTagIngredient.textContent = 'X'; // à remplacer par 1 croix (icône "close")
       $spanChildText.textContent = e.target.textContent; // injection du nom de l'ingrédient ds le tag
       const target = e.target.textContent.toLowerCase();
-      $tagsWrapper.appendChild($tagButton);
-      $tagButton.appendChild($spanParentText);
+      $tagsWrapper.appendChild($tagIngredientButton);
+      $tagIngredientButton.appendChild($spanParentText);
       $spanParentText.appendChild($spanChildText);
-      $spanParentText.appendChild($closingTagBtn);
+      $spanParentText.appendChild($closingTagIngredient);
 
       //$buttonTagIngredients.style.display = 'block'; // affichage du tag en réation au click sur l'élement de la liste
       // $contentTagIngredients.textContent = e.target.textContent;
@@ -344,6 +345,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // todo ds cette fn: MAJ les élements des 2 autres listes en fonction de l'ingredient sélectionné
       // utiliser la fn updateIngredientsList() ms avec un 2eme paramètre
+      $closingTagIngredient.addEventListener('click', () => {
+        $tagIngredientButton.style.display = 'none';
+      })
     })
   })
 
