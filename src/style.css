@@ -263,17 +263,26 @@ header>section>h1 {
   color: var(--primary-text-color);
 }
 
-.hide {
-  display: none;
-}
-
 .filter-wrapper {
   background-color: white;
   width: 195px;
   border-radius: 11px;
 }
 
-.filter-btn-top {
+/* .filter-btn-top {
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 195px;
+  height: 56px;
+  border-radius: 11px;
+  padding: 17px 16px;
+} */
+
+.dropdown-ingredients-btn,
+.dropdown-appliances-btn,
+.dropdown-ustensils-btn {
   background-color: white;
   display: flex;
   justify-content: space-between;
@@ -382,15 +391,23 @@ header>section>h1 {
   padding-bottom: 9px;
 }
 
-/* input {
-  appearance: none;
-  font-family: 'Font Awesome 6 Free';
-  font-weight: 900;
+.toggle-display-ingredients,
+.toggle-display-appliances,
+.toggle-display-ustensils {
+  display: block;
 }
 
-input::before {
-  content: '\f002';
-} */
+.toggle-flex-ingredients,
+.toggle-flex-appliances,
+.toggle-flex-ustensils {
+  display: flex;
+}
+
+.toggle-hide-ingredients,
+.toggle-hide-appliances,
+.toggle-hide-ustensils {
+  display: none;
+}
 
 @media (prefers-color-scheme: light) {
   :root {
