@@ -355,23 +355,15 @@ document.addEventListener("DOMContentLoaded", function () {
     query.term = target;
     const result = searchRecipes(query);
     console.log('recherche principale:', result, 'nbr char.: ', target.length);
-    deleteDisplayData(); // suppression des recettes affichées
-    displayRecipeData(result); // affichage des nouvelles recettes
-    deleteRecipesNumberTitle(); // supprime précédent titre de total du nbre de recettes
-    totalRecipedDisplayed(result); // affiche nbre total de recettes
 
-    // MAJ des filtres
-    const ingredients = updateIngredientsList(query.ingredients); // récupération & MAJ liste ingrédients
-    const appliances = updateAppliancesList(''); // récupération & MAJ liste appareils
-    const ustensils = updateUstensilsList(''); // récupération & MAJ liste ustensils
-
-    console.table(ingredients);
-    console.table(appliances);
-    console.table(ustensils);
-
-    displayIngredients(ingredients); // affichage de la liste des ingrédients
-    displayAppliances(appliances); // affichage de la liste des appareils
-    displayUstensils(ustensils); // affichage de la liste des ustensils
+    // on lance la recherche à partir de 3 charactères
+    if (target.length >= 3) {
+      deleteDisplayData(); // suppression des recettes affichées
+      displayRecipeData(result); // affichage des nouvelles recettes
+      deleteRecipesNumberTitle(); // supprime précédent titre de total du nbre de recettes
+      totalRecipedDisplayed(result); // affiche nbre total de recettes
+      // + MAJ des filtres
+    }
   });
 
   // on écoute au click: MAJ des recettes + MAJ des 3 listes en fonction du tag sélectionné
