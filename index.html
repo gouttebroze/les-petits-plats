@@ -22,16 +22,18 @@
           CHERCHEZ PARMI PLUS DE 1500 RECETTES DU QUOTIDIEN, SIMPLES ET DÉLICIEUSES
         </h1>
       </section>
-      <div class="search-input">
-        <!-- <i class="fa-solid fa-magnifying-glass search-icon"></i> -->
-        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="white" class="search-icon bi bi-search"
-          viewBox="0 0 16 16">
-          <path
-            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-        </svg>
-        <input id="primary-search" class="input-field w-200 mb-[188px] pl-10 ring-1 ring-slate-200 shadow-sm"
-          type="text" placeholder="Rechercher une recette, un ingrédient, ..." />
-      </div>
+      <form id="search-form">
+        <div class="search-input">
+          <!-- <i class="fa-solid fa-magnifying-glass search-icon"></i> -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="white" class="search-icon bi bi-search"
+            viewBox="0 0 16 16">
+            <path
+              d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+          </svg>
+          <input id="primary-search" class="input-field w-200 mb-[188px] pl-10 ring-1 ring-slate-200 shadow-sm"
+            type="text" placeholder="Rechercher une recette, un ingrédient, ..." />
+        </div>
+      </form>
     </header>
 
     <main class="bg-gray-300 main-container d-flex flex-column">
@@ -49,10 +51,12 @@
                     <i class="fa-solid fa-angle-up arrow-up"></i>
                   </div>
                 </div>
-                <button type="button" class="input-icons input-filter-btn">
-                  <i class="fa-solid fa-magnifying-glass"></i>
-                  <input name="ingredient" id="ingredient" type="text" class="input-field input-filter" />
-                </button>
+                <form action="" id="filter-ingredients-form">
+                  <button type="button" class="input-icons input-filter-btn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input name="ingredient" id="ingredient" type="text" class="input-field input-filter" />
+                  </button>
+                </form>
               </div>
               <div id="ingredients" class="filter-list">
               </div>

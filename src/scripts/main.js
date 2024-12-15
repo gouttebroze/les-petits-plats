@@ -40,40 +40,32 @@ const $contentTagUstensils = document.getElementById('content-tag-ustensils');
 
 let $displayRecipesNumber = document.createElement('h3');
 $displayRecipesNumber.setAttribute('class', 'recipes-number anton');
+const $formSubmit = document.querySelector('#search-form');
+
+/**
+ * fn permettant de restaurer les valeurs par défaut
+ * @param {HTMLFormElement} element - formulaire
+ */
+function resetForm(element) {
+  element.reset();
+}
 
 /** 
- * recupère & MAJ la liste des ingrédients, sans doublons.
- * pr la MAJ: doit filtrer les ingredients correspondant à l'input 
- * MAJ doit aussi se faire suivant: 
- *   - recherche principale, 
- *   - tag sélectionné ds les autres listes
- *  Les résultats de recherche sont actualisés 
- *  les éléments disponibles sont actualisés dans les champs de recherche avancée
- *  faire 1 MAJ sur la liste des appareils & celle des ustensils par rapport à "term"
  * @property {string} term
- * @property {string[]} toUpdate - listes à MAJ (celle des appareils & des 
+ * @property {string[]} recipes - listes à MAJ (celle des appareils & des 
  * ustensils en fonction des recettes générées par le term)
  * @returns {void}
  */
-function updateIngredientsList(term, list) {
-  // updatedList = ingredient I === liste des ustensils && liste des appareils, inclus ds les recettes générées par l'ingrédient I
+export function updateIngredientsList(term, _recipes = recipes) {
   let updatedIngredients = [];
-  let updatedAppliancesByIngredients = [];
-  for (let i = 0; i < recipes.length; i++) {
-    for (let j = 0; j < recipes[i].ingredients.length; j++) {
-      if (recipes[i].ingredients[j].ingredient.toLowerCase().includes(term.toLowerCase())) {
-        updatedIngredients.push(recipes[i].ingredients[j].ingredient.toLowerCase());
+  // let ingredientsFilter = [];
+  for (let i = 0; i < _recipes.length; i++) {
+    for (let j = 0; j < _recipes[i].ingredients.length; j++) {
+      if (_recipes[i].ingredients[j].ingredient.toLowerCase().includes(term.toLowerCase())) {
+        updatedIngredients.push(_recipes[i].ingredients[j].ingredient.toLowerCase());
       }
     }
   }
-  /**
-   * trouver: liste de tous les appareils + liste de tous les ustensils: 
-   *      - dont la recette contient l'ingrédient I
-   * appareil inclus dans recette de I, recette de I contient apparei
-   
-  let updatedFilterList = [];
-  updatedIngredients.filter((recipe) => recipe.ingredients.ingredient === recipes.appliance);
-*/
 
   let uniqueIngredients = [];
   for (let i = 0; i < updatedIngredients.length; i++) {
@@ -86,11 +78,11 @@ function updateIngredientsList(term, list) {
   return uniqueIngredients;
 }
 
-function updateAppliancesList(term) {
+export function updateAppliancesList(term, _recipes = recipes) {
   let updatedAppliances = [];
-  for (let i = 0; i < recipes.length; i++) {
-    if (recipes[i].appliance.toLowerCase().includes(term.toLowerCase())) {
-      updatedAppliances.push(recipes[i].appliance.toLowerCase());
+  for (let i = 0; i < _recipes.length; i++) {
+    if (_recipes[i].appliance.toLowerCase().includes(term.toLowerCase())) {
+      updatedAppliances.push(_recipes[i].appliance.toLowerCase());
     }
   }
   let uniqueAppliances = [];
@@ -103,12 +95,12 @@ function updateAppliancesList(term) {
   return uniqueAppliances;
 }
 
-function updateUstensilsList(term) {
+export function updateUstensilsList(term, _recipes = recipes) {
   let updatedUstensils = [];
-  for (let i = 0; i < recipes.length; i++) {
-    for (let j = 0; j < recipes[i].ustensils.length; j++) {
-      if (recipes[i].ustensils[j].toLowerCase().includes(term.toLowerCase())) {
-        updatedUstensils.push(recipes[i].ustensils[j].toLowerCase());
+  for (let i = 0; i < _recipes.length; i++) {
+    for (let j = 0; j < _recipes[i].ustensils.length; j++) {
+      if (_recipes[i].ustensils[j].toLowerCase().includes(term.toLowerCase())) {
+        updatedUstensils.push(_recipes[i].ustensils[j].toLowerCase());
       }
     }
   }
@@ -128,8 +120,9 @@ function updateUstensilsList(term) {
  * fonction qui génère une liste (un template HTML (<ul> > <li>))
  * @param {string[]} ingredients 
  */
-function displayIngredients(ingredients) {
+export function displayIngredients(ingredients) {
   const $div = document.querySelector('#ingredients');
+  // $div.innerHTML = ''
   let $ul = '<ul>';
   for (let i = 0; i < ingredients.length; i++) {
     $ul += `<li>${ingredients[i]}</li>`;
@@ -179,9 +172,9 @@ function displayIngredients(ingredients) {
  * display appliances list
  * @param {string[]} appliances 
  */
-function displayAppliances(appliances) {
+export function displayAppliances(appliances) {
   const $div = document.querySelector('#appliances'); // on créé 1 div à partir de l'id "appliances"
-
+  //$div.innerHTML = ''
   // création des tags HTML <ul> & <li>
   let $ul = '<ul>';
   for (let i = 0; i < appliances.length; i++) {
@@ -234,14 +227,16 @@ function displayAppliances(appliances) {
  * display ustensils list
  * @param {string[]} appliances 
  */
-function displayUstensils(ustensils) {
+export function displayUstensils(ustensils) {
   const $div = document.querySelector('#ustensils');
+  //$div.innerHTML = '';
   let $ul = '<ul>';
   for (let i = 0; i < ustensils.length; i++) {
     $ul += `<li>${ustensils[i]}</li>`;
   }
   $ul += '</ul>';
   $div.insertAdjacentHTML('beforeend', $ul);
+
 
   // au click sur le boutton du dropdown des ustensils
   $dropdownUstensilsBtn.addEventListener('click', () => {
@@ -274,14 +269,17 @@ function displayUstensils(ustensils) {
 /** 
  * fn de calcul & d'affichage du nombre de recettes 
  * @param {string[]} recipes - tableau de recettes
- * @returns {number} totalRecipes - taille du tableau, soit le nbre de recettes affichés
+ * @param {string} term - recherche de l'utilisateur
+ * @returns {number} totalRecipes - nbre de recettes affichés
  */
-function totalRecipedDisplayed(recipes) {
+function totalRecipedDisplayed(recipes, term) {
   let totalRecipes = recipes.length;
-  /* let $displayRecipesNumber = document.createElement('h3');
-  $displayRecipesNumber.setAttribute('class', 'recipes-number anton'); */
   $displayRecipesNumber.querySelector('.recipes-number');
-  $displayRecipesNumber.textContent = `${totalRecipes} recettes`;
+  if (totalRecipes === 0) {
+    $displayRecipesNumber.textContent = `Aucune recette ne contient ‘${term}’ vous pouvez chercher « tarte aux pommes », « poisson », etc.`;
+  } else {
+    $displayRecipesNumber.textContent = `${totalRecipes} recettes`;
+  }
   $totalRecipesDisplayed.appendChild($displayRecipesNumber);
   return totalRecipes;
 }
@@ -345,11 +343,22 @@ document.addEventListener("DOMContentLoaded", function () {
     ingredients: []
   }
 
-  /** 
-   * écoute de l'Event "input" sur la recherche principale 
-   * L'évènement DOM input est déclenché quand la valeur de l'élément <input> est modifiée
-   */
-  // voir pr ajouter une MAJ des élements des listes des 3 filtres selon le terme de recherche
+  $formSubmit.addEventListener('change', (e) => {
+    e.preventDefault();
+    let target = e.target.value.toLowerCase();
+    query.term = target;
+    const result = searchRecipes(query);
+    if (target.length >= 3) {
+      deleteDisplayData();
+      displayRecipeData(result);
+      deleteRecipesNumberTitle();
+      totalRecipedDisplayed(result, target);
+    }
+    console.log('ok, recherche...', target, result, query);
+    // enfin, on réinitialise le champs de la recherche principale au click sur le btn
+    resetForm($formSubmit);
+  })
+
   $primarySearch.addEventListener('input', (e) => {
     let target = e.target.value.toLowerCase();
     query.term = target;
@@ -361,16 +370,20 @@ document.addEventListener("DOMContentLoaded", function () {
       deleteDisplayData(); // suppression des recettes affichées
       displayRecipeData(result); // affichage des nouvelles recettes
       deleteRecipesNumberTitle(); // supprime précédent titre de total du nbre de recettes
-      totalRecipedDisplayed(result); // affiche nbre total de recettes
+      totalRecipedDisplayed(result, target); // affiche nbre total de recettes
       // + MAJ des filtres
+      // displayIngredients(updateIngredientsList('', result));
     }
   });
 
   // on écoute au click: MAJ des recettes + MAJ des 3 listes en fonction du tag sélectionné
   function onClickToIngredient() {
     const $ingredientsList = Array.from(document.querySelectorAll('#ingredients ul li'));
-    $ingredientsList.forEach((ingredient) => {
+    console.table('$ingredientsList: ', $ingredientsList);
+    $ingredientsList.forEach((ingredient, i) => {
       ingredient.addEventListener("click", (e) => {
+        console.log('forEach ingredient + index, au click => ', ingredient, i);
+
         // génération des élements HTML constituant un tag
         const $tagsIngredientsWrapper = document.querySelector('.ingredients-tags-wrapper');
         const $tagIngredientButton = document.createElement('button');
@@ -394,15 +407,19 @@ document.addEventListener("DOMContentLoaded", function () {
         $spanIngredientParentText.appendChild($spanIngredientChildText);
         $spanIngredientParentText.appendChild($closingTagIngredient);
 
-        // on pousse l'élément target ds le tableau des ingrédients
-        query.ingredients.push(target);
+        // pr l'instant le tab."query.ingredients" est vide (ainsi que tt l'objet query)
+        console.log(query, query.ingredients);
+
+        // on stock le (ou les) éléments ds le tableau des ingrédients
+        query.ingredients.push(target); // on a maintenant l'element ds notre tableau
+        console.log(query.ingredients);
         const result = searchRecipes(query);
         // suppression des recettes affichées (nettoyage avant d'afficher une nouvelle liste de recettes)
         deleteDisplayData();
         // fn d'affichage des recettes
         displayRecipeData(result);
         deleteRecipesNumberTitle();
-        totalRecipedDisplayed(result);
+        totalRecipedDisplayed(result, target);
         console.log('filtre par ingredients : ', result);
 
         // supprimer l'ingredient au click
@@ -422,26 +439,41 @@ document.addEventListener("DOMContentLoaded", function () {
         $list.appendChild($itemOnTheTop);
         $list.classList.add('item-on-the-top');
 
-        // MAJ les élements des 2 autres listes en fonction de l'ingredient sélectionné
-        // utiliser la fn updateIngredientsList() ms avec un 2eme paramètre
-        updateIngredientsList(target, appliances);
-        console.log(updateIngredientsList(target, appliances));
+        // MAJ les élements des listes en fonction de l'ingredient sélectionné 
+        // & selon les ingredients, appliances & ustensils contenus ds les recettes affichées
 
+        // utiliser la fn updateIngredientsList() ms avec un 2eme paramètre
+        // clear HTML elements list
+
+        /**
+         * ajouter fn de MAJ de l affichage, qd on supprime le tag
+         */
         $closingTagIngredient.addEventListener('click', () => {
-          $tagIngredientButton.style.display = 'none'; // cache le tag
-          $itemOnTheTop.style.display = 'none'; // cache l'item sélectionné
+
+          // cache le tag & cache l'item sélectionné (voir si l'item doit encore etre a cette position?)
+          $tagIngredientButton.style.display = 'none';
+          $itemOnTheTop.style.display = 'none';
+
+          // il faut re-afficher l'ingredient en tant que <li> ds la liste
           const $addListItem = document.createElement('li');
           $addListItem.textContent = e.target.textContent;
-          $list.appendChild($addListItem);
+          console.log($addListItem);
+          $list.appendChild($addListItem);  // ajout de l element ds le DOM
+
+          // on supprime l'element du tableau "ingredients" ds l objet "query"
+          query.ingredients.pop($addListItem); // on a maintenant l'element ds notre tableau
+          console.log(query.ingredients);
+
+          // MAJ recettes
+          const updatedResult = searchRecipes(query);
+          deleteDisplayData();
+          displayRecipeData(updatedResult);
+          deleteRecipesNumberTitle();
+          totalRecipedDisplayed(updatedResult, target);
         })
 
         $itemArrow.addEventListener('click', () => {
           $itemOnTheTop.style.display = 'none';
-
-          // & on recréé un <li> contenant l'ingrédient à replacer ds la liste
-          /* const $addListItem = document.createElement('li');
-          $addListItem.textContent = e.target.textContent;
-          $list.appendChild($addListItem); */
         })
       })
     })
@@ -482,10 +514,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // MAJ affichage du nombre total de recettes affichées
         deleteRecipesNumberTitle();
-        totalRecipedDisplayed(result);
+        totalRecipedDisplayed(result, target);
         console.log('filtre par appareils : ', result);
 
         // il faut également 1 fn de MAJ des listes selon le resultat des recettes
+        // utiliser la fn updateIngredientsList() ms avec un 2eme paramètre
+
+        /* const $updated = document.querySelectorAll('#appliances ul li');
+        $updated.forEach((item) => {
+          console.log(item);
+          return item.textContent = '';
+        })
+        let updated = updateAppliancesList(target, result);
+        console.log(updateAppliancesList(target, result));
+        displayAppliances(updated); */
 
         // affichage de l'item sélectionné en haut de la liste dans un <p> HTML avec 1 <span> pr texte & 1 <i> pr icône
         const $itemOnTheTop = document.createElement('p');
@@ -510,11 +552,6 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         $itemArrow.addEventListener('click', () => {
           $itemOnTheTop.style.display = 'none';
-
-          // & on recréé un <li> contenant l'ingrédient à replacer ds la liste
-          /* const $addListItem = document.createElement('li');
-          $addListItem.textContent = e.target.textContent;
-          $list.appendChild($addListItem); */
         })
       })
     })
@@ -553,8 +590,9 @@ document.addEventListener("DOMContentLoaded", function () {
         deleteDisplayData();
         displayRecipeData(result);
         deleteRecipesNumberTitle();
-        totalRecipedDisplayed(result);
+        totalRecipedDisplayed(result, target);
         console.log('filtre par ustensils: ', result);
+
         // affichage de l'item sélectionné en haut de la liste dans un <p> HTML avec 1 <span> pr texte & 1 <i> pr icône
         const $itemOnTheTop = document.createElement('p');
         const $itemText = document.createElement('span');
@@ -590,12 +628,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   onClickToUstensil();
 
-  // input: MAJ du contenu de la liste du filtre
   /**
    * input - filter by ingredient 
-   * Au fur et à mesure du remplissage, les mots clés ne correspondant pas 
-   * à la frappe dans le champ disparaissent
-   * Ok - mais une fois la liste MAJ, les elements ne sont plus clickable....
    */
   $filterInput.addEventListener('input', (e) => {
 
@@ -612,15 +646,6 @@ document.addEventListener("DOMContentLoaded", function () {
     displayIngredients(newList);
     console.log(updateIngredientsList(target));
     onClickToIngredient();
-    /**
-     * pas de MAJ de l'affichage desrecettes mais 
-     * une MAJ de l'affichage des élements de la liste 
-     */
-    //query.ingredients.push(target);
-    //const result = searchRecipes(query);
-    //deleteDisplayData();
-    //displayRecipeData(result);
-    //totalRecipedDisplayed(result);
   });
 
   /**
@@ -630,13 +655,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // clear HTML elements list
     const $list = document.querySelectorAll('#appliances ul li');
     $list.forEach((item) => {
-      console.log(item);
       return item.textContent = '';
     })
     let target = e.target.value.toLowerCase();
     let newList = updateAppliancesList(target);
     displayAppliances(newList);
-
     onClickToAppliance();
   });
 
@@ -647,7 +670,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // clear HTML elements list
     const $list = document.querySelectorAll('#ustensils ul li');
     $list.forEach((item) => {
-      console.log(item);
       return item.textContent = '';
     })
     let target = e.target.value.toLowerCase();
@@ -656,13 +678,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // affichage de la nouvelle liste d'ustensils
     displayUstensils(newList);
 
-    /* relance fn: 
-    génere comportement de l'event "click" sur item d'1 liste, 
-    génere tags, 
-    MAJ affichage recettes et de leur nombre, 
-    modifie position de l'item selectionné,
-    génere comportement de réaction à la fermeture des tags ) des tags
-    */
     onClickToUstensil();
   });
 });
