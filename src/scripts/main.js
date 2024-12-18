@@ -37,6 +37,9 @@ const $primarySearch = document.getElementById('primary-search');
 // const $contentTagIngredients = document.getElementById('content-tag-ingredients');
 const $contentTagAppliances = document.getElementById('content-tag-appliances');
 const $contentTagUstensils = document.getElementById('content-tag-ustensils');
+/* const $ingredientsList = document.querySelectorAll('#ingredients ul li');
+const $ustensilsList = document.querySelectorAll('#ustensils ul li');
+const $appliancesList = document.querySelectorAll('#appliances ul li'); */
 
 let $displayRecipesNumber = document.createElement('h3');
 $displayRecipesNumber.setAttribute('class', 'recipes-number anton');
@@ -50,19 +53,22 @@ function resetForm(element) {
   element.reset();
 }
 
+
+
+
 /** 
  * @property {string} term
  * @property {string[]} recipes - listes à MAJ (celle des appareils & des 
  * ustensils en fonction des recettes générées par le term)
  * @returns {void}
  */
-export function updateIngredientsList(term, _recipes = recipes) {
+export function updateIngredientsList(term) {
   let updatedIngredients = [];
   // let ingredientsFilter = [];
-  for (let i = 0; i < _recipes.length; i++) {
-    for (let j = 0; j < _recipes[i].ingredients.length; j++) {
-      if (_recipes[i].ingredients[j].ingredient.toLowerCase().includes(term.toLowerCase())) {
-        updatedIngredients.push(_recipes[i].ingredients[j].ingredient.toLowerCase());
+  for (let i = 0; i < recipes.length; i++) {
+    for (let j = 0; j < recipes[i].ingredients.length; j++) {
+      if (recipes[i].ingredients[j].ingredient.toLowerCase().includes(term.toLowerCase())) {
+        updatedIngredients.push(recipes[i].ingredients[j].ingredient.toLowerCase());
       }
     }
   }
@@ -78,11 +84,11 @@ export function updateIngredientsList(term, _recipes = recipes) {
   return uniqueIngredients;
 }
 
-export function updateAppliancesList(term, _recipes = recipes) {
+export function updateAppliancesList(term) {
   let updatedAppliances = [];
-  for (let i = 0; i < _recipes.length; i++) {
-    if (_recipes[i].appliance.toLowerCase().includes(term.toLowerCase())) {
-      updatedAppliances.push(_recipes[i].appliance.toLowerCase());
+  for (let i = 0; i < recipes.length; i++) {
+    if (recipes[i].appliance.toLowerCase().includes(term.toLowerCase())) {
+      updatedAppliances.push(recipes[i].appliance.toLowerCase());
     }
   }
   let uniqueAppliances = [];
@@ -95,12 +101,12 @@ export function updateAppliancesList(term, _recipes = recipes) {
   return uniqueAppliances;
 }
 
-export function updateUstensilsList(term, _recipes = recipes) {
+export function updateUstensilsList(term) {
   let updatedUstensils = [];
-  for (let i = 0; i < _recipes.length; i++) {
-    for (let j = 0; j < _recipes[i].ustensils.length; j++) {
-      if (_recipes[i].ustensils[j].toLowerCase().includes(term.toLowerCase())) {
-        updatedUstensils.push(_recipes[i].ustensils[j].toLowerCase());
+  for (let i = 0; i < recipes.length; i++) {
+    for (let j = 0; j < recipes[i].ustensils.length; j++) {
+      if (recipes[i].ustensils[j].toLowerCase().includes(term.toLowerCase())) {
+        updatedUstensils.push(recipes[i].ustensils[j].toLowerCase());
       }
     }
   }
@@ -302,6 +308,17 @@ async function displayRecipeData(recipes) {
     $recipeSection.appendChild(Template.createRecipeCard());
   })
 }
+
+/**
+ * fn to clear HTML elements list on filter dropdowns
+ * @param {*} list 
+ */
+/* function resetFilterListDisplay(list) {
+  list.forEach((item) => {
+    console.log(item);
+    return item.textContent = '';
+  })
+} */
 
 /**
  * fn de nettoyage pour préparer un nouvel affichage, 
@@ -549,6 +566,17 @@ document.addEventListener("DOMContentLoaded", function () {
           const $addListItem = document.createElement('li');
           $addListItem.textContent = e.target.textContent;
           $list.appendChild($addListItem);
+
+          // on supprime l'element du tableau "appliances" ds l objet "query"
+          query.appliances.pop($addListItem); // on a maintenant l'element ds notre tableau
+          console.log(query.appliances);
+
+          // MAJ recettes
+          const updatedResult = searchRecipes(query);
+          deleteDisplayData();
+          displayRecipeData(updatedResult);
+          deleteRecipesNumberTitle();
+          totalRecipedDisplayed(updatedResult, target);
         })
         $itemArrow.addEventListener('click', () => {
           $itemOnTheTop.style.display = 'none';
@@ -614,6 +642,16 @@ document.addEventListener("DOMContentLoaded", function () {
           const $addListItem = document.createElement('li');
           $addListItem.textContent = e.target.textContent;
           $list.appendChild($addListItem);
+
+          query.ustensils.pop($addListItem);
+          console.log(query.ustensils);
+
+          // MAJ recettes
+          const updatedResult = searchRecipes(query);
+          deleteDisplayData();
+          displayRecipeData(updatedResult);
+          deleteRecipesNumberTitle();
+          totalRecipedDisplayed(updatedResult, target);
         })
         $itemArrow.addEventListener('click', () => {
           $itemOnTheTop.style.display = 'none';
@@ -634,6 +672,7 @@ document.addEventListener("DOMContentLoaded", function () {
   $filterInput.addEventListener('input', (e) => {
 
     // clear HTML elements list
+    // resetFilterListDisplay($ingredientsList);
     const $list = document.querySelectorAll('#ingredients ul li');
     $list.forEach((item) => {
       console.log(item);
@@ -653,6 +692,7 @@ document.addEventListener("DOMContentLoaded", function () {
    */
   $filterInputAppliances.addEventListener('input', (e) => {
     // clear HTML elements list
+    //resetFilterListDisplay($appliancesList);
     const $list = document.querySelectorAll('#appliances ul li');
     $list.forEach((item) => {
       return item.textContent = '';
@@ -668,6 +708,7 @@ document.addEventListener("DOMContentLoaded", function () {
    */
   $filterInputUstensils.addEventListener('input', (e) => {
     // clear HTML elements list
+    //resetFilterListDisplay($ustensilsList);
     const $list = document.querySelectorAll('#ustensils ul li');
     $list.forEach((item) => {
       return item.textContent = '';

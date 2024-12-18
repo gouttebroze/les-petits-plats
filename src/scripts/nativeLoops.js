@@ -1,5 +1,12 @@
 import { recipes } from "./recipes";
-import { updateIngredientsList, updateAppliancesList, updateUstensilsList, displayIngredients, displayAppliances, displayUstensils } from "./main";
+import {
+  updateIngredientsList,
+  updateAppliancesList,
+  updateUstensilsList,
+  displayIngredients,
+  displayAppliances,
+  displayUstensils
+} from "./main";
 
 /**
  * @typedef {Object} SearchQuery
@@ -73,10 +80,10 @@ export function searchRecipes(searchForm) {
     }
   }
 
-  /* const _ingredients = updateIngredientsList("", newRecipesIngredients);
+  const _ingredients = updateIngredientsList("", newRecipesIngredients);
   const _appliances = updateAppliancesList("", newRecipesAppliances);
   const _ustensils = updateUstensilsList("", newRecipesUstensils);
-  displayIngredients(_ingredients)
+  /* displayIngredients(_ingredients)
   displayAppliances(_appliances)
   displayUstensils(_ustensils) */
 
