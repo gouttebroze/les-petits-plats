@@ -1,13 +1,3 @@
-import { recipes } from "./recipes";
-import {
-  updateIngredientsList,
-  updateAppliancesList,
-  updateUstensilsList,
-  displayIngredients,
-  displayAppliances,
-  displayUstensils
-} from "./main";
-
 /**
  * @typedef {Object} SearchQuery
  * @property {string} term - Le terme de recherche saisi par l'utilisateur.
@@ -21,7 +11,7 @@ import {
  * @param {SearchQuery} searchForm - The search query containing filters.
  * @returns {void}
  */
-export function searchRecipes(searchForm) {
+function searchRecipes(searchForm) {
   const { term, appliances, ustensils, ingredients } = searchForm;
   let newRecipes = [];
 

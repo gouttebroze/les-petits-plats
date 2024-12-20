@@ -1,6 +1,4 @@
-import { recipes } from "./recipes";
-
-export function filterRecipesByIngredients(term) {
+function filterRecipesByIngredients(term) {
   const recipesFilteredByIngredients = recipes.reduce((acc, curr) => {
     if (curr?.ingredients?.ingredient?.includes(term)) {
       acc.push(curr);
@@ -14,7 +12,7 @@ export function filterRecipesByIngredients(term) {
  * @param {string} term 
  * @returns {string[]}
  */
-export function filterRecipesByAppliances(term) {
+function filterRecipesByAppliances(term) {
   const recipesFilteredByAppliances = recipes.reduce((acc, curr) => {
     if (curr?.appliance?.toLowerCase().includes(term)) {
       acc.push(curr);
@@ -24,7 +22,7 @@ export function filterRecipesByAppliances(term) {
   return recipesFilteredByAppliances;
 }
 
-export function filterRecipesByUstensils(term) {
+function filterRecipesByUstensils(term) {
   const recipesFilteredByUstensils = recipes.reduce((acc, curr) => {
     if (curr?.ustensils.includes(term)) { // debugage en supprimant "toLowerCase()"
       acc.push(curr);
