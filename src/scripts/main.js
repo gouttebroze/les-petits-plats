@@ -54,13 +54,13 @@ function resetForm(element) {
  * ustensils en fonction des recettes générées par le term)
  * @returns {void}
  */
-function updateIngredientsList(term) {
+function updateIngredientsList(term, _recipes = recipes) {
   let updatedIngredients = [];
   // let ingredientsFilter = [];
-  for (let i = 0; i < recipes.length; i++) {
-    for (let j = 0; j < recipes[i].ingredients.length; j++) {
-      if (recipes[i].ingredients[j].ingredient.toLowerCase().includes(term.toLowerCase())) {
-        updatedIngredients.push(recipes[i].ingredients[j].ingredient.toLowerCase());
+  for (let i = 0; i < _recipes.length; i++) {
+    for (let j = 0; j < _recipes[i].ingredients.length; j++) {
+      if (_recipes[i].ingredients[j].ingredient.toLowerCase().includes(term.toLowerCase())) {
+        updatedIngredients.push(_recipes[i].ingredients[j].ingredient.toLowerCase());
       }
     }
   }
@@ -76,11 +76,11 @@ function updateIngredientsList(term) {
   return uniqueIngredients;
 }
 
-function updateAppliancesList(term) {
+function updateAppliancesList(term, _recipes = recipes) {
   let updatedAppliances = [];
-  for (let i = 0; i < recipes.length; i++) {
-    if (recipes[i].appliance.toLowerCase().includes(term.toLowerCase())) {
-      updatedAppliances.push(recipes[i].appliance.toLowerCase());
+  for (let i = 0; i < _recipes.length; i++) {
+    if (_recipes[i].appliance.toLowerCase().includes(term.toLowerCase())) {
+      updatedAppliances.push(_recipes[i].appliance.toLowerCase());
     }
   }
   let uniqueAppliances = [];
@@ -93,12 +93,12 @@ function updateAppliancesList(term) {
   return uniqueAppliances;
 }
 
-function updateUstensilsList(term) {
+function updateUstensilsList(term, _recipes = recipes) {
   let updatedUstensils = [];
-  for (let i = 0; i < recipes.length; i++) {
-    for (let j = 0; j < recipes[i].ustensils.length; j++) {
-      if (recipes[i].ustensils[j].toLowerCase().includes(term.toLowerCase())) {
-        updatedUstensils.push(recipes[i].ustensils[j].toLowerCase());
+  for (let i = 0; i < _recipes.length; i++) {
+    for (let j = 0; j < _recipes[i].ustensils.length; j++) {
+      if (_recipes[i].ustensils[j].toLowerCase().includes(term.toLowerCase())) {
+        updatedUstensils.push(_recipes[i].ustensils[j].toLowerCase());
       }
     }
   }
@@ -120,7 +120,7 @@ function updateUstensilsList(term) {
  */
 function displayIngredients(ingredients) {
   const $div = document.querySelector('#ingredients');
-  // $div.innerHTML = ''
+  $div.innerHTML = ''
   let $ul = '<ul>';
   for (let i = 0; i < ingredients.length; i++) {
     $ul += `<li>${ingredients[i]}</li>`;
@@ -128,42 +128,7 @@ function displayIngredients(ingredients) {
   $ul += '</ul>';
   $div.insertAdjacentHTML('beforeend', $ul);
 
-  // au click sur le btn du dropdown des ingrédients
-  $dropdownIngredientsBtn.addEventListener('click', () => {
 
-    // bascule (toggle) entre afficher et cacher la liste des ingrédients
-    $filterList.classList.toggle('toggle-display-ingredients');
-
-    // MAJ positions des flèches
-    $arrowDown.classList.toggle('toggle-hide-ingredients');// on cacher la flèche qui pointe vers le bas
-    $arrowUp.classList.toggle('toggle-display-ingredients');// & on affiche la flèche qui pointe vers le haut
-    // $arrowUp.style.display = 'block'; //$arrowDown.style.display = 'none';
-
-    // affichage de l'input qui filtre la liste des ingrédients
-    $filterInput.classList.toggle('toggle-display-ingredients');
-    $inputIcon.classList.toggle('toggle-flex-ingredients');
-    /* $inputIcon.style.display = 'flex';
-    $filterInput.style.display = 'block'; */
-  });
-
-  /* au click sur 1 élement de la liste des ingrédients 
-     comportement à vérifier: 
-     la liste est caché au click sur le btn d'ouverture ? (et non sur un des item?)
-  */
-  $filterList.addEventListener('click', () => {
-    /* non, l'affichage du tag sera géré par 1 autre fn, tout comme ses autres comportements, 
-    tel que l'injection du texte, le changement de position de l'item, la fermeture du tag ...) */
-    // $buttonTagIngredients.style.display = 'block';
-    // $filterList.style.display = 'none';
-
-    // MAJ positions des flèches
-    $arrowUp.style.display = 'none';
-    $arrowDown.style.display = 'block';
-
-    // on cache l'input & l'icône "loupe" (action à lancer avec la fermeture de la liste)
-    /* $filterInput.style.display = 'none';
-    $inputIcon.style.display = 'none'; */
-  })
 }
 
 /**
@@ -172,7 +137,7 @@ function displayIngredients(ingredients) {
  */
 function displayAppliances(appliances) {
   const $div = document.querySelector('#appliances'); // on créé 1 div à partir de l'id "appliances"
-  //$div.innerHTML = ''
+  $div.innerHTML = ''
   // création des tags HTML <ul> & <li>
   let $ul = '<ul>';
   for (let i = 0; i < appliances.length; i++) {
@@ -181,39 +146,7 @@ function displayAppliances(appliances) {
   $ul += '</ul>';
   $div.insertAdjacentHTML('beforeend', $ul);
 
-  // au click sur le boutton du dropdown des appareils
-  $dropdownAppliancesBtn.addEventListener('click', () => {
-    // bascule (toggle) entre afficher et cacher la liste des appareils
-    $filterAppliancesList.classList.toggle('toggle-display-appliances');
 
-    // on passe le btn en position ouvert
-    $arrowDownAppliances.style.display = 'none'; // on cacher la flèche qui pointe vers le bas
-    $arrowUpAppliances.style.display = 'block'; // & on affiche la flèche qui pointe vers le haut
-
-    // affichage de l'input & icône "loupe" du filtre des appareil
-    $filterInputAppliances.classList.toggle('toggle-display-appliances');
-    $inputAppliancesIcon.classList.toggle('toggle-flex-appliances');
-    /* $filterInputAppliances.style.display = 'block';
-    $inputAppliancesIcon.style.display = 'flex'; */
-  });
-
-  // au click sur la liste du dropdown des appareils(comportement à vérifier)
-  $filterAppliancesList.addEventListener('click', () => {
-
-    // on affiche le tag
-    //$buttonTagAppliances.style.display = 'block';
-
-    // on cache la liste
-    // $filterAppliancesList.style.display = 'none';
-
-    // on passe le btn en position fermée
-    $arrowUpAppliances.style.display = 'none'; // on cache la flèche qui pointe vers le haut
-    $arrowDownAppliances.style.display = 'block'; // on affiche la flèche qui pointe vers le bas
-
-    // désaffichage de l'input du filtre des appareil
-    // $filterInputAppliances.style.display = 'none'; // on cache l'input
-    // $inputAppliancesIcon.style.display = 'none'; // on cache la loupe
-  })
 
   // event listener on tag's arrow (to close tag & re-push element into filter list)
   /* $closeTagAppliances.addEventListener('click', () => {
@@ -227,7 +160,7 @@ function displayAppliances(appliances) {
  */
 function displayUstensils(ustensils) {
   const $div = document.querySelector('#ustensils');
-  //$div.innerHTML = '';
+  $div.innerHTML = '';
   let $ul = '<ul>';
   for (let i = 0; i < ustensils.length; i++) {
     $ul += `<li>${ustensils[i]}</li>`;
@@ -236,29 +169,7 @@ function displayUstensils(ustensils) {
   $div.insertAdjacentHTML('beforeend', $ul);
 
 
-  // au click sur le boutton du dropdown des ustensils
-  $dropdownUstensilsBtn.addEventListener('click', () => {
-    // bascule (toggle) entre afficher et cacher la liste des ustensils
-    $filterUstensilsList.classList.toggle('toggle-display-ustensils');
-    // MAJ de l'affichage des flèches avec le dropdown en position "ouvert"
-    $arrowDownUstensils.style.display = 'none';
-    $arrowUpUstensils.style.display = 'block';
-    // affichage input & icône "loupe"
-    $filterInputUstensils.classList.toggle('toggle-display-ustensils');
-    $inputUstensilsIcon.classList.toggle('toggle-flex-ustensils');
-    /* $filterInputUstensils.style.display = 'block';
-    $inputUstensilsIcon.style.display = 'flex'; */
-  });
 
-  // au click sur la liste des ustensils (comportement à vérifier)
-  $filterUstensilsList.addEventListener('click', () => {
-    /* $buttonTagUstensils.style.display = 'block';
-    $filterUstensilsList.style.display = 'none'; */
-    $arrowUpUstensils.style.display = 'none';
-    $arrowDownUstensils.style.display = 'block';
-    /* $filterInputUstensils.style.display = 'none';
-    $inputUstensilsIcon.style.display = 'none'; */
-  })
   /* $closeTagUstensils.addEventListener('click', () => {
     $buttonTagUstensils.style.display = 'none';
   }) */
@@ -281,6 +192,22 @@ function totalRecipedDisplayed(recipes, term) {
   $totalRecipesDisplayed.appendChild($displayRecipesNumber);
   return totalRecipes;
 }
+
+/* function updateDisplayIngredientsList() {
+  // clear HTML elements list
+  // resetFilterListDisplay($ingredientsList);
+  const $list = document.querySelectorAll('#ingredients ul li');
+  $list.forEach((item) => {
+    return item.textContent = '';
+  })
+
+  // display new list with elements that includes target
+  let target = e.target.value.toLowerCase();
+  let newList = updateIngredientsList(target);
+  displayIngredients(newList);
+  console.log(updateIngredientsList(target));
+  onClickToIngredient();
+ }*/
 
 /**
  * fn qui vide du DOM le contenu du titre du nbre de recettes affiché
@@ -327,6 +254,7 @@ let query = {
   ingredients: []
 }
 
+// a debug: creation d une liste de <ul> au lieu de <li> qd on cree ou manip tag 
 function onClickToIngredient() {
   const $ingredientsList = Array.from(document.querySelectorAll('#ingredients ul li'));
   console.table('$ingredientsList: ', $ingredientsList);
@@ -348,15 +276,19 @@ function onClickToIngredient() {
       $closingTagIngredient.classList.add('close-tag-ingredients');
       // injection du text dans le tag
       $closingTagIngredient.textContent = 'X'; // à remplacer par 1 croix (icône "close")
+
       $spanIngredientChildText.textContent = e.target.textContent; // injection du nom de l'ingrédient ds le tag
-      const target = e.target.textContent.toLowerCase();
+
       // ajout dans le DOM des élements constituant un tag
       $tagsIngredientsWrapper.appendChild($tagIngredientButton);
       $tagIngredientButton.appendChild($spanIngredientParentText);
       $spanIngredientParentText.appendChild($spanIngredientChildText);
       $spanIngredientParentText.appendChild($closingTagIngredient);
+      const target = e.target.textContent.toLowerCase();
       // pr l'instant le tab."query.ingredients" est vide (ainsi que tt l'objet query)
       console.log(query, query.ingredients);
+
+      // const tagIngredientTemplate = new IngredientTag(ingredient);
 
       // on stock le (ou les) éléments ds le tableau des ingrédients
       query.ingredients.push(target); // on a maintenant l'element ds notre tableau
@@ -400,11 +332,19 @@ function onClickToIngredient() {
         console.log($addListItem);
         $list.appendChild($addListItem);  // ajout de l element ds le DOM
 
-        // on supprime l'element du tableau "ingredients" ds l objet "query"
-        query.ingredients.pop($addListItem); // on a maintenant l'element ds notre tableau
-        console.log(query.ingredients);
+        // copie du tab avec element a supprimer ms a ajouter ds liste du filtre
+        //let ingredientsArrayCopie = [...query.ingredients]
+        query.ingredients.pop($addListItem); // on supprime l'element ds notre tableau
+        //console.log(ingredientsArrayCopie, query.ingredients);
+        // ingredientsArrayCopie.concat($ingredientsList)
+
+        //let target = e.target.value.toLowerCase();
+        //let newList = updateIngredientsList($addListItem);
+        //displayIngredients(newList);
+        //console.log(updateIngredientsList(target));
 
         // MAJ recettes
+        // const updatedResult = searchRecipes(query.ingredients);
         const updatedResult = searchRecipes(query);
         deleteDisplayData();
         displayRecipeData(updatedResult);
@@ -570,6 +510,101 @@ function onClickToUstensil() {
 
 document.addEventListener("DOMContentLoaded", function () {
 
+  // au click sur le btn du dropdown des ingrédients
+  $dropdownIngredientsBtn.addEventListener('click', () => {
+
+    // bascule (toggle) entre afficher et cacher la liste des ingrédients
+    $filterList.classList.toggle('toggle-display-ingredients');
+
+    // MAJ positions des flèches
+    $arrowDown.classList.toggle('toggle-hide-ingredients');// on cacher la flèche qui pointe vers le bas
+    $arrowUp.classList.toggle('toggle-display-ingredients');// & on affiche la flèche qui pointe vers le haut
+    // $arrowUp.style.display = 'block'; //$arrowDown.style.display = 'none';
+
+    // affichage de l'input qui filtre la liste des ingrédients
+    $filterInput.classList.toggle('toggle-display-ingredients');
+    $inputIcon.classList.toggle('toggle-flex-ingredients');
+    /* $inputIcon.style.display = 'flex';
+    $filterInput.style.display = 'block'; */
+  });
+
+  /* au click sur 1 élement de la liste des ingrédients 
+     comportement à vérifier: 
+     la liste est caché au click sur le btn d'ouverture ? (et non sur un des item?)
+  */
+  $filterList.addEventListener('click', () => {
+    /* non, l'affichage du tag sera géré par 1 autre fn, tout comme ses autres comportements, 
+    tel que l'injection du texte, le changement de position de l'item, la fermeture du tag ...) */
+    // $buttonTagIngredients.style.display = 'block';
+    // $filterList.style.display = 'none';
+
+    // MAJ positions des flèches
+    $arrowUp.style.display = 'none';
+    $arrowDown.style.display = 'block';
+
+    // on cache l'input & l'icône "loupe" (action à lancer avec la fermeture de la liste)
+    /* $filterInput.style.display = 'none';
+    $inputIcon.style.display = 'none'; */
+  })
+
+  // au click sur le boutton du dropdown des appareils
+  $dropdownAppliancesBtn.addEventListener('click', () => {
+    // bascule (toggle) entre afficher et cacher la liste des appareils
+    $filterAppliancesList.classList.toggle('toggle-display-appliances');
+
+    // on passe le btn en position ouvert
+    $arrowDownAppliances.style.display = 'none'; // on cacher la flèche qui pointe vers le bas
+    $arrowUpAppliances.style.display = 'block'; // & on affiche la flèche qui pointe vers le haut
+
+    // affichage de l'input & icône "loupe" du filtre des appareil
+    $filterInputAppliances.classList.toggle('toggle-display-appliances');
+    $inputAppliancesIcon.classList.toggle('toggle-flex-appliances');
+    /* $filterInputAppliances.style.display = 'block';
+    $inputAppliancesIcon.style.display = 'flex'; */
+  });
+
+  // au click sur la liste du dropdown des appareils(comportement à vérifier)
+  $filterAppliancesList.addEventListener('click', () => {
+
+    // on affiche le tag
+    //$buttonTagAppliances.style.display = 'block';
+
+    // on cache la liste
+    // $filterAppliancesList.style.display = 'none';
+
+    // on passe le btn en position fermée
+    $arrowUpAppliances.style.display = 'none'; // on cache la flèche qui pointe vers le haut
+    $arrowDownAppliances.style.display = 'block'; // on affiche la flèche qui pointe vers le bas
+
+    // désaffichage de l'input du filtre des appareil
+    // $filterInputAppliances.style.display = 'none'; // on cache l'input
+    // $inputAppliancesIcon.style.display = 'none'; // on cache la loupe
+  })
+
+  // au click sur le boutton du dropdown des ustensils
+  $dropdownUstensilsBtn.addEventListener('click', () => {
+    // bascule (toggle) entre afficher et cacher la liste des ustensils
+    $filterUstensilsList.classList.toggle('toggle-display-ustensils');
+    // MAJ de l'affichage des flèches avec le dropdown en position "ouvert"
+    $arrowDownUstensils.style.display = 'none';
+    $arrowUpUstensils.style.display = 'block';
+    // affichage input & icône "loupe"
+    $filterInputUstensils.classList.toggle('toggle-display-ustensils');
+    $inputUstensilsIcon.classList.toggle('toggle-flex-ustensils');
+    /* $filterInputUstensils.style.display = 'block';
+    $inputUstensilsIcon.style.display = 'flex'; */
+  });
+
+  // au click sur la liste des ustensils (comportement à vérifier)
+  $filterUstensilsList.addEventListener('click', () => {
+    /* $buttonTagUstensils.style.display = 'block';
+    $filterUstensilsList.style.display = 'none'; */
+    $arrowUpUstensils.style.display = 'none';
+    $arrowDownUstensils.style.display = 'block';
+    /* $filterInputUstensils.style.display = 'none';
+    $inputUstensilsIcon.style.display = 'none'; */
+  })
+
   displayRecipeData(recipes); // affichage initial du total des recettes (avant recherche)
   totalRecipedDisplayed(recipes); // affichage nbre de recettes affichées
 
@@ -632,6 +667,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /**
    * input - filter by ingredient 
+   * notes: eventListener sur input MAJ la liste filtre & debug les items qui n'etait plus clickables
    */
   $filterInput.addEventListener('input', (e) => {
 
@@ -684,4 +720,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
     onClickToUstensil();
   });
-}, { once: true });
+});

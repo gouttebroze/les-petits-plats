@@ -71,11 +71,11 @@ function searchRecipes(searchForm) {
   }
 
   const _ingredients = updateIngredientsList("", newRecipesIngredients);
-  const _appliances = updateAppliancesList("", newRecipesAppliances);
-  const _ustensils = updateUstensilsList("", newRecipesUstensils);
-  /* displayIngredients(_ingredients)
+  const _appliances = updateAppliancesList("", newRecipesIngredients);
+  const _ustensils = updateUstensilsList("", newRecipesIngredients);
+  displayIngredients(_ingredients)
   displayAppliances(_appliances)
-  displayUstensils(_ustensils) */
+  displayUstensils(_ustensils)
 
   return newRecipesIngredients;
   // return newRecipesUstensils;
