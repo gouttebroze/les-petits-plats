@@ -128,6 +128,7 @@ function displayIngredients(ingredients) {
   $ul += '</ul>';
   $div.insertAdjacentHTML('beforeend', $ul);
 
+  onClickToIngredient();
 
 }
 
@@ -146,7 +147,7 @@ function displayAppliances(appliances) {
   $ul += '</ul>';
   $div.insertAdjacentHTML('beforeend', $ul);
 
-
+  onClickToAppliance();
 
   // event listener on tag's arrow (to close tag & re-push element into filter list)
   /* $closeTagAppliances.addEventListener('click', () => {
@@ -168,7 +169,7 @@ function displayUstensils(ustensils) {
   $ul += '</ul>';
   $div.insertAdjacentHTML('beforeend', $ul);
 
-
+  onClickToUstensil();
 
   /* $closeTagUstensils.addEventListener('click', () => {
     $buttonTagUstensils.style.display = 'none';
@@ -222,6 +223,7 @@ function deleteRecipesNumberTitle() {
  * @param {*} recipes 
  */
 async function displayRecipeData(recipes) {
+  $recipeSection.textContent = '';
   recipes.map((recipe) => {
     const Template = new RecipeCard(recipe);
     $recipeSection.appendChild(Template.createRecipeCard());
@@ -244,7 +246,7 @@ async function displayRecipeData(recipes) {
  * soit chargée de vider les recettes affichées du DOM
  */
 function deleteDisplayData() {
-  $recipeSection.textContent = '';
+
 }
 
 let query = {
@@ -661,9 +663,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  onClickToIngredient();
+  /* onClickToIngredient();
   onClickToAppliance();
-  onClickToUstensil();
+  onClickToUstensil(); */
 
   /**
    * input - filter by ingredient 

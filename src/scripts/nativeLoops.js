@@ -51,6 +51,7 @@ function searchRecipes(searchForm) {
       for (let l = 0; l < newRecipesAppliances[k]?.ustensils.length; l++) {
         if (ustensils.includes(newRecipesAppliances[k].ustensils[l].toLowerCase())) {
           newRecipesUstensils.push(newRecipesAppliances[k]);
+          break;
         }
       }
     }
@@ -65,6 +66,7 @@ function searchRecipes(searchForm) {
       for (let m = 0; m < newRecipesUstensils[l].ingredients.length; m++) {
         if (ingredients.includes(newRecipesUstensils[l].ingredients[m].ingredient.toLowerCase())) {
           newRecipesIngredients.push(newRecipesUstensils[l]);
+          break;
         }
       }
     }
