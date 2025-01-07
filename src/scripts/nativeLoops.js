@@ -64,9 +64,17 @@ function searchRecipes(searchForm) {
   } else {
     for (let l = 0; l < newRecipesUstensils.length; l++) {
       for (let m = 0; m < newRecipesUstensils[l].ingredients.length; m++) {
-        if (ingredients.includes(newRecipesUstensils[l].ingredients[m].ingredient.toLowerCase())) {
+        let found = false;
+        for (let n = 0; n < ingredients.length; n++) {
+          if (newRecipesUstensils[l].ingredients[m].ingredient.toLowerCase().includes(ingredients[n])) {
+            found = true;
+          } else {
+            found = false;
+            break;
+          }
+        }
+        if (found === true) {
           newRecipesIngredients.push(newRecipesUstensils[l]);
-          break;
         }
       }
     }

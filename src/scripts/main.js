@@ -44,19 +44,17 @@ const $formSubmit = document.querySelector('#search-form');
  * fn permettant de restaurer les valeurs par défaut
  * @param {HTMLFormElement} element - formulaire
  */
-function resetForm(element) {
+/* function resetForm(element) {
   element.reset();
-}
+} */
 
 /** 
  * @property {string} term
- * @property {string[]} recipes - listes à MAJ (celle des appareils & des 
- * ustensils en fonction des recettes générées par le term)
+ * @property {string[]} _recipes - tableau des recettes, initial par défault, ou MAJ
  * @returns {void}
  */
 function updateIngredientsList(term, _recipes = recipes) {
   let updatedIngredients = [];
-  // let ingredientsFilter = [];
   for (let i = 0; i < _recipes.length; i++) {
     for (let j = 0; j < _recipes[i].ingredients.length; j++) {
       if (_recipes[i].ingredients[j].ingredient.toLowerCase().includes(term.toLowerCase())) {
@@ -115,7 +113,9 @@ function updateUstensilsList(term, _recipes = recipes) {
 }
 
 /**
- * fonction qui génère une liste (un template HTML (<ul> > <li>))
+ * fn qui gère l'affichage des ingrédients ds le filtre
+ * fn qui lance onClickIngredient(), fn qui gère l'affichage des items du filtre selon 
+ * les sélections des ingrédients
  * @param {string[]} ingredients 
  */
 function displayIngredients(ingredients) {
@@ -128,8 +128,7 @@ function displayIngredients(ingredients) {
   $ul += '</ul>';
   $div.insertAdjacentHTML('beforeend', $ul);
 
-  onClickToIngredient();
-
+  onClickToIngredient(query);
 }
 
 /**
@@ -147,7 +146,7 @@ function displayAppliances(appliances) {
   $ul += '</ul>';
   $div.insertAdjacentHTML('beforeend', $ul);
 
-  onClickToAppliance();
+  onClickToAppliance(query);
 
   // event listener on tag's arrow (to close tag & re-push element into filter list)
   /* $closeTagAppliances.addEventListener('click', () => {
@@ -169,7 +168,7 @@ function displayUstensils(ustensils) {
   $ul += '</ul>';
   $div.insertAdjacentHTML('beforeend', $ul);
 
-  onClickToUstensil();
+  onClickToUstensil(query);
 
   /* $closeTagUstensils.addEventListener('click', () => {
     $buttonTagUstensils.style.display = 'none';
@@ -220,6 +219,7 @@ function deleteRecipesNumberTitle() {
 
 /**
  * fn d'affichage du template d'1 recette, selon les recettes passées en paramètres
+ * TODO tier avec sort par ordre alph.
  * @param {*} recipes 
  */
 async function displayRecipeData(recipes) {
@@ -245,9 +245,7 @@ async function displayRecipeData(recipes) {
  * fn de nettoyage pour préparer un nouvel affichage, 
  * soit chargée de vider les recettes affichées du DOM
  */
-function deleteDisplayData() {
-
-}
+function deleteDisplayData() { }
 
 let query = {
   term: '',
@@ -257,7 +255,7 @@ let query = {
 }
 
 // a debug: creation d une liste de <ul> au lieu de <li> qd on cree ou manip tag 
-function onClickToIngredient() {
+/* function onClickToIngredient() {
   const $ingredientsList = Array.from(document.querySelectorAll('#ingredients ul li'));
   console.table('$ingredientsList: ', $ingredientsList);
   $ingredientsList.forEach((ingredient, i) => {
@@ -348,7 +346,7 @@ function onClickToIngredient() {
         // MAJ recettes
         // const updatedResult = searchRecipes(query.ingredients);
         const updatedResult = searchRecipes(query);
-        deleteDisplayData();
+        //deleteDisplayData();
         displayRecipeData(updatedResult);
         deleteRecipesNumberTitle();
         totalRecipedDisplayed(updatedResult, target);
@@ -508,7 +506,7 @@ function onClickToUstensil() {
       })
     })
   })
-}
+} */
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -615,61 +613,79 @@ document.addEventListener("DOMContentLoaded", function () {
   const appliances = updateAppliancesList(''); // récupération & MAJ liste appareils
   const ustensils = updateUstensilsList(''); // récupération & MAJ liste ustensils
 
-  console.table(ingredients);
-  console.table(appliances);
-  console.table(ustensils);
-
   displayIngredients(ingredients); // affichage de la liste des ingrédients
   displayAppliances(appliances); // affichage de la liste des appareils
   displayUstensils(ustensils); // affichage de la liste des ustensils
 
   /**
    * recherche principale
-   * voir Event "input": 
-   *  - relance la recherche à chaque frappe
-   *  - mais il faut doit relancer la recherche qu'à partir 3 charatères entrés ds le champs
+   * TODO: relancer affichage avec reset sur input
    */
 
-  $formSubmit.addEventListener('change', (e) => {
+  /* $formSubmit.addEventListener('submit', (e) => {
+    //e.preventDefault();
+    let target = e.target.value.toLowerCase();
+    console.log(e, e.target);
+    query.term = target;
+    console.log(query);
+    const result = searchRecipes(query);
+    console.log(result);
+    //if (target.length >= 3) {}
+    //deleteDisplayData();
+    //réinitialisation du formulaire
+    //$formSubmit.reset();
+    // enfin, on réinitialise le champs de la recherche principale au click sur le btn
+    // target.reset();
+  }) */
+
+  /* $primarySearch.addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      let target = e.target.value.toLowerCase();
+      query.term = target;
+      const result = searchRecipes(query);
+      displayRecipeData(result); // affichage des nouvelles recettes
+      deleteRecipesNumberTitle(); // supprime précédent titre de total du nbre de recettes
+      totalRecipedDisplayed(result, target);
+    }
+  }) */
+
+  // on "input" event (reload search results on every input field new character)
+  $primarySearch.addEventListener('input', (e) => {
     e.preventDefault();
     let target = e.target.value.toLowerCase();
     query.term = target;
     const result = searchRecipes(query);
+
     if (target.length >= 3) {
-      deleteDisplayData();
+      displayRecipeData(result); // affichage des nouvelles recettes
+      deleteRecipesNumberTitle(); // supprime précédent titre de total du nbre de recettes
+      totalRecipedDisplayed(result, target); // affiche nbre total de recettes
+    } else {
+      query.term = '';
+      const result = searchRecipes(query);
       displayRecipeData(result);
       deleteRecipesNumberTitle();
       totalRecipedDisplayed(result, target);
     }
-    console.log('ok, recherche...', target, result, query);
-    // enfin, on réinitialise le champs de la recherche principale au click sur le btn
-    // resetForm($formSubmit);
-  })
+  });
 
-  $primarySearch.addEventListener('input', (e) => {
+  // on "submit" event
+  /* $primarySearch.addEventListener('submit', (e) => {
+    e.preventDefault();
     let target = e.target.value.toLowerCase();
     query.term = target;
     const result = searchRecipes(query);
-    console.log('recherche principale:', result, 'nbr char.: ', target.length);
 
-    // on lance la recherche à partir de 3 charactères
-    if (target.length >= 3) {
-      deleteDisplayData(); // suppression des recettes affichées
-      displayRecipeData(result); // affichage des nouvelles recettes
-      deleteRecipesNumberTitle(); // supprime précédent titre de total du nbre de recettes
-      totalRecipedDisplayed(result, target); // affiche nbre total de recettes
-      // + MAJ des filtres
-      // displayIngredients(updateIngredientsList('', result));
-    }
-  });
-
-  /* onClickToIngredient();
-  onClickToAppliance();
-  onClickToUstensil(); */
+    deleteDisplayData(); // suppression des recettes affichées
+    displayRecipeData(result); // affichage des nouvelles recettes
+    deleteRecipesNumberTitle(); // supprime précédent titre de total du nbre de recettes
+    totalRecipedDisplayed(result, target); // affiche nbre total de recettes
+    resetForm(target);
+  }) */
 
   /**
    * input - filter by ingredient 
-   * notes: eventListener sur input MAJ la liste filtre & debug les items qui n'etait plus clickables
    */
   $filterInput.addEventListener('input', (e) => {
 
