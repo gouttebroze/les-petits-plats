@@ -33,103 +33,44 @@ function filterByReduceMethod(term) {
  * @returns {void}
  */
 function filterByReduce(searchForm) {
+  const { term, appliances, ustensils, ingredients } = searchForm;
 
-  const {
-    term, appliances, ustensils, ingredients
-  } = searchForm;
-
-  // recherche globale
+  // global search using "reduce()" array method
   const recipesFiltered = recipes.reduce((acc, curr) => {
 
-    if (curr.name.toLowerCase().includes(term)
-      || curr.description.toLowerCase().includes(term)
-      || curr.ingredients.ingredient.toLowerCase().includes(term)) {
+    // search recipes that includes term, into recipes name, desc. or ingredients list
+    if (curr.name.toLowerCase().includes(term) ||
+      curr.description.toLowerCase().includes(term) ||
+      // to browse the ingredients, use the "some()" method to reaching the desired depth
+      curr.ingredients.some(ing => ing.ingredient.toLowerCase().includes(term))) {
       acc.push(curr);
     }
     return acc;
-
   }, []); // initial value is an empty array []
 
-  // filtre par appareil
-  /*   const appliancesFilter = recipesFiltered.reduce((acc, curr) => {
-      if (curr?.appliances?.toLowerCase().includes(appliances)) {
-        acc.push(curr);
-      }
-      return acc;
-    }, []); */
+  // to advanced appliances search field,
+  const appliancesFilter = recipesFiltered.reduce((acc, curr) => {
+    if (curr?.appliance?.toLowerCase().includes(appliances)) {
+      acc.push(curr); // return a new array with recipes that meet the condition  
+    }
+    return acc;
+  }, []);
 
-  // filtre par ustensils
-  /*   const ustensilsFilter = appliancesFilter.reduce((acc, curr) => {
-      if (curr.ustensils.toLowerCase().includes(ustensils)) {
-        acc.push(curr);
-      }
-      return acc;
-    }, []);
-  
-    // filtre par ingredients
-    const ingredientsFilter = ustensilsFilter.reduce((acc, curr) => {
-      if (curr.ingredients.toLowerCase().includes(ingredients)) {
-        acc.push(curr);
-      }
-      return acc;
-    }, []); */
+  // to advanced ustensils search field 
+  const ustensilsFilter = appliancesFilter.reduce((acc, curr) => {
+    if (curr.ustensils.some(ustensil => ustensil.toLowerCase().includes(ustensils))) {
+      acc.push(curr); // return a new array with recipes that meet the condition  
+    }
+    return acc;
+  }, []);
 
-  return recipesFiltered;
-  // return appliancesFilter;
-  // return ingredientsFilter;
-}
-
-function searchByArrayObjects(searchForm) {
-  const {
-    term, appliances, ustensils, ingredients
-  } = searchForm;
-
-  const recipesFiltered = recipes.filter(recipe => {
-
-    // use "some" Array method to loop on "ingredients" array
-    return recipe.name.toLowerCase().includes(term)
-      || recipe.description.toLowerCase().includes(term)
-      || recipe.ingredients.some(ing => ing.ingredient.toLowerCase().includes(term))
-
-  });
-  console.log('recipesFilltered array:', recipesFiltered);
-
-  // check if filtered recipes array is empty, to forward recipes array
-
-  // filter by appliances
-  let newRecipesAppliances;
-  if (appliances.length === 0) {
-    newRecipesAppliances = [...recipesFiltered];
-  } else {
-    newRecipesAppliances = recipesFiltered.filter(item => {
-      if (appliances.includes(item?.appliances?.toLowerCase())) {
-        return newRecipesAppliances.push(item);
-      }
-    })
-  }
-  console.log('"newRecipesAppliances" array return: ', newRecipesAppliances);
-
-  let newRecipesUstensils;
-  if (ustensils.length === 0) {
-    newRecipesUstensils = [...newRecipesAppliances];
-  } else {
-    newRecipesUstensils = newRecipesAppliances.filter(item => {
-      return ustensils.includes(item.ustensils.toLowerCase());
-    })
-  }
-  console.log('"newRecipesUstensils" array return: ', newRecipesUstensils);
-
-  let newRecipesIngredients;
-  if (ingredients.length === 0) {
-    newRecipesIngredients = [...newRecipesUstensils];
-  } else {
-    newRecipesIngredients = newRecipesUstensils.every(item =>
-      item.ingredients.some(ing => ing.ingredient.toLowerCase())
-      // console.log('test itération sur tableau "ingredients": ', item.ingredients.ingredient)
-    )
-  }
-  console.log('"newRecipesIngredients" array return: ', newRecipesIngredients);
-
-  // return recipesFiltered // newRecipesAppliances;
-  return newRecipesIngredients;
+  // to advanced ingredient search field
+  const ingredientsFilter = ustensilsFilter.reduce((acc, curr) => {
+    if (curr.ingredients.some(ing => ing.ingredient.toLowerCase().includes(ingredients))) {
+      acc.push(curr); // return "acc", a new array with recipes that meet the condition  
+    }
+    return acc;
+  }, []);
+  // return recipesFiltered; // return appliancesFilter; // return ustensilsFilter;
+  return ingredientsFilter;
 }

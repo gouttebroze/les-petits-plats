@@ -41,7 +41,8 @@ function onClickToIngredient(query) {
       // add selected ingredient into ingredients array (into query object)
       query.ingredients.push(target);
 
-      const result = searchRecipes(query);
+      const result = filterByReduce(query);
+      // const result = searchRecipes(query);
       // const result = searchByArrayObjects(query);
       // deleteDisplayData(); // removed fn
       displayRecipeData(result);
@@ -90,7 +91,8 @@ function onClickToIngredient(query) {
         query.ingredients.pop($addListItem);
 
         // to update global recipes displayed
-        const updatedResult = searchRecipes(query);
+        const updatedResult = filterByReduce(query);
+        // const updatedResult = searchRecipes(query);
         displayRecipeData(updatedResult);
         deleteRecipesNumberTitle();
         totalRecipedDisplayed(updatedResult, target);
@@ -129,7 +131,8 @@ function onClickToAppliance(query) {
 
       // ajout "target" ds le tableau des appareils
       query.appliances.push(target);
-      const result = searchRecipes(query);
+      // const result = searchRecipes(query);
+      const result = filterByReduce(query);
       // MAJ affichage recettes
       deleteDisplayData();
       displayRecipeData(result);
@@ -164,7 +167,8 @@ function onClickToAppliance(query) {
         console.log(query.appliances);
 
         // MAJ recettes
-        const updatedResult = searchRecipes(query);
+        // const updatedResult = searchRecipes(query);
+        const updatedResult = filterByReduce(query);
         deleteDisplayData();
         displayRecipeData(updatedResult);
         deleteRecipesNumberTitle();
@@ -204,7 +208,8 @@ function onClickToUstensil(query) {
 
       query.ustensils.push(target);
 
-      const result = searchRecipes(query);
+      // const result = searchRecipes(query);
+      const result = filterByReduce(query);
       deleteDisplayData();
       displayRecipeData(result);
       deleteRecipesNumberTitle();
@@ -239,7 +244,8 @@ function onClickToUstensil(query) {
         console.log(query.ustensils);
 
         // MAJ recettes
-        const updatedResult = searchRecipes(query);
+        // const updatedResult = searchRecipes(query);
+        const updatedResult = filterByReduce(query);
         deleteDisplayData();
         displayRecipeData(updatedResult);
         deleteRecipesNumberTitle();

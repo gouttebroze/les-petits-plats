@@ -32,10 +32,8 @@ function searchRecipes(searchForm) {
   // filtre par appareil
   let newRecipesAppliances = [];
   /* 
-   * on verifie si le tab. des recettes 
-   * filtrées par appareils est vide, si oui, 
-   * on lui donne une copie du tab. retourné par 
-   * la recherche principale
+   * on verifie si le tab. des recettes filtrées par appareils est vide, si oui, 
+   * on lui donne une copie du dernier tab. retourné
    */
   if (appliances.length === 0) {
     newRecipesAppliances = [...newRecipes];
