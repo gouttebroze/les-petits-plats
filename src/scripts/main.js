@@ -1,8 +1,3 @@
-import { recipes } from './recipes';
-import RecipeCard from './recipeCard.js';
-import { searchRecipes } from './nativeLoops.js';
-import { filterByReduceMethod } from './arrayObject.js';
-
 const $buttonTagIngredients = document.querySelector('.toggle-tag-ingredients');
 const $buttonTagAppliances = document.querySelector('.toggle-tag-appliances');
 const $buttonTagUstensils = document.querySelector('.toggle-tag-ustensils');
@@ -10,8 +5,12 @@ const $closeTagIngredients = document.querySelector('.close-tag-ingredients');
 const $closeTagAppliances = document.querySelector('.close-tag-appliances');
 const $closeTagUstensils = document.querySelector('.close-tag-ustensils');
 const $filter = document.querySelector('.filter-btn');
-const $filterAppliancesButton = document.querySelector('.filter-appliances-btn');
-const $filterUstensilsButton = document.querySelector('.filter-ustensils-btn');
+// const $filterDropdownBtn = document.querySelector('.filter-btn-top');
+const $dropdownIngredientsBtn = document.querySelector('.dropdown-ingredients-btn');
+// const $filterAppliancesButton = document.querySelector('.dropdown-appliances-btn');
+const $dropdownAppliancesBtn = document.querySelector('.dropdown-appliances-btn');
+// const $filterUstensilsButton = document.querySelector('.dropdown-ustensils-btn');
+const $dropdownUstensilsBtn = document.querySelector('.dropdown-ustensils-btn');
 const $filterList = document.querySelector('.filter-list');
 const $filterAppliancesList = document.querySelector('.filter-appliances-list');
 const $filterUstensilsList = document.querySelector('.filter-ustensils-list');
@@ -30,367 +29,608 @@ const $inputUstensilsIcon = document.querySelector('.input-ustensils-icons');
 const $totalRecipesDisplayed = document.querySelector('.total-recipes');
 const $recipeSection = document.querySelector('.recipes-wrapper');
 const $primarySearch = document.getElementById('primary-search');
-const $contentTagIngredients = document.getElementById('content-tag-ingredients');
+// const $contentTagIngredients = document.getElementById('content-tag-ingredients');
 const $contentTagAppliances = document.getElementById('content-tag-appliances');
 const $contentTagUstensils = document.getElementById('content-tag-ustensils');
+/* const $ingredientsList = document.querySelectorAll('#ingredients ul li');
+const $ustensilsList = document.querySelectorAll('#ustensils ul li');
+const $appliancesList = document.querySelectorAll('#appliances ul li'); */
 
-/** 
- * fonction permettant de récupérer et de mettre à jour la liste des ingrédients, sans doublons, selon le terme de la recherche.
- * La boucle "for" nous permet de parcourir les différents niveaux du tableau de recettes afin d'y récupérer la liste des ingrédients.
- * @property {string} term - Le terme de recherche saisi par l'utilisateur.
- * @returns {void}
- */
-function updateIngredientsList(term) {
-  let updatedIngredients = [];
-  for (let i = 0; i < recipes.length; i++) {
-    for (let j = 0; j < recipes[i].ingredients.length; j++) {
-      if (recipes[i].ingredients[j].ingredient.toLowerCase().includes(term.toLowerCase())) {
-        updatedIngredients.push(recipes[i].ingredients[j].ingredient.toLowerCase());
-      }
-    }
-  }
-  let uniqueIngredients = [];
-  for (let i = 0; i < updatedIngredients.length; i++) {
-    // on récupère l'index, puis on le compare à l'index du tableau, indexOf retourne le 1er index si doublon
-    const ingredientIndex = updatedIngredients.indexOf(updatedIngredients[i]);
-    if (i === ingredientIndex) {
-      uniqueIngredients.push(updatedIngredients[i]);
-    }
-  }
-  return uniqueIngredients;
-}
-
-function updateAppliancesList(term) {
-  let updatedAppliances = [];
-  for (let i = 0; i < recipes.length; i++) {
-    if (recipes[i].appliance.toLowerCase().includes(term.toLowerCase())) {
-      updatedAppliances.push(recipes[i].appliance.toLowerCase());
-    }
-  }
-  let uniqueAppliances = [];
-  for (let i = 0; i < updatedAppliances.length; i++) {
-    const applianceIndex = updatedAppliances.indexOf(updatedAppliances[i]);
-    if (i === applianceIndex) {
-      uniqueAppliances.push(updatedAppliances[i]);
-    }
-  }
-  return uniqueAppliances;
-}
-
-/* function updateAppliancesList(term) {
-  //let updatedAppliances = [];
-  // return recipes.filter((recipe) => recipe.appliance.toLowerCase().includes(term.toLowerCase()));
-  let updatedAppliances = recipes.map(recipe => recipe.appliance.toLowerCase().includes(term.toLowerCase()));
-  return updatedAppliances;
-} */
-
-function updateUstensilsList(term) {
-  let updatedUstansils = [];
-  for (let i = 0; i < recipes.length; i++) {
-    for (let j = 0; j < recipes[i].ustensils.length; j++) {
-      if (recipes[i].ustensils[j].toLowerCase().includes(term.toLowerCase())) {
-        updatedUstansils.push(recipes[i].ustensils[j].toLowerCase());
-      }
-    }
-  }
-  // suppression d'éventuels doublons
-  let uniqueUstansils = [];
-  for (let i = 0; i < updatedUstansils.length; i++) {
-    const ustensilIndex = updatedUstansils.indexOf(updatedUstansils[i]);
-    // indexOf() récupère l'index et, en cas de doublon, récupère uniquement le 1er index de(s) l'élément(s) trouvé(s)
-    if (i === ustensilIndex) {
-      uniqueUstansils.push(updatedUstansils[i]);
-    }
-  }
-  return uniqueUstansils;
-}
+let $displayRecipesNumber = document.createElement('h3');
+$displayRecipesNumber.setAttribute('class', 'recipes-number anton');
+const $formSubmit = document.querySelector('#search-form');
 
 /**
- * fonction qui génère un template HTML (<ul> > <li>)
+ * fn qui gère l'affichage des ingrédients ds le filtre
+ * fn qui lance onClickIngredient(), fn qui gère l'affichage des items du filtre selon 
+ * les sélections des ingrédients
  * @param {string[]} ingredients 
  */
 function displayIngredients(ingredients) {
   const $div = document.querySelector('#ingredients');
+  $div.innerHTML = ''
   let $ul = '<ul>';
   for (let i = 0; i < ingredients.length; i++) {
     $ul += `<li>${ingredients[i]}</li>`;
   }
   $ul += '</ul>';
   $div.insertAdjacentHTML('beforeend', $ul);
-  $filter.addEventListener('click', () => {
-    $filterList.style.display = 'block';
-    $arrowDown.style.display = 'none';
-    $arrowUp.style.display = 'block';
-    $filterInput.style.display = 'block';
-    $inputIcon.style.display = 'flex';
-  });
-  $filterList.addEventListener('click', () => {
-    $buttonTagIngredients.style.display = 'block';
-    $filterList.style.display = 'none';
-    $arrowUp.style.display = 'none';
-    $arrowDown.style.display = 'block';
-    $filterInput.style.display = 'none';
-    $inputIcon.style.display = 'none';
-  })
-  $closeTagIngredients.addEventListener('click', () => {
-    $buttonTagIngredients.style.display = 'none';
-  })
+  onClickToIngredient(query);
 }
 
+/**
+ * display appliances list
+ * @param {string[]} appliances 
+ */
 function displayAppliances(appliances) {
-  const $div = document.querySelector('#appliances');
+  const $div = document.querySelector('#appliances'); // on créé 1 div à partir de l'id "appliances"
+  $div.innerHTML = ''
+  // création des tags HTML <ul> & <li>
   let $ul = '<ul>';
   for (let i = 0; i < appliances.length; i++) {
     $ul += `<li>${appliances[i]}</li>`;
   }
   $ul += '</ul>';
   $div.insertAdjacentHTML('beforeend', $ul);
-
-  $filterAppliancesButton.addEventListener('click', () => {
-    $filterAppliancesList.style.display = 'block';
-    $arrowDownAppliances.style.display = 'none';
-    $arrowUpAppliances.style.display = 'block';
-    $filterInputAppliances.style.display = 'block';
-    $inputAppliancesIcon.style.display = 'flex';
-  });
-
-  $filterAppliancesList.addEventListener('click', () => {
-    $buttonTagAppliances.style.display = 'block';
-    $filterAppliancesList.style.display = 'none';
-    $arrowUpAppliances.style.display = 'none';
-    $arrowDownAppliances.style.display = 'block';
-    $filterInputAppliances.style.display = 'none';
-    $inputAppliancesIcon.style.display = 'none';
-  })
-  $closeTagAppliances.addEventListener('click', () => {
-    $buttonTagAppliances.style.display = 'none';
-  })
+  onClickToAppliance(query);
 }
 
+/**
+ * display ustensils list
+ * @param {string[]} appliances 
+ */
 function displayUstensils(ustensils) {
   const $div = document.querySelector('#ustensils');
+  $div.innerHTML = '';
   let $ul = '<ul>';
   for (let i = 0; i < ustensils.length; i++) {
     $ul += `<li>${ustensils[i]}</li>`;
   }
   $ul += '</ul>';
   $div.insertAdjacentHTML('beforeend', $ul);
-
-  $filterUstensilsButton.addEventListener('click', () => {
-    $filterUstensilsList.style.display = 'block';
-    $arrowDownUstensils.style.display = 'none';
-    $arrowUpUstensils.style.display = 'block';
-    $filterInputUstensils.style.display = 'block';
-    $inputUstensilsIcon.style.display = 'flex';
-  });
-
-  $filterUstensilsList.addEventListener('click', () => {
-    $buttonTagUstensils.style.display = 'block';
-    $filterUstensilsList.style.display = 'none';
-    $arrowUpUstensils.style.display = 'none';
-    $arrowDownUstensils.style.display = 'block';
-    $filterInputUstensils.style.display = 'none';
-    $inputUstensilsIcon.style.display = 'none';
-  })
-  $closeTagUstensils.addEventListener('click', () => {
-    $buttonTagUstensils.style.display = 'none';
-  })
+  onClickToUstensil(query);
 }
 
-/**
- * fn de calcul & d'affichage:
- *  - du nombre de recettes affichées
- *  - de l'affichage de ce nombre
- * TODO: séparer la logique de calcul de celle d'affichage (créer 2 fns, pr que chaque fn ai une & une seul responsable)
- * @param {string[]} recipes 
- * @returns {number} totalRecipes - taille du tableau de recettes passé en paramètre
+/** 
+ * fn de calcul & d'affichage du nombre de recettes 
+ * @param {string[]} recipes - tableau de recettes
+ * @param {string} term - recherche de l'utilisateur
+ * @returns {number} totalRecipes - nbre de recettes affichés
  */
-function totalRecipedDisplayed(recipes) {
+function totalRecipedDisplayed(recipes, term) {
   let totalRecipes = recipes.length;
-  let $displayRecipesNumber = document.createElement('h3');
-  $displayRecipesNumber.setAttribute('class', 'recipes-number anton');
-  $displayRecipesNumber.textContent = `${totalRecipes} recettes`;
+  $displayRecipesNumber.querySelector('.recipes-number');
+  if (totalRecipes === 0) {
+    $displayRecipesNumber.textContent = `Aucune recette ne contient ‘${term}’ vous pouvez chercher « tarte aux pommes », « poisson », etc.`;
+  } else {
+    $displayRecipesNumber.textContent = `${totalRecipes} recettes`;
+  }
   $totalRecipesDisplayed.appendChild($displayRecipesNumber);
   return totalRecipes;
 }
 
-function calculResultsElements(results) {
-  let arrayLength = results.length;
-  return arrayLength;
-}
+/* function updateDisplayIngredientsList() {
+  // clear HTML elements list
+  // resetFilterListDisplay($ingredientsList);
+  const $list = document.querySelectorAll('#ingredients ul li');
+  $list.forEach((item) => {
+    return item.textContent = '';
+  })
 
-function displayRecipesNumber(resultsNumbers) {
-  let $displayRecipesNumber = document.createElement('h3');
-  $displayRecipesNumber.setAttribute('class', 'recipes-number anton');
-  $displayRecipesNumber.textContent = `${totalRecipes} recettes`;
-  $totalRecipesDisplayed.appendChild($displayRecipesNumber);
+  // display new list with elements that includes target
+  let target = e.target.value.toLowerCase();
+  let newList = updateIngredientsList(target);
+  displayIngredients(newList);
+  console.log(updateIngredientsList(target));
+  onClickToIngredient();
+ }*/
+
+/**
+ * fn qui vide du DOM le contenu du titre du nbre de recettes affiché
+ */
+function deleteRecipesNumberTitle() {
+  $displayRecipesNumber.querySelector('.recipes-number');
+  $displayRecipesNumber.textContent = '';
 }
 
 /**
- * fn to display recipes
+ * fn d'affichage du template d'1 recette, selon les recettes passées en paramètres
+ * TODO tier avec sort par ordre alph.
  * @param {*} recipes 
  */
 async function displayRecipeData(recipes) {
+  $recipeSection.textContent = '';
   recipes.map((recipe) => {
     const Template = new RecipeCard(recipe);
     $recipeSection.appendChild(Template.createRecipeCard());
   })
 }
 
-function deleteDisplayData() {
-  $recipeSection.textContent = '';
-  document.querySelector('.recipes-number').textContent = '';
+/**
+ * fn to clear HTML elements list on filter dropdowns
+ * @param {*} list 
+ */
+/* function resetFilterListDisplay(list) {
+  list.forEach((item) => {
+    console.log(item);
+    return item.textContent = '';
+  })
+} */
+
+/**
+ * fn de nettoyage pour préparer un nouvel affichage, 
+ * soit chargée de vider les recettes affichées du DOM
+ */
+function deleteDisplayData() { }
+
+let query = {
+  term: '',
+  appliances: [],
+  ustensils: [],
+  ingredients: []
 }
 
-function resetSearchInput() {
-  $searchForm = document.querySelector('.search-input');
-  $searchForm.innerHTML = '';
+// a debug: creation d une liste de <ul> au lieu de <li> qd on cree ou manip tag 
+/* function onClickToIngredient() {
+  const $ingredientsList = Array.from(document.querySelectorAll('#ingredients ul li'));
+  console.table('$ingredientsList: ', $ingredientsList);
+  $ingredientsList.forEach((ingredient, i) => {
+    ingredient.addEventListener("click", (e) => {
+      console.log('forEach ingredient + index, au click => ', ingredient, i);
+      // génération des élements HTML constituant un tag
+      const $tagsIngredientsWrapper = document.querySelector('.ingredients-tags-wrapper');
+      const $tagIngredientButton = document.createElement('button');
+      const $spanIngredientParentText = document.createElement('span');
+      const $spanIngredientChildText = document.createElement('span');
+      const $closingTagIngredient = document.createElement('button');
+      // ajout de classes & attributs sur le tag
+      $spanIngredientParentText.classList.add('d-flex');
+      $spanIngredientParentText.classList.add('justify-content-around');
+      $spanIngredientChildText.setAttribute('id', 'content-tag-ingredients')
+      $tagIngredientButton.classList.add('button-tag');
+      $tagIngredientButton.classList.add('show-tag');
+      $closingTagIngredient.classList.add('close-tag-ingredients');
+      // injection du text dans le tag
+      $closingTagIngredient.textContent = 'X'; // à remplacer par 1 croix (icône "close")
+
+      $spanIngredientChildText.textContent = e.target.textContent; // injection du nom de l'ingrédient ds le tag
+
+      // ajout dans le DOM des élements constituant un tag
+      $tagsIngredientsWrapper.appendChild($tagIngredientButton);
+      $tagIngredientButton.appendChild($spanIngredientParentText);
+      $spanIngredientParentText.appendChild($spanIngredientChildText);
+      $spanIngredientParentText.appendChild($closingTagIngredient);
+      const target = e.target.textContent.toLowerCase();
+      // pr l'instant le tab."query.ingredients" est vide (ainsi que tt l'objet query)
+      console.log(query, query.ingredients);
+
+      // const tagIngredientTemplate = new IngredientTag(ingredient);
+
+      // on stock le (ou les) éléments ds le tableau des ingrédients
+      query.ingredients.push(target); // on a maintenant l'element ds notre tableau
+      console.log(query.ingredients);
+      const result = searchRecipes(query);
+      deleteDisplayData();
+      displayRecipeData(result);
+      deleteRecipesNumberTitle();
+      totalRecipedDisplayed(result, target);
+      console.log('filtre par ingredients : ', result);
+
+      // supprimer l'ingredient au click
+      e.target.remove();
+
+      // affichage de l'item sélectionné en haut de la liste dans un <p> HTML avec 1 <span> pr texte & 1 <i> pr icône
+      const $itemOnTheTop = document.createElement('p');
+      const $itemText = document.createElement('span');
+      const $itemArrow = document.createElement('i');
+      $itemArrow.classList.add('fa-solid');
+      $itemArrow.classList.add('fa-circle-xmark');
+      $itemArrow.classList.add('close-item-on-the-top');
+      $itemText.textContent = e.target.textContent;
+      const $list = document.querySelector('#ingredients ul');
+      $itemOnTheTop.appendChild($itemText);
+      $itemOnTheTop.appendChild($itemArrow);
+      $list.appendChild($itemOnTheTop);
+      $list.classList.add('item-on-the-top');
+
+      // MAJ les élements des listes en fonction de l'ingredient sélectionné 
+      // & selon les ingredients, appliances & ustensils contenus ds les recettes affichées
+
+      $closingTagIngredient.addEventListener('click', () => {
+
+        // cache le tag & cache l'item sélectionné (voir si l'item doit encore etre a cette position?)
+        $tagIngredientButton.style.display = 'none';
+        $itemOnTheTop.style.display = 'none';
+
+        // il faut re-afficher l'ingredient en tant que <li> ds la liste
+        const $addListItem = document.createElement('li');
+        $addListItem.textContent = e.target.textContent;
+        console.log($addListItem);
+        $list.appendChild($addListItem);  // ajout de l element ds le DOM
+
+        // copie du tab avec element a supprimer ms a ajouter ds liste du filtre
+        //let ingredientsArrayCopie = [...query.ingredients]
+        query.ingredients.pop($addListItem); // on supprime l'element ds notre tableau
+        //console.log(ingredientsArrayCopie, query.ingredients);
+        // ingredientsArrayCopie.concat($ingredientsList)
+
+        //let target = e.target.value.toLowerCase();
+        //let newList = updateIngredientsList($addListItem);
+        //displayIngredients(newList);
+        //console.log(updateIngredientsList(target));
+
+        // MAJ recettes
+        // const updatedResult = searchRecipes(query.ingredients);
+        const updatedResult = searchRecipes(query);
+        //deleteDisplayData();
+        displayRecipeData(updatedResult);
+        deleteRecipesNumberTitle();
+        totalRecipedDisplayed(updatedResult, target);
+      })
+
+      $itemArrow.addEventListener('click', () => {
+        $itemOnTheTop.style.display = 'none';
+      })
+    })
+  })
 }
+
+function onClickToAppliance() {
+  const $appliancesList = Array.from(document.querySelectorAll('#appliances ul li'));
+  $appliancesList.forEach((appliance) => {
+    appliance.addEventListener("click", (e) => {
+      // on crée le tag HTML (création dynamique qui permet de générer 1 nouveau tag à chaque clic sur 1 ingrédient)
+      const $tagsAppliancesWrapper = document.querySelector('.appliances-tags-wrapper');
+      const $tagApplianceButton = document.createElement('button');
+      const $spanApplianceParentText = document.createElement('span');
+      const $spanApplianceChildText = document.createElement('span');
+      const $closingTagAppliance = document.createElement('button');
+      $spanApplianceParentText.classList.add('d-flex');
+      $spanApplianceParentText.classList.add('justify-content-around');
+      $spanApplianceChildText.setAttribute('id', 'content-tag-appliances')
+      $tagApplianceButton.classList.add('button-tag');
+      $tagApplianceButton.classList.add('show-tag');
+      $closingTagAppliance.classList.add('close-tag-appliances');
+      $closingTagAppliance.textContent = 'X'; // à remplacer par 1 croix (icône "close")
+      $spanApplianceChildText.textContent = e.target.textContent; // injection du nom de l'ingrédient ds le tag
+      const target = e.target.textContent.toLowerCase();
+      $tagsAppliancesWrapper.appendChild($tagApplianceButton);
+      $tagApplianceButton.appendChild($spanApplianceParentText);
+      $spanApplianceParentText.appendChild($spanApplianceChildText);
+      $spanApplianceParentText.appendChild($closingTagAppliance);
+
+      // ajout "target" ds le tableau des appareils
+      query.appliances.push(target);
+      const result = searchRecipes(query);
+      // MAJ affichage recettes
+      deleteDisplayData();
+      displayRecipeData(result);
+      deleteRecipesNumberTitle();
+      totalRecipedDisplayed(result, target);
+      console.log('filtre par appareils : ', result);
+      e.target.remove();// supprimer l'appareil au click
+
+      // affichage de l'item sélectionné en haut de la liste dans un <p> HTML avec 1 <span> pr texte & 1 <i> pr icône
+      const $itemOnTheTop = document.createElement('p');
+      const $itemText = document.createElement('span');
+      const $itemArrow = document.createElement('i');
+      $itemArrow.classList.add('fa-solid');
+      $itemArrow.classList.add('fa-circle-xmark');
+      $itemArrow.classList.add('close-item-on-the-top');
+      $itemText.textContent = e.target.textContent;
+      const $list = document.querySelector('#appliances ul');
+      $itemOnTheTop.appendChild($itemText);
+      $itemOnTheTop.appendChild($itemArrow);
+      $list.appendChild($itemOnTheTop);
+      $list.classList.add('item-on-the-top');
+
+      $closingTagAppliance.addEventListener('click', () => {
+        $tagApplianceButton.style.display = 'none';
+        $itemOnTheTop.style.display = 'none'; // cache l'item sélectionné
+        const $addListItem = document.createElement('li');
+        $addListItem.textContent = e.target.textContent;
+        $list.appendChild($addListItem);
+
+        // on supprime l'element du tableau "appliances" ds l objet "query"
+        query.appliances.pop($addListItem); // on a maintenant l'element ds notre tableau
+        console.log(query.appliances);
+
+        // MAJ recettes
+        const updatedResult = searchRecipes(query);
+        deleteDisplayData();
+        displayRecipeData(updatedResult);
+        deleteRecipesNumberTitle();
+        totalRecipedDisplayed(updatedResult, target);
+      })
+      $itemArrow.addEventListener('click', () => {
+        $itemOnTheTop.style.display = 'none';
+      })
+    })
+  })
+}
+
+function onClickToUstensil() {
+  const $ustensilsList = Array.from(document.querySelectorAll('#ustensils ul li'));
+  $ustensilsList.forEach((ustensil) => {
+    ustensil.addEventListener("click", (e) => {
+
+      // on crée le tag HTML (création dynamique qui permet de générer 1 nouveau tag à chaque clic sur 1 ingrédient)
+      const $tagsUstensilsWrapper = document.querySelector('.ustensils-tags-wrapper');
+      const $tagUstensilButton = document.createElement('button');
+      const $spanUstensilParentText = document.createElement('span');
+      const $spanUstensilChildText = document.createElement('span');
+      const $closingTagUstensil = document.createElement('button');
+      $spanUstensilParentText.classList.add('d-flex');
+      $spanUstensilParentText.classList.add('justify-content-around');
+      $spanUstensilChildText.setAttribute('id', 'content-tag-ustensils')
+      $tagUstensilButton.classList.add('button-tag');
+      $tagUstensilButton.classList.add('show-tag');
+      $closingTagUstensil.classList.add('close-tag-ustensils');
+      $closingTagUstensil.textContent = 'X'; // à remplacer par 1 croix (icône "close")
+      $spanUstensilChildText.textContent = e.target.textContent; // injection du nom de l'ingrédient ds le tag
+      const target = e.target.textContent.toLowerCase();
+      $tagsUstensilsWrapper.appendChild($tagUstensilButton);
+      $tagUstensilButton.appendChild($spanUstensilParentText);
+      $spanUstensilParentText.appendChild($spanUstensilChildText);
+      $spanUstensilParentText.appendChild($closingTagUstensil);
+
+      query.ustensils.push(target);
+
+      const result = searchRecipes(query);
+      deleteDisplayData();
+      displayRecipeData(result);
+      deleteRecipesNumberTitle();
+      totalRecipedDisplayed(result, target);
+      console.log('filtre par ustensils: ', result);
+
+      e.target.remove();// suppression de l'ustensil au click
+
+      // affichage de l'item sélectionné en haut de la liste dans un <p> HTML avec 1 <span> pr texte & 1 <i> pr icône
+      const $itemOnTheTop = document.createElement('p');
+      const $itemText = document.createElement('span');
+      const $itemArrow = document.createElement('i');
+      $itemArrow.classList.add('fa-solid');
+      $itemArrow.classList.add('fa-circle-xmark');
+      $itemArrow.classList.add('close-item-on-the-top');
+      $itemText.textContent = e.target.textContent;
+      const $list = document.querySelector('#ustensils ul');
+      $itemOnTheTop.appendChild($itemText);
+      $itemOnTheTop.appendChild($itemArrow);
+      $list.appendChild($itemOnTheTop);
+      $list.classList.add('item-on-the-top');
+
+      // écoute au click fermeture tag (MAJ affichage)
+      $closingTagUstensil.addEventListener('click', () => {
+        $tagUstensilButton.style.display = 'none';
+        $itemOnTheTop.style.display = 'none'; // cache l'item sélectionné
+        const $addListItem = document.createElement('li');
+        $addListItem.textContent = e.target.textContent;
+        $list.appendChild($addListItem);
+
+        query.ustensils.pop($addListItem);
+        console.log(query.ustensils);
+
+        // MAJ recettes
+        const updatedResult = searchRecipes(query);
+        deleteDisplayData();
+        displayRecipeData(updatedResult);
+        deleteRecipesNumberTitle();
+        totalRecipedDisplayed(updatedResult, target);
+      })
+      $itemArrow.addEventListener('click', () => {
+        $itemOnTheTop.style.display = 'none';
+      })
+    })
+  })
+} */
 
 document.addEventListener("DOMContentLoaded", function () {
 
-  console.log(filterByReduceMethod('courgette'));
+  // au click sur le btn du dropdown des ingrédients
+  $dropdownIngredientsBtn.addEventListener('click', () => {
 
-  // affichage initial, avec tableau de recettes complet
-  displayRecipeData(recipes);
-  totalRecipedDisplayed(recipes);
+    // bascule (toggle) entre afficher et cacher la liste des ingrédients
+    $filterList.classList.toggle('toggle-display-ingredients');
 
-  // affichage de la liste des menus déroulants
-  /* const ingredients = updateIngredientsList('');
-  const appliances = updateAppliancesList('');
-  const ustensils = updateUstensilsList('');
-  console.table(ingredients);
-  console.table(appliances);
-  console.table(ustensils);
-  displayIngredients(ingredients);
-  displayAppliances(appliances);
-  displayUstensils(ustensils); */
+    // MAJ positions des flèches
+    $arrowDown.classList.toggle('toggle-hide-ingredients');// on cacher la flèche qui pointe vers le bas
+    $arrowUp.classList.toggle('toggle-display-ingredients');// & on affiche la flèche qui pointe vers le haut
+    // $arrowUp.style.display = 'block'; //$arrowDown.style.display = 'none';
+
+    // affichage de l'input qui filtre la liste des ingrédients
+    $filterInput.classList.toggle('toggle-display-ingredients');
+    $inputIcon.classList.toggle('toggle-flex-ingredients');
+    /* $inputIcon.style.display = 'flex';
+    $filterInput.style.display = 'block'; */
+  });
+
+  /* au click sur 1 élement de la liste des ingrédients 
+     comportement à vérifier: 
+     la liste est caché au click sur le btn d'ouverture ? (et non sur un des item?)
+  */
+  $filterList.addEventListener('click', () => {
+    /* non, l'affichage du tag sera géré par 1 autre fn, tout comme ses autres comportements, 
+    tel que l'injection du texte, le changement de position de l'item, la fermeture du tag ...) */
+    // $buttonTagIngredients.style.display = 'block';
+    // $filterList.style.display = 'none';
+
+    // MAJ positions des flèches
+    $arrowUp.style.display = 'none';
+    $arrowDown.style.display = 'block';
+
+    // on cache l'input & l'icône "loupe" (action à lancer avec la fermeture de la liste)
+    /* $filterInput.style.display = 'none';
+    $inputIcon.style.display = 'none'; */
+  })
+
+  // au click sur le boutton du dropdown des appareils
+  $dropdownAppliancesBtn.addEventListener('click', () => {
+    // bascule (toggle) entre afficher et cacher la liste des appareils
+    $filterAppliancesList.classList.toggle('toggle-display-appliances');
+
+    // on passe le btn en position ouvert
+    $arrowDownAppliances.style.display = 'none'; // on cacher la flèche qui pointe vers le bas
+    $arrowUpAppliances.style.display = 'block'; // & on affiche la flèche qui pointe vers le haut
+
+    // affichage de l'input & icône "loupe" du filtre des appareil
+    $filterInputAppliances.classList.toggle('toggle-display-appliances');
+    $inputAppliancesIcon.classList.toggle('toggle-flex-appliances');
+    /* $filterInputAppliances.style.display = 'block';
+    $inputAppliancesIcon.style.display = 'flex'; */
+  });
+
+  // au click sur la liste du dropdown des appareils(comportement à vérifier)
+  $filterAppliancesList.addEventListener('click', () => {
+
+    // on affiche le tag
+    //$buttonTagAppliances.style.display = 'block';
+
+    // on cache la liste
+    // $filterAppliancesList.style.display = 'none';
+
+    // on passe le btn en position fermée
+    $arrowUpAppliances.style.display = 'none'; // on cache la flèche qui pointe vers le haut
+    $arrowDownAppliances.style.display = 'block'; // on affiche la flèche qui pointe vers le bas
+
+    // désaffichage de l'input du filtre des appareil
+    // $filterInputAppliances.style.display = 'none'; // on cache l'input
+    // $inputAppliancesIcon.style.display = 'none'; // on cache la loupe
+  })
+
+  // au click sur le boutton du dropdown des ustensils
+  $dropdownUstensilsBtn.addEventListener('click', () => {
+    // bascule (toggle) entre afficher et cacher la liste des ustensils
+    $filterUstensilsList.classList.toggle('toggle-display-ustensils');
+    // MAJ de l'affichage des flèches avec le dropdown en position "ouvert"
+    $arrowDownUstensils.style.display = 'none';
+    $arrowUpUstensils.style.display = 'block';
+    // affichage input & icône "loupe"
+    $filterInputUstensils.classList.toggle('toggle-display-ustensils');
+    $inputUstensilsIcon.classList.toggle('toggle-flex-ustensils');
+    /* $filterInputUstensils.style.display = 'block';
+    $inputUstensilsIcon.style.display = 'flex'; */
+  });
+
+  // au click sur la liste des ustensils (comportement à vérifier)
+  $filterUstensilsList.addEventListener('click', () => {
+    /* $buttonTagUstensils.style.display = 'block';
+    $filterUstensilsList.style.display = 'none'; */
+    $arrowUpUstensils.style.display = 'none';
+    $arrowDownUstensils.style.display = 'block';
+    /* $filterInputUstensils.style.display = 'none';
+    $inputUstensilsIcon.style.display = 'none'; */
+  })
+
+  displayRecipeData(recipes); // affichage initial du total des recettes (avant recherche)
+  totalRecipedDisplayed(recipes); // affichage nbre de recettes affichées
+
+  /* affichage de la liste des menus déroulants */
+  const ingredients = updateIngredientsList(''); // récupération & MAJ liste ingrédients
+  const appliances = updateAppliancesList(''); // récupération & MAJ liste appareils
+  const ustensils = updateUstensilsList(''); // récupération & MAJ liste ustensils
+
+  displayIngredients(ingredients); // affichage de la liste des ingrédients
+  displayAppliances(appliances); // affichage de la liste des appareils
+  displayUstensils(ustensils); // affichage de la liste des ustensils
 
   /**
    * recherche principale
+   * TODO: relancer affichage avec reset sur input
    */
-  $primarySearch.addEventListener('change', (e) => {
-    // console.log(filterByReduceMethod('fraise'));
+  function handleInputSearch(e, query) {
     let target = e.target.value.toLowerCase();
-    //let arrTarg = Array.of(target);
-    console.log(target);
-
-    /* let query = {
-      term: target,
-      appliances: [],
-      ustensils: [],
-      ingredients: ['citron']
+    query.term = target;
+    const result = searchRecipes(query);
+    if (target.length >= 3) {
+      displayRecipeData(result); // reload recipes to displayed on every new character enter
+      deleteRecipesNumberTitle(); // remove title with displayed recipes count
+      totalRecipedDisplayed(result, target); // display how many recipes are displayed 
+    } else {
+      query.term = ''; // with an empty query
+      const result = searchRecipes(query);
+      displayRecipeData(result);
+      deleteRecipesNumberTitle();
+      totalRecipedDisplayed(result, target);
     }
-    // const result = searchRecipes(query);
-    const result = filterByReduceMethod(query);
-    console.log(result); */
+  }
+  // on "input" event (reload search results on every input field new character)
+  $primarySearch.addEventListener('input', (e) => {
+    e.preventDefault();
+    let target = e.target.value.toLowerCase();
+    query.term = target;
+    const result = searchRecipes(query);
+    // console.log(searchByArrayObjects(query));
+    // Array object function
+    // const result = filterByReduce(query);
+    // const result = searchByArrayObjects(query);
 
-    // suppression des recettes déjà affichées
-    deleteDisplayData();
-
-    // affichage des recettes (selon le mot recherché)
-    // displayRecipeData(result);
-
-    /**
-     * fn d'affichage des recettes, 
-     * pernnant en paramètre une fn de recherche de correspondances entre l'occurence soumise dans l'input, 
-     * & les valeurs trouvées parcourant le tab. de recettes 
-     * on recherche les égalités ds le tableau "recipes", 
-     * entre les valeurs des objets{} "nom", "description" & le tableau "ingredients" (tab. multi-dimensionnel) 
-     * & avec l'occurence soumise dans l'input
-     * fn utilisant les methodes de l'objet Array (.reduce())
-     */
-    displayRecipeData(filterByReduceMethod(target));
-
-    // calcul du nbre de recettes affichées
-    // totalRecipedDisplayed(result);
-    totalRecipedDisplayed(recipes);
-
-    // resetSearchInput();
+    if (target.length >= 3) {
+      // if input field text contains 3 or more characters, do it
+      displayRecipeData(result); // reload recipes to displayed on every new character enter
+      deleteRecipesNumberTitle(); // remove title with displayed recipes count
+      totalRecipedDisplayed(result, target); // display how many recipes are displayed 
+    } else {
+      query.term = ''; // with an empty query
+      const result = searchRecipes(query);
+      // const result = searchByArrayObjects(query);
+      displayRecipeData(result);
+      deleteRecipesNumberTitle();
+      totalRecipedDisplayed(result, target);
+    }
   });
 
-  // inject element name on click, into button tag
-  const $ingredientsList = Array.from(document.querySelectorAll('#ingredients ul li'));
-  console.log($ingredientsList); // return nodeList of <li>
-  $ingredientsList.forEach((li) => {
-    li.addEventListener("click", (e) => {
-
-      // au lieu d'afficher btn, le / les créer pr en afficher plusieurs
-      $buttonTagIngredients.style.display = 'block';
-      $contentTagIngredients.textContent = e.target.textContent;
-    })
-  })
-
-  const $ustensilsList = Array.from(document.querySelectorAll('#ustensils ul li'));
-  console.log($ustensilsList);
-  $ustensilsList.forEach((li) => {
-    li.addEventListener("click", (e) => {
-      $buttonTagUstensils.style.display = 'block';
-      $contentTagUstensils.textContent = e.target.textContent;
-    })
-  })
-
-  const $appliancesList = Array.from(document.querySelectorAll('#appliances ul li'));
-  console.log($appliancesList);
-  $appliancesList.forEach((li) => {
-    li.addEventListener("click", (e) => {
-      $buttonTagAppliances.style.display = 'block';
-      $contentTagAppliances.textContent = e.target.textContent;
-    })
-  })
-
-  /*****************************************
-   * Dropdown - to display filters recipes 
-   *****************************************/
   /**
-   * filter by ingredient
+   * input - filter by ingredient 
    */
-  /* $filter.addEventListener('change', (e) => {
+  $filterInput.addEventListener('input', (e) => {
+
+    // clear HTML elements list
+    // resetFilterListDisplay($ingredientsList);
+    const $list = document.querySelectorAll('#ingredients ul li');
+    $list.forEach((item) => {
+      return item.textContent = '';
+    })
+
+    // display new list with elements that includes target
     let target = e.target.value.toLowerCase();
-    let query = {
-      term: target,
-      appliances: [],
-      ustensils: [],
-      ingredients: ['citron'] // preciser un ingredient pr avoir des résultats (ok, fonctionne)
-    }
-    const result = searchRecipes(query);
-    deleteDisplayData();
-    displayRecipeData(result);
-    totalRecipedDisplayed(result);
-  }); */
+    let newList = updateIngredientsList(target);
+    displayIngredients(newList);
+    console.log(updateIngredientsList(target));
+    onClickToIngredient();
+  });
 
   /**
-   * filter by appliance
+   * input - filter by appliance
    */
-  /* $filterInputAppliances.addEventListener('change', (e) => {
+  $filterInputAppliances.addEventListener('input', (e) => {
+    // clear HTML elements list
+    //resetFilterListDisplay($appliancesList);
+    const $list = document.querySelectorAll('#appliances ul li');
+    $list.forEach((item) => {
+      return item.textContent = '';
+    })
     let target = e.target.value.toLowerCase();
-    let query = {
-      term: target,
-      appliances: [],
-      ustensils: [],
-      ingredients: ['citron']
-    }
-    const result = searchRecipes(query);
-    deleteDisplayData();
-    displayRecipeData(result);
-    totalRecipedDisplayed(result);
-  }); */
+    let newList = updateAppliancesList(target);
+    displayAppliances(newList);
+    onClickToAppliance();
+  });
 
   /**
-   * filter by ustensil
+   * input - filter by ustensil
    */
-  /* $filterInputUstensils.addEventListener('change', (e) => {
+  $filterInputUstensils.addEventListener('input', (e) => {
+    // clear HTML elements list
+    //resetFilterListDisplay($ustensilsList);
+    const $list = document.querySelectorAll('#ustensils ul li');
+    $list.forEach((item) => {
+      return item.textContent = '';
+    })
     let target = e.target.value.toLowerCase();
-    let query = {
-      term: target,
-      appliances: [],
-      ustensils: [],
-      ingredients: ['citron']
-    }
-    const result = searchRecipes(query);
-    console.log(result);
-    deleteDisplayData();
-    displayRecipeData(result);
-    totalRecipedDisplayed(result);
-  }); */
+    let newList = updateUstensilsList(target);
+
+    // affichage de la nouvelle liste d'ustensils
+    displayUstensils(newList);
+
+    onClickToUstensil();
+  });
 });

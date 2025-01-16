@@ -257,8 +257,10 @@ header>section>h1 {
   color: var(--primary-text-color);
 }
 
-.hide {
-  display: none;
+.show-tag {
+  display: block;
+  background-color: var(--primary-color);
+  color: var(--primary-text-color);
 }
 
 .filter-wrapper {
@@ -267,7 +269,20 @@ header>section>h1 {
   border-radius: 11px;
 }
 
-.filter-btn-top {
+/* .filter-btn-top {
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 195px;
+  height: 56px;
+  border-radius: 11px;
+  padding: 17px 16px;
+} */
+
+.dropdown-ingredients-btn,
+.dropdown-appliances-btn,
+.dropdown-ustensils-btn {
   background-color: white;
   display: flex;
   justify-content: space-between;
@@ -285,11 +300,11 @@ header>section>h1 {
 }
 
 /* arrière-plan en jaune sur éléments des filtres (juste sur ingredients, pr tester...) */
-.filter-list>ul>li:hover,
+/* .filter-list>ul>li:hover,
 .filter-list>ul>li:focus,
 .filter-list>ul>li:active {
   background-color: var(--primary-color);
-}
+} */
 
 .arrow-wrapper>.arrow-up,
 .arrow-wrapper>.arrow-up-appliances,
@@ -360,15 +375,39 @@ header>section>h1 {
   border-radius: 11px;
 }
 
-/* input {
-  appearance: none;
-  font-family: 'Font Awesome 6 Free';
-  font-weight: 900;
+.item-on-the-top {
+  display: flex;
+  flex-direction: column-reverse;
 }
 
-input::before {
-  content: '\f002';
-} */
+.item-on-the-top>p {
+  background-color: var(--primary-color);
+  font-weight: 700;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-bottom: 21px;
+  padding-top: 9px;
+  padding-bottom: 9px;
+}
+
+.toggle-display-ingredients,
+.toggle-display-appliances,
+.toggle-display-ustensils {
+  display: block;
+}
+
+.toggle-flex-ingredients,
+.toggle-flex-appliances,
+.toggle-flex-ustensils {
+  display: flex;
+}
+
+.toggle-hide-ingredients,
+.toggle-hide-appliances,
+.toggle-hide-ustensils {
+  display: none;
+}
 
 @media (prefers-color-scheme: light) {
   :root {

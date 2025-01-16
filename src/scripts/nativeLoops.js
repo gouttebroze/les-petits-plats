@@ -1,5 +1,3 @@
-import { recipes } from "./recipes";
-
 /**
  * @typedef {Object} SearchQuery
  * @property {string} term - Le terme de recherche saisi par l'utilisateur.
@@ -13,7 +11,7 @@ import { recipes } from "./recipes";
  * @param {SearchQuery} searchForm - The search query containing filters.
  * @returns {void}
  */
-export function searchRecipes(searchForm) {
+function searchRecipes(searchForm) {
   const { term, appliances, ustensils, ingredients } = searchForm;
   let newRecipes = [];
 
@@ -33,32 +31,76 @@ export function searchRecipes(searchForm) {
 
   // filtre par appareil
   let newRecipesAppliances = [];
-  for (let j = 0; j < newRecipes.length; j++) {
-    if (appliances.includes(newRecipes[j]?.appliance.toLowerCase())) {
-      newRecipesAppliances.push(newRecipes[j]);
+  /* 
+   * on verifie si le tab. des recettes 
+   * filtrées par appareils est vide, si oui, 
+   * on lui donne une copie du tab. retourné par 
+   * la recherche principale
+   */
+  if (appliances.length === 0) {
+    newRecipesAppliances = [...newRecipes];
+  } else {
+    for (let j = 0; j < newRecipes.length; j++) {
+      if (appliances.includes(newRecipes[j]?.appliance.toLowerCase())) {
+        newRecipesAppliances.push(newRecipes[j]);
+      }
     }
   }
 
   // filtre par ustensiles
   let newRecipesUstensils = [];
-  // on recherche sur la rech. principale + sur 1 des filtres (ms les résultats des filtres doivent être combinés et non séparés...donc...)
-  for (let k = 0; k < newRecipes.length; k++) {
-    for (let l = 0; l < newRecipes[k]?.ustensils.length; l++) {
-      if (ustensils.includes(newRecipes[k].ustensils[l].toLowerCase())) {
-        newRecipesUstensils.push(newRecipes[k]);
+  // si le tab. d'ustensils est vide, on retourne 1 copie du tab. du filtre précédent (permet d'éviter bug, sans aucun résultat, car il faut rendre les recherches précédentes)
+  if (ustensils.length === 0) {
+    newRecipesUstensils = [...newRecipesAppliances];
+  } else {
+    for (let k = 0; k < newRecipesAppliances.length; k++) {
+      for (let l = 0; l < newRecipesAppliances[k]?.ustensils.length; l++) {
+        if (ustensils.includes(newRecipesAppliances[k].ustensils[l].toLowerCase())) {
+          newRecipesUstensils.push(newRecipesAppliances[k]);
+          break;
+        }
       }
     }
   }
 
   // filtre par ingredients
   let newRecipesIngredients = [];
-  for (let l = 0; l < newRecipes.length; l++) {
-    for (let m = 0; m < newRecipes[l].ingredients.length; m++) {
-      if (ingredients.includes(newRecipes[l].ingredients[m].ingredient.toLowerCase())) {
-        newRecipesIngredients.push(newRecipes[l]);
+  if (ingredients.length === 0) {
+    newRecipesIngredients = [...newRecipesUstensils];
+  } else {
+    for (let l = 0; l < newRecipesUstensils.length; l++) {
+      for (let m = 0; m < newRecipesUstensils[l].ingredients.length; m++) {
+        let found = false;
+        // on recherche ds la liste des ingredients 
+        for (let n = 0; n < ingredients.length; n++) {
+          // A VOIR pr DEBUGGER : ici on parcours 1 tab. avec 1 seul élement (l'élement sélectionné)
+          // si ds le 1er ingredients des 50 recettes il est inclus l'élement sélectionné
+          if ((newRecipesUstensils[l].ingredients[m].ingredient.toLowerCase()) === (ingredients[n])) {
+            found = true;
+            // debugger
+          } else {
+            found = false;
+            //debugger
+            break;
+          }
+        }
+        // si el. inclus, on ajoute
+        if (found === true) {
+          newRecipesIngredients.push(newRecipesUstensils[l]);
+          // debugger
+        }
       }
     }
   }
-  //return newRecipesAppliances;
+
+  const _ingredients = updateIngredientsList("", newRecipesIngredients);
+  const _appliances = updateAppliancesList("", newRecipesIngredients);
+  const _ustensils = updateUstensilsList("", newRecipesIngredients);
+  displayIngredients(_ingredients)
+  displayAppliances(_appliances)
+  displayUstensils(_ustensils)
+
   return newRecipesIngredients;
+  // return newRecipesUstensils;
+  //return newRecipes;
 }
