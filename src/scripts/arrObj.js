@@ -71,6 +71,14 @@ function filterByReduce(searchForm) {
     }
     return acc;
   }, []);
+
+  const _ingredients = updateIngredientsList("", ingredientsFilter);
+  const _appliances = updateAppliancesList("", ingredientsFilter);
+  const _ustensils = updateUstensilsList("", ingredientsFilter);
+  displayIngredients(_ingredients)
+  displayAppliances(_appliances)
+  displayUstensils(_ustensils)
+
   // return recipesFiltered; // return appliancesFilter; // return ustensilsFilter;
   return ingredientsFilter;
 }
