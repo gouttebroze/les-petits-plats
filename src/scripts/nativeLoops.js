@@ -31,6 +31,12 @@ function searchRecipes(searchForm) {
 
   // filtre par appareil
   let newRecipesAppliances = [];
+  /* 
+   * on verifie si le tab. des recettes 
+   * filtrées par appareils est vide, si oui, 
+   * on lui donne une copie du tab. retourné par 
+   * la recherche principale
+   */
   if (appliances.length === 0) {
     newRecipesAppliances = [...newRecipes];
   } else {
@@ -65,16 +71,23 @@ function searchRecipes(searchForm) {
     for (let l = 0; l < newRecipesUstensils.length; l++) {
       for (let m = 0; m < newRecipesUstensils[l].ingredients.length; m++) {
         let found = false;
+        // on recherche ds la liste des ingredients 
         for (let n = 0; n < ingredients.length; n++) {
-          if (newRecipesUstensils[l].ingredients[m].ingredient.toLowerCase().includes(ingredients[n])) {
+          // A VOIR pr DEBUGGER : ici on parcours 1 tab. avec 1 seul élement (l'élement sélectionné)
+          // si ds le 1er ingredients des 50 recettes il est inclus l'élement sélectionné
+          if ((newRecipesUstensils[l].ingredients[m].ingredient.toLowerCase()) === (ingredients[n])) {
             found = true;
+            // debugger
           } else {
             found = false;
+            //debugger
             break;
           }
         }
+        // si el. inclus, on ajoute
         if (found === true) {
           newRecipesIngredients.push(newRecipesUstensils[l]);
+          // debugger
         }
       }
     }

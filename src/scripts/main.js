@@ -41,78 +41,6 @@ $displayRecipesNumber.setAttribute('class', 'recipes-number anton');
 const $formSubmit = document.querySelector('#search-form');
 
 /**
- * fn permettant de restaurer les valeurs par défaut
- * @param {HTMLFormElement} element - formulaire
- */
-/* function resetForm(element) {
-  element.reset();
-} */
-
-/** 
- * @property {string} term
- * @property {string[]} _recipes - tableau des recettes, initial par défault, ou MAJ
- * @returns {void}
- */
-function updateIngredientsList(term, _recipes = recipes) {
-  let updatedIngredients = [];
-  for (let i = 0; i < _recipes.length; i++) {
-    for (let j = 0; j < _recipes[i].ingredients.length; j++) {
-      if (_recipes[i].ingredients[j].ingredient.toLowerCase().includes(term.toLowerCase())) {
-        updatedIngredients.push(_recipes[i].ingredients[j].ingredient.toLowerCase());
-      }
-    }
-  }
-
-  let uniqueIngredients = [];
-  for (let i = 0; i < updatedIngredients.length; i++) {
-    // on récupère l'index, puis on le compare à l'index du tableau, indexOf retourne le 1er index si doublon
-    const ingredientIndex = updatedIngredients.indexOf(updatedIngredients[i]);
-    if (i === ingredientIndex) {
-      uniqueIngredients.push(updatedIngredients[i]);
-    }
-  }
-  return uniqueIngredients;
-}
-
-function updateAppliancesList(term, _recipes = recipes) {
-  let updatedAppliances = [];
-  for (let i = 0; i < _recipes.length; i++) {
-    if (_recipes[i].appliance.toLowerCase().includes(term.toLowerCase())) {
-      updatedAppliances.push(_recipes[i].appliance.toLowerCase());
-    }
-  }
-  let uniqueAppliances = [];
-  for (let i = 0; i < updatedAppliances.length; i++) {
-    const applianceIndex = updatedAppliances.indexOf(updatedAppliances[i]);
-    if (i === applianceIndex) {
-      uniqueAppliances.push(updatedAppliances[i]);
-    }
-  }
-  return uniqueAppliances;
-}
-
-function updateUstensilsList(term, _recipes = recipes) {
-  let updatedUstensils = [];
-  for (let i = 0; i < _recipes.length; i++) {
-    for (let j = 0; j < _recipes[i].ustensils.length; j++) {
-      if (_recipes[i].ustensils[j].toLowerCase().includes(term.toLowerCase())) {
-        updatedUstensils.push(_recipes[i].ustensils[j].toLowerCase());
-      }
-    }
-  }
-  // suppression d'éventuels doublons
-  let uniqueUstensils = [];
-  for (let i = 0; i < updatedUstensils.length; i++) {
-    const ustensilIndex = updatedUstensils.indexOf(updatedUstensils[i]);
-    // indexOf() récupère l'index et, en cas de doublon, récupère uniquement le 1er index de(s) l'élément(s) trouvé(s)
-    if (i === ustensilIndex) {
-      uniqueUstensils.push(updatedUstensils[i]);
-    }
-  }
-  return uniqueUstensils;
-}
-
-/**
  * fn qui gère l'affichage des ingrédients ds le filtre
  * fn qui lance onClickIngredient(), fn qui gère l'affichage des items du filtre selon 
  * les sélections des ingrédients
@@ -127,7 +55,6 @@ function displayIngredients(ingredients) {
   }
   $ul += '</ul>';
   $div.insertAdjacentHTML('beforeend', $ul);
-
   onClickToIngredient(query);
 }
 
@@ -145,13 +72,7 @@ function displayAppliances(appliances) {
   }
   $ul += '</ul>';
   $div.insertAdjacentHTML('beforeend', $ul);
-
   onClickToAppliance(query);
-
-  // event listener on tag's arrow (to close tag & re-push element into filter list)
-  /* $closeTagAppliances.addEventListener('click', () => {
-    $tagIngredientButton.style.display = 'none';
-  }) */
 }
 
 /**
@@ -167,12 +88,7 @@ function displayUstensils(ustensils) {
   }
   $ul += '</ul>';
   $div.insertAdjacentHTML('beforeend', $ul);
-
   onClickToUstensil(query);
-
-  /* $closeTagUstensils.addEventListener('click', () => {
-    $buttonTagUstensils.style.display = 'none';
-  }) */
 }
 
 /** 
@@ -621,68 +537,47 @@ document.addEventListener("DOMContentLoaded", function () {
    * recherche principale
    * TODO: relancer affichage avec reset sur input
    */
-
-  /* $formSubmit.addEventListener('submit', (e) => {
-    //e.preventDefault();
+  function handleInputSearch(e, query) {
     let target = e.target.value.toLowerCase();
-    console.log(e, e.target);
     query.term = target;
-    console.log(query);
     const result = searchRecipes(query);
-    console.log(result);
-    //if (target.length >= 3) {}
-    //deleteDisplayData();
-    //réinitialisation du formulaire
-    //$formSubmit.reset();
-    // enfin, on réinitialise le champs de la recherche principale au click sur le btn
-    // target.reset();
-  }) */
-
-  /* $primarySearch.addEventListener('keyup', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      let target = e.target.value.toLowerCase();
-      query.term = target;
+    if (target.length >= 3) {
+      displayRecipeData(result); // reload recipes to displayed on every new character enter
+      deleteRecipesNumberTitle(); // remove title with displayed recipes count
+      totalRecipedDisplayed(result, target); // display how many recipes are displayed 
+    } else {
+      query.term = ''; // with an empty query
       const result = searchRecipes(query);
-      displayRecipeData(result); // affichage des nouvelles recettes
-      deleteRecipesNumberTitle(); // supprime précédent titre de total du nbre de recettes
+      displayRecipeData(result);
+      deleteRecipesNumberTitle();
       totalRecipedDisplayed(result, target);
     }
-  }) */
-
+  }
   // on "input" event (reload search results on every input field new character)
   $primarySearch.addEventListener('input', (e) => {
     e.preventDefault();
     let target = e.target.value.toLowerCase();
     query.term = target;
     const result = searchRecipes(query);
+    // console.log(searchByArrayObjects(query));
+    // Array object function
+    // const result = filterByReduce(query);
+    // const result = searchByArrayObjects(query);
 
     if (target.length >= 3) {
-      displayRecipeData(result); // affichage des nouvelles recettes
-      deleteRecipesNumberTitle(); // supprime précédent titre de total du nbre de recettes
-      totalRecipedDisplayed(result, target); // affiche nbre total de recettes
+      // if input field text contains 3 or more characters, do it
+      displayRecipeData(result); // reload recipes to displayed on every new character enter
+      deleteRecipesNumberTitle(); // remove title with displayed recipes count
+      totalRecipedDisplayed(result, target); // display how many recipes are displayed 
     } else {
-      query.term = '';
+      query.term = ''; // with an empty query
       const result = searchRecipes(query);
+      // const result = searchByArrayObjects(query);
       displayRecipeData(result);
       deleteRecipesNumberTitle();
       totalRecipedDisplayed(result, target);
     }
   });
-
-  // on "submit" event
-  /* $primarySearch.addEventListener('submit', (e) => {
-    e.preventDefault();
-    let target = e.target.value.toLowerCase();
-    query.term = target;
-    const result = searchRecipes(query);
-
-    deleteDisplayData(); // suppression des recettes affichées
-    displayRecipeData(result); // affichage des nouvelles recettes
-    deleteRecipesNumberTitle(); // supprime précédent titre de total du nbre de recettes
-    totalRecipedDisplayed(result, target); // affiche nbre total de recettes
-    resetForm(target);
-  }) */
 
   /**
    * input - filter by ingredient 

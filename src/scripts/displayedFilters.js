@@ -41,8 +41,8 @@ function onClickToIngredient(query) {
       // add selected ingredient into ingredients array (into query object)
       query.ingredients.push(target);
 
-
       const result = searchRecipes(query);
+      // const result = searchByArrayObjects(query);
       // deleteDisplayData(); // removed fn
       displayRecipeData(result);
       deleteRecipesNumberTitle();
@@ -72,7 +72,7 @@ function onClickToIngredient(query) {
       $list.classList.add('item-on-the-top');
 
       // listen on click on arrow to closing tag
-      $closingTagIngredient.addEventListener('click', () => {
+      $closingTagIngredient.addEventListener('click', (e) => {
 
         // to hide the tag & the new item on the top
         $tagIngredientButton.style.display = 'none';
