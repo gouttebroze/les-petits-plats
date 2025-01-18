@@ -1,3 +1,7 @@
+/******************************************************************************
+ * Here is a search & filter fn, that used differents Array object methods, 
+ * like `reduce()`, `some()`, `every()`, `includes()` methods ...
+ ******************************************************************************/
 /**
  * @typedef {Object} SearchQuery
  * @property {string} term - Le terme de recherche saisi par l'utilisateur.
@@ -56,6 +60,7 @@ function filterByReduce(searchForm) {
     return acc;
   }, []);
 
+  // update filters lists with new search results
   const _ingredients = updateIngredientsList("", ingredientsFilter);
   const _appliances = updateAppliancesList("", ingredientsFilter);
   const _ustensils = updateUstensilsList("", ingredientsFilter);
@@ -63,6 +68,5 @@ function filterByReduce(searchForm) {
   displayAppliances(_appliances)
   displayUstensils(_ustensils)
 
-  // return recipesFiltered; // return appliancesFilter; // return ustensilsFilter;
   return ingredientsFilter;
 }
