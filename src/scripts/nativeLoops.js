@@ -69,26 +69,14 @@ function searchRecipes(searchForm) {
     newRecipesIngredients = [...newRecipesUstensils];
   } else {
     for (let l = 0; l < newRecipesUstensils.length; l++) {
-      for (let m = 0; m < newRecipesUstensils[l].ingredients.length; m++) {
-        let found = false;
-        // on recherche ds la liste des ingredients 
-        for (let n = 0; n < ingredients.length; n++) {
-          // A VOIR pr DEBUGGER : ici on parcours 1 tab. avec 1 seul élement (l'élement sélectionné)
-          // si ds le 1er ingredients des 50 recettes il est inclus l'élement sélectionné
-          if ((newRecipesUstensils[l].ingredients[m].ingredient.toLowerCase()) === (ingredients[n])) {
-            found = true;
-            // debugger
-          } else {
-            found = false;
-            //debugger
-            break;
-          }
-        }
-        // si el. inclus, on ajoute
-        if (found === true) {
-          newRecipesIngredients.push(newRecipesUstensils[l]);
-          // debugger
-        }
+      const isFound = ingredients.every(ingr => {
+        return newRecipesUstensils[l].ingredients
+          .some(ing => {
+            return ing.ingredient.toLowerCase() === ingr.toLowerCase()
+          })
+      })
+      if (isFound) {
+        newRecipesIngredients.push(newRecipesUstensils[l]);
       }
     }
   }
