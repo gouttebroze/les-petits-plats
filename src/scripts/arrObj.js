@@ -1,6 +1,7 @@
 /******************************************************************************
- * Here is a search & filter fn, that used differents Array object methods, 
- * like `reduce()`, `some()`, `every()`, `includes()` methods ...
+ * Global search function
+ * - search recipes that includes term (user search)
+ * - search / filter recipes by appliances, ustensils or/and ingredients
  ******************************************************************************/
 /**
  * @typedef {Object} SearchQuery
@@ -34,8 +35,7 @@ function filterByReduce(searchForm) {
   // to advanced appliances search field,
   const appliancesFilter = recipesFiltered.reduce((acc, curr) => {
     if (curr?.appliance?.toLowerCase().includes(appliances)) {
-      // if (curr?.appliance?.every(app => app.includes(appliances))) {
-      acc.push(curr); // return a new array with recipes that meet the condition  
+      acc.push(curr);
     }
     return acc;
   }, []);

@@ -109,22 +109,6 @@ function totalRecipedDisplayed(recipes, term) {
   return totalRecipes;
 }
 
-/* function updateDisplayIngredientsList() {
-  // clear HTML elements list
-  // resetFilterListDisplay($ingredientsList);
-  const $list = document.querySelectorAll('#ingredients ul li');
-  $list.forEach((item) => {
-    return item.textContent = '';
-  })
-
-  // display new list with elements that includes target
-  let target = e.target.value.toLowerCase();
-  let newList = updateIngredientsList(target);
-  displayIngredients(newList);
-  console.log(updateIngredientsList(target));
-  onClickToIngredient();
- }*/
-
 /**
  * fn qui vide du DOM le contenu du titre du nbre de recettes affiché
  */
