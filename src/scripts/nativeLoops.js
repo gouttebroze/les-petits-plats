@@ -72,7 +72,8 @@ function searchRecipes(searchForm) {
       const isFound = ingredients.every(ingr => {
         return newRecipesUstensils[l].ingredients
           .some(ing => {
-            return ing.ingredient.toLowerCase() === ingr.toLowerCase()
+            // return ing.ingredient.toLowerCase() === ingr.toLowerCase()
+            return ing.ingredient.toLowerCase().includes(ingr.toLowerCase());
           })
       })
       if (isFound) {
