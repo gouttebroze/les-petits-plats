@@ -537,22 +537,22 @@ document.addEventListener("DOMContentLoaded", function () {
    * recherche principale
    * TODO: relancer affichage avec reset sur input
    */
-  function handleInputSearch(e, query) {
-    let target = e.target.value.toLowerCase();
-    query.term = target;
-    const result = searchRecipes(query);
-    if (target.length >= 3) {
-      displayRecipeData(result); // reload recipes to displayed on every new character enter
-      deleteRecipesNumberTitle(); // remove title with displayed recipes count
-      totalRecipedDisplayed(result, target); // display how many recipes are displayed 
-    } else {
-      query.term = ''; // with an empty query
-      const result = searchRecipes(query);
-      displayRecipeData(result);
-      deleteRecipesNumberTitle();
-      totalRecipedDisplayed(result, target);
-    }
-  }
+  /*  function handleInputSearch(e, query) {
+     let target = e.target.value.toLowerCase();
+     query.term = target;
+     const result = searchRecipes(query);
+     if (target.length >= 3) {
+       displayRecipeData(result); // reload recipes to displayed on every new character enter
+       deleteRecipesNumberTitle(); // remove title with displayed recipes count
+       totalRecipedDisplayed(result, target); // display how many recipes are displayed 
+     } else {
+       query.term = ''; // with an empty query
+       const result = searchRecipes(query);
+       displayRecipeData(result);
+       deleteRecipesNumberTitle();
+       totalRecipedDisplayed(result, target);
+     }
+   } */
   // on "input" event (reload search results on every input field new character)
   $primarySearch.addEventListener('input', (e) => {
     e.preventDefault();
