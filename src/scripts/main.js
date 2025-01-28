@@ -557,7 +557,7 @@ document.addEventListener("DOMContentLoaded", function () {
   $primarySearch.addEventListener('input', (e) => {
     e.preventDefault();
     let target = e.target.value.toLowerCase();
-    query.term = target;
+    query.term = target.trim();
     const result = searchRecipes(query);
     // console.log(searchByArrayObjects(query));
     // Array object function
