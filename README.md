@@ -5,6 +5,10 @@
 * Développement Front-End du site de l'entreprise "les petits plats", une application web de recettes de cuisines
 * Développement d'un algorithme de recherche en JavaScript
 
+## Lancement de l'application avec code fonctionnel
+
+* Suite à un bug persistant avec le serveur de développement de `vite.js`, nous conseillons d'utiliser l'extention `Live Serveur` pour lancer l'interface front-end, au lieu de l'outil de construction `vite.js`.
+
 ## ViteJS
 
 ```sh
