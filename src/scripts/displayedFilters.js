@@ -40,6 +40,7 @@ function onClickToIngredient(query) {
 
       // add selected ingredient into ingredients array (into query object)
       query.ingredients.push(target);
+      // console.log('query.ingredients : ', query.ingredients);
 
       const result = filterByReduce(query);
       // const result = searchRecipes(query);
