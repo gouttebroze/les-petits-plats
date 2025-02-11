@@ -134,7 +134,7 @@ header>section>h1 {
 
 .main-container {
   width: 100%;
-  max-width: 1440px;
+  /* max-width: 1440px; */
   padding: 0 50px;
   box-sizing: border-box;
   min-width: 320px;

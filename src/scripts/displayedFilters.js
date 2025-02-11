@@ -140,7 +140,6 @@ function onClickToAppliance(query) {
       totalRecipedDisplayed(result, target);
       console.log('filtre par appareils : ', result);
       e.target.remove();// supprimer l'appareil au click
-      debugger
       // affichage de l'item sélectionné en haut de la liste dans un <p> HTML avec 1 <span> pr texte & 1 <i> pr icône
       const $itemOnTheTop = document.createElement('p');
       const $itemText = document.createElement('span');
