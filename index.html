@@ -31,7 +31,6 @@
       </section>
       <div id="search-form">
         <div class="search-input">
-          <!-- <i class="fa-solid fa-magnifying-glass search-icon"></i> -->
           <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="white" class="search-icon bi bi-search"
             viewBox="0 0 16 16">
             <path
@@ -45,8 +44,9 @@
 
     <main class="bg-gray-300 main-container d-flex flex-column">
       <section class="top-main-bar">
-        <section class="total-recipes">
-        </section>
+        <!-- <section class="total-recipes">
+        </section> -->
+        <div class="total-recipes"></div>
         <div id="menu" class="dropdowns-wrapper d-flex mx-2">
           <div class="filter-container">
             <div class="filter-wrapper m-6">
@@ -58,25 +58,15 @@
                     <i class="fa-solid fa-angle-up arrow-up"></i>
                   </div>
                 </div>
-                <button type="button" class="input-icons input-filter-btn">
+                <div class="input-icons input-filter-btn">
                   <i class="fa-solid fa-magnifying-glass"></i>
                   <input name="ingredient" id="ingredient" type="text" class="input-field input-filter" />
-                </button>
+                </div>
               </div>
               <div id="ingredients" class="filter-list">
               </div>
             </div>
             <div class="ingredients-tags-wrapper"></div>
-            <!-- <button class="button-tag toggle-tag-ingredients">
-              <span class="d-flex justify-content-around">
-                <span id="content-tag-ingredients"></span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                  class="close-tag-ingredients bi bi-x" viewBox="0 0 16 16">
-                  <path
-                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
-                </svg>
-              </span>
-            </button> -->
           </div>
 
           <div class="filter-container">
@@ -89,28 +79,15 @@
                     <i class="fa-solid fa-angle-up arrow-up-appliances"></i>
                   </div>
                 </div>
-                <button type="button" class="input-appliances-icons input-filter-btn">
+                <div class="input-appliances-icons input-filter-btn">
                   <i class="fa-solid fa-magnifying-glass"></i>
                   <input name="appliance" id="appliance" type="text" class="input-field input-filter" />
-                </button>
+                </div>
               </div>
               <div id="appliances" class="filter-appliances-list">
               </div>
             </div>
-
-            <!-- injection des tags des appareils -->
             <div class="appliances-tags-wrapper"></div>
-
-            <!-- <button class="button-tag toggle-tag-appliances">
-              <span class="d-flex justify-content-around">
-                <span id="content-tag-appliances"></span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                  class="close-tag-appliances bi bi-x" viewBox="0 0 16 16">
-                  <path
-                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
-                </svg>
-              </span>
-            </button> -->
           </div>
 
           <div class="filter-container">
@@ -123,59 +100,21 @@
                     <i class="fa-solid fa-angle-up arrow-up-ustensils"></i>
                   </div>
                 </div>
-                <button type="button" class="input-ustensils-icons input-filter-btn">
+                <div class="input-ustensils-icons input-filter-btn">
                   <i class="fa-solid fa-magnifying-glass"></i>
                   <input name="ustensil" id="ustensil" type="text" class="input-field input-filter" />
-                </button>
+                </div>
               </div>
               <div id="ustensils" class="filter-ustensils-list">
               </div>
             </div>
             <div class="ustensils-tags-wrapper"></div>
-            <!-- <button class="button-tag toggle-tag-ustensils">
-              <span class="d-flex justify-content-around">
-                <span id="content-tag-ustensils"></span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                  class="close-tag-ustensils bi bi-x" viewBox="0 0 16 16">
-                  <path
-                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
-                </svg>
-              </span>
-            </button> -->
           </div>
-
-          <!-- <br />
-
-          <button class="button-tag toggle-tag">
-            <span class="d-flex justify-content-around">
-              <span id="content-tag"></span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                class="close-tag bi bi-x" viewBox="0 0 16 16">
-                <path
-                  d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
-              </svg>
-            </span>
-          </button> -->
-
-          <!--           <div class="dropdown mx-4">
-            <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Ingrédients
-            </button>
-            <ul class="dropdown-menu first">
-              <li><a class="dropdown-item" href="#menu">
-                  <span>Ingrédients</span>
-                  <input name="inputIngredient" id="inputIngredient" type="text" class="inputFilter"
-                    placeholder="Rechercher un ingrédient" />
-                </a></li>
-              <li><a class="dropdown-item" href="#menu">Another action</a></li>
-              <li><a class="dropdown-item" href="#menu">Something else here</a></li>
-            </ul>
-          </div> -->
         </div>
       </section>
 
-      <section class="recipes-wrapper grid">
-      </section>
+      <div class="recipes-wrapper grid">
+      </div>
     </main>
 
   </div>

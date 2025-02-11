@@ -40,7 +40,6 @@ function onClickToIngredient(query) {
 
       // add selected ingredient into ingredients array (into query object)
       query.ingredients.push(target);
-      // console.log('query.ingredients : ', query.ingredients);
 
       const result = filterByReduce(query);
       // const result = searchRecipes(query);
@@ -51,7 +50,7 @@ function onClickToIngredient(query) {
       totalRecipedDisplayed(result, target);
 
       e.target.remove(); // remove target element to DOM (target element as selected ingredient of ingredients)
-
+      // ingredientsList.splice(i, 1); // remove selected ingredient of ingredients array
       // displayed selected ingredient on the top (re-create an new HTML elements, a <p> HTML tag around a <span> & an <i> HTML tags)
       // HTML elements creation
       const $itemOnTheTop = document.createElement('p');
@@ -141,7 +140,6 @@ function onClickToAppliance(query) {
       totalRecipedDisplayed(result, target);
       console.log('filtre par appareils : ', result);
       e.target.remove();// supprimer l'appareil au click
-
       // affichage de l'item sélectionné en haut de la liste dans un <p> HTML avec 1 <span> pr texte & 1 <i> pr icône
       const $itemOnTheTop = document.createElement('p');
       const $itemText = document.createElement('span');
