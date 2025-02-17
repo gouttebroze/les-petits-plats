@@ -394,7 +394,8 @@ header>section>h1 {
 .toggle-display-ingredients,
 .toggle-display-appliances,
 .toggle-display-ustensils {
-  display: block;
+  display: flex;
+  /* to display item filter selected on top of the list */
 }
 
 .toggle-flex-ingredients,
