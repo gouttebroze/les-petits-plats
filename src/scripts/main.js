@@ -35,46 +35,32 @@ const $elements = {
 let $displayRecipesNumber = document.createElement('h3');
 $displayRecipesNumber.setAttribute('class', 'recipes-number anton');
 
-
 /**
- * Displays the list of ingredients in the DOM.
- * 
- * This function creates an unordered list of ingredients and inserts it into the DOM element
- * with the id 'ingredients'. It then calls the onClickToIngredient function to set up event listeners.
- * 
- * @param {string[]} ingredients - An array of ingredient names to be displayed.
- * @returns {void} This function does not return a value.
+ * Sanitizes HTML to prevent XSS attacks.
+ * This function creates a new div element, sets its textContent to the input string, and returns the innerHTML of the div.
+ * This prevents any HTML code from being executed within the div.
  */
+function sanitizeHTML(str) {
+  const temp = document.createElement('div');
+  temp.textContent = str;
+  return temp.innerHTML;
+}
+
 function displayIngredients(ingredients) {
   const $div = document.querySelector('#ingredients');
-  $div.innerHTML = '<ul>' + ingredients.map(ingredient => `<li>${ingredient}</li>`).join('') + '</ul>';
+  $div.innerHTML = '<ul>' + ingredients.map(ingredient => `<li>${sanitizeHTML(ingredient)}</li>`).join('') + '</ul>';
   onClickToIngredient(query);
 }
 
-
-/**
- * Displays the list of appliances in the DOM.
- * 
- * This function creates an unordered list of appliances and inserts it into the DOM element
- * with the id 'appliances'. It then calls the onClickToAppliance function to set up event listeners.
- * 
- * @param {string[]} appliances - An array of appliance names to be displayed.
- * @returns {void} This function does not return a value.
- */
 function displayAppliances(appliances) {
-  const $div = document.querySelector('#appliances'); // on créé 1 div à partir de l'id "appliances"
-  $div.innerHTML = '<ul>' + appliances.map(appliance => `<li>${appliance}</li>`).join('') + '</ul>';
+  const $div = document.querySelector('#appliances');
+  $div.innerHTML = '<ul>' + appliances.map(appliance => `<li>${sanitizeHTML(appliance)}</li>`).join('') + '</ul>';
   onClickToAppliance(query);
 }
 
-
-/**
- * display ustensils list
- * @param {string[]} appliances 
- */
 function displayUstensils(ustensils) {
   const $div = document.querySelector('#ustensils');
-  $div.innerHTML = '<ul>' + ustensils.map(ustensil => `<li>${ustensil}</li>`).join('') + '</ul>';
+  $div.innerHTML = '<ul>' + ustensils.map(ustensil => `<li>${sanitizeHTML(ustensil)}</li>`).join('') + '</ul>';
   onClickToUstensil(query);
 }
 
@@ -278,7 +264,7 @@ function handleInputSearch(e, query) {
 function handleFilterInput(e, type, updateListFn, displayFn, onClickFn) {
   const $list = document.querySelectorAll(`#${type}s ul li`);
   $list.forEach(item => item.textContent = '');
-  let target = e.target.value.toLowerCase();
+  let target = sanitizeHTML(e.target.value.toLowerCase());
   let newList = updateListFn(target);
   displayFn(newList);
   onClickFn();
